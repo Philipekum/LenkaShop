@@ -1,0 +1,19 @@
+/* Heigth of product img control */
+.card-img-top {
+    width: 100%;
+    height: 26rem;
+    object-fit:scale-down;
+}
+
+/* Change img via hover */
+.picture2 {
+    display: none;
+}
+
+.pictures:hover .picture1 {
+    display: none;
+}
+
+.pictures:hover .picture2 {
+    display: block;
+}
