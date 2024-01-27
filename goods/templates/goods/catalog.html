@@ -14,19 +14,24 @@
                 <div class="col-lg-4 col-md-6 mt-4">
                     <div class="card" style="width: 26rem;">
                         <a href="#" class="text-decoration-none text-reset">
-                            <div class="pictures">
-                                <div class="picture1">
-                                    <img src="source/images/sample product.jpg" class="card-img-top img-fluid"
-                                        alt="Product image">
-                                </div>
-                                <div class="picture2">
-                                    <img src="source/images/sample product 2.jpg" class="card-img-top img-fluid"
-                                        alt="Product image">
-                                </div>
-                            </div>
+
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
+                            {% else %}
+                                <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
+                            {% endif %}
+
                             <div class="card-body">
                                 <h5 class="card-title">{{ product.name }}</h5>
-                                <p class="card-text">{{ product.price }}</p>
+
+                                {% if product.discount %}
+                                    <p><s>{{ product.price }}</s></p>
+                                    <p class="card-text">{{ product.sell_price }}</p>
+                                    <span class='badge bg-warning text-dark'>Скидка {{ product.discount }} %</span>
+                                {% else %}
+                                    <p class="card-text">{{ product.price }}</p>
+                                {% endif %}
+                                
                                 <a href="#" class="btn btn-outline-dark mt-3">Добавить в корзину</a>
                             </div>
                         </a>
