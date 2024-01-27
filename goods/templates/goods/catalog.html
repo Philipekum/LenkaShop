@@ -13,7 +13,7 @@
                 {% for product in products %}
                 <div class="col-lg-4 col-md-6 mt-4">
                     <div class="card" style="width: 26rem;">
-                        <a href="#" class="text-decoration-none text-reset">
+                        <a href={% url "catalog:product" product.slug %} class="text-decoration-none text-reset">
 
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
