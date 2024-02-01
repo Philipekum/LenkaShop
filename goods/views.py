@@ -4,7 +4,9 @@ from django.core.paginator import Paginator
 from goods.models import Products
 
 
-def catalog(request, page=1):
+def catalog(request):
+    page = int(request.GET.get('page', 1))
+
     products = Products.objects.all()
 
     paginator = Paginator(products, 2)
