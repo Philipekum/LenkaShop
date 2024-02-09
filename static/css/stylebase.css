@@ -1,6 +1,11 @@
-@import url('https://fonts.googleapis.com/css?family=Michroma&display=swap');
+.navbar-brand {
+    font-size: 40px;
+}
 
+.nav-link {
+    font-size: 24px;
+}
 
-body {
-    font-family: Michroma, serif;
+.navbar-text {
+    font-size: 1.5rem;
 }
