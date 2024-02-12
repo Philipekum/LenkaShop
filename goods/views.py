@@ -9,7 +9,7 @@ def catalog(request):
 
     products = Products.objects.all()
 
-    paginator = Paginator(products, 2)
+    paginator = Paginator(products, 9)
     current_page = paginator.page(page)
 
     context = {

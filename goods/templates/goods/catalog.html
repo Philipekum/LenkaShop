@@ -31,8 +31,6 @@
                                 {% else %}
                                     <p class="card-text">{{ product.price }}</p>
                                 {% endif %}
-                                
-                                <a href="#" class="btn btn-outline-dark mt-3">Добавить в корзину</a>
                             </div>
                         </a>
                     </div>
@@ -44,7 +42,7 @@
     </div>
 </div>
 <nav aria-label="Page navigation example">
-    <ul class="pagination">
+    <ul class="pagination my-4">
       <li class="page-item {% if not products.has_previous %}disabled{% endif %}">
         <a class="page-link" href="
             {% if products.has_previous %} ?page={{ products.previous_page_number }}
