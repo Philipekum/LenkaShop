@@ -15,12 +15,12 @@
     <title>{{ title }}</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
       <nav class="navbar navbar-expand-md py-5">
         
-        <div class="col-6">
-          <a class="offset-1 navbar-brand" href="{% url "main:index" %}">Lenka</a>
+        <div class="col-6 px-5">
+          <a class="navbar-brand" href="{% url "main:index" %}">Lenka</a>
         </div>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@
           </ul>
         </div>
 
-        <a class="col-2 offset-1 navbar-text" href="#">
+        <a class="col-2 navbar-text" href="#">
           <i class="bi bi-bag"></i>
         </a>
           
@@ -48,10 +48,10 @@
     </section>
 
     <footer class="footer mt-auto">
-        <div class="row">
+        <div class="row w-100">
           
-          <div class="col-3 mb-4">
-            <a class="offset-2 navbar-brand" href="#">Lenka</a>
+          <div class="col-3 mb-4 px-5">
+            <a class="navbar-brand" href="#">Lenka</a>
           </div>
 
           <div class="col-3 mb-4">
