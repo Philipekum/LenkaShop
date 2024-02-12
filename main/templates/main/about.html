@@ -1,0 +1,10 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% comment %} {% block css %}
+  <link rel="stylesheet" href="{% static "css/stylecard.css" %}">
+{% endblock %} {% endcomment %}
+
+{% block content %}
+  {{ content }}
+{% endblock  %}
