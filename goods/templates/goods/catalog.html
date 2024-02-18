@@ -4,64 +4,67 @@
 {% block content %}
 <div class="container-fluid mt-4">
     <div class="row">
-        {% comment %} Вроде бы можно убрать, так как в бейс добавлена колонка {% endcomment %}
-        {% comment %} <div class="col-lg-1"></div>  {% endcomment %}
 
         <div class="col-lg-8 col-md-12">
-            <div class="row">
+            <div class="row justify-content-center">
+
                 {% for product in products %}
-                <div class="col-lg-4 col-md-6 mt-4">
-                    <div class="card border-0" style="width: 26rem;">
-                        <a href={% url "catalog:product" product.slug %} class="text-decoration-none text-reset">
+                    <div class="col-lg-4 col-md-6 mt-4">
+                        <div class="card border-0" style="width: 26rem;">
+                            <a href={% url "catalog:product" product.slug %} class="text-decoration-none text-reset">
 
-                            {% if product.image %}
-                                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
-                            {% else %}
-                                <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
-                            {% endif %}
-
-                            <div class="card-body">
-                                <h5 class="card-title text-center">{{ product.name }}</h5>
-
-                                {% if product.discount %}
-                                    <p class="card-text text-center"><s>{{ product.price }}</s></p>
-                                    <p class="card-text text-center">{{ product.sell_price }}</p>
-                                    <span class='badge bg-warning text-dark'>Скидка {{ product.discount }} %</span>
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
                                 {% else %}
-                                    <p class="card-text text-center">{{ product.sell_price }}</p>
+                                    <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
                                 {% endif %}
-                            </div>
-                        </a>
-                    </div>
-                </div>                
+
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">{{ product.name }}</h5>
+
+                                    {% if product.discount %}
+                                        <p class="card-text text-center"><s>{{ product.price }}</s> {{ product.sell_price }}</p>
+                                        {% comment %} <p class="card-text text-center">{{ product.sell_price }}</p> {% endcomment %}
+                                        {% comment %} <span class='badge bg-warning text-dark'>Скидка {{ product.discount }} %</span> {% endcomment %}
+                                    {% else %}
+                                        <p class="card-text text-center">{{ product.sell_price }}</p>
+                                    {% endif %}
+                                </div>
+                            </a>
+                        </div>
+                    </div>                
                 {% endfor %}
 
             </div>
         </div>
     </div>
 </div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination my-4">
-      <li class="page-item {% if not products.has_previous %}disabled{% endif %}">
-        <a class="page-link" href="
-            {% if products.has_previous %} ?page={{ products.previous_page_number }}
-                {% else %} #
-            {% endif %}">Назад</a></li>
 
-        {% for page in products.paginator.page_range %}
-        {% if page >= products.number|add:-2 and page <= products.number|add:2 %}
-            <li class="page-item {% if products.number == page %}disabled{% endif %}">
-                <a class="page-link" href="?page={{ page }}">{{ page }}</a></li>           
-        {% endif %}
-        {% endfor %}
+{% if products.has_other_pages %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-lg my-4 justify-content-center">
+        <li class="page-item {% if not products.has_previous %}disabled{% endif %}">
+            <a class="page-link" href="
+                {% if products.has_previous %} ?page={{ products.previous_page_number }}
+                    {% else %} #
+                {% endif %}">&laquo;</a></li>
+
+            {% for page in products.paginator.page_range %}
+                {% if page >= products.number|add:-2 and page <= products.number|add:2 %}
+                    <li class="page-item {% if products.number == page %}disabled{% endif %}">
+                        <a class="page-link" href="?page={{ page }}">{{ page }}</a></li>           
+                {% endif %}
+            {% endfor %}
 
 
-      <li class="page-item {% if not products.has_next %}disabled{% endif %}">
-        <a class="page-link" href="
-            {% if products.has_next %} ?page={{ products.next_page_number }}
-                {% else %} #
-            {% endif %}">Далее</a></li>
-    </ul>
-  </nav>
+        <li class="page-item {% if not products.has_next %}disabled{% endif %}">
+            <a class="page-link" href="
+                {% if products.has_next %} ?page={{ products.next_page_number }}
+                    {% else %} #
+                {% endif %}">&raquo;</a></li>
+        </ul>
+    </nav>
+{% endif %}
+
 {% endblock %}
 
