@@ -43,13 +43,13 @@
     </header>
 
     <section>
-      <div class="row">
-        <div class="col-lg-1 col-md-1"></div>
-        <div class="col-10">
+      {% comment %} <div class="row"> {% endcomment %}
+        {% comment %} <div class="col-lg-1 col-md-1"></div> {% endcomment %}
+        {% comment %} <div class="col-10"> {% endcomment %}
           {% block content %}
           {% endblock %}
-        </div>
-      </div>
+        {% comment %} </div> {% endcomment %}
+      {% comment %} </div> {% endcomment %}
     </section>
 
     <footer class="footer mt-auto">
