@@ -4,101 +4,159 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% block css %}{% endblock %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" 
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href={% static "css/stylebase.css" %}>
-    <link rel="stylesheet" href={% static "css/stylecard.css" %}>
-    <title>{{ title }}</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport">
+  <title></title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" type='text/css' href={% static "css/bootstrap.min.css" %}>
+  <link rel="stylesheet" type='text/css' href={% static "css/style.css" %}>
+
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <header>
-      <nav class="navbar navbar-expand-md py-5">
-        
-        <div class="col-6 px-5">
-          <a class="navbar-brand" href="{% url "main:index" %}">Lenka</a>
-        </div>
+    <header class="header fixed-top">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg">
+          <div class="container-fluid px-0">
+            <a class="navbar-brand" href="{% url "main:index" %}">
+              <img src={% static "images/logo.png" %} alt="Lenka">
+            </a>
+            <div class="cart_block ms-lg-0 order-lg-3">
+              <a class="cart_lnk" href="#">
+                <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg"> <g clip-path="url(#clip0_2_692)"> <rect width="37" height="37" fill="white"/> <path d="M15.0312 16.1875C14.7246 16.1875 14.4305 16.3093 14.2137 16.5262C13.9968 16.743 13.875 17.0371 13.875 17.3438C13.875 17.6504 13.9968 17.9445 14.2137 18.1613C14.4305 18.3782 14.7246 18.5 15.0312 18.5H24.2812C24.5879 18.5 24.882 18.3782 25.0988 18.1613C25.3157 17.9445 25.4375 17.6504 25.4375 17.3438C25.4375 17.0371 25.3157 16.743 25.0988 16.5262C24.882 16.3093 24.5879 16.1875 24.2812 16.1875H15.0312Z" fill="black"/> <path d="M1.15625 2.3125C0.849593 2.3125 0.555497 2.43432 0.338658 2.65116C0.121819 2.868 0 3.16209 0 3.46875C0 3.77541 0.121819 4.0695 0.338658 4.28634C0.555497 4.50318 0.849593 4.625 1.15625 4.625H3.72312L4.65044 8.34119L8.11456 26.8065C8.16416 27.0715 8.30478 27.3108 8.51211 27.483C8.71943 27.6553 8.98044 27.7498 9.25 27.75H11.5625C10.3359 27.75 9.15949 28.2373 8.29213 29.1046C7.42478 29.972 6.9375 31.1484 6.9375 32.375C6.9375 33.6016 7.42478 34.778 8.29213 35.6454C9.15949 36.5127 10.3359 37 11.5625 37C12.7891 37 13.9655 36.5127 14.8329 35.6454C15.7002 34.778 16.1875 33.6016 16.1875 32.375C16.1875 31.1484 15.7002 29.972 14.8329 29.1046C13.9655 28.2373 12.7891 27.75 11.5625 27.75H27.75C26.5234 27.75 25.347 28.2373 24.4796 29.1046C23.6123 29.972 23.125 31.1484 23.125 32.375C23.125 33.6016 23.6123 34.778 24.4796 35.6454C25.347 36.5127 26.5234 37 27.75 37C28.9766 37 30.153 36.5127 31.0204 35.6454C31.8877 34.778 32.375 33.6016 32.375 32.375C32.375 31.1484 31.8877 29.972 31.0204 29.1046C30.153 28.2373 28.9766 27.75 27.75 27.75H30.0625C30.3321 27.7498 30.5931 27.6553 30.8004 27.483C31.0077 27.3108 31.1483 27.0715 31.1979 26.8065L34.6667 8.3065C34.6979 8.13962 34.692 7.96791 34.6494 7.80357C34.6068 7.63923 34.5285 7.48629 34.4202 7.35561C34.3118 7.22493 34.1759 7.11972 34.0223 7.04746C33.8687 6.9752 33.701 6.93766 33.5312 6.9375H6.68313L5.74656 3.18894C5.68415 2.93869 5.53985 2.71649 5.33663 2.55768C5.1334 2.39887 4.88292 2.31257 4.625 2.3125H1.15625ZM10.2097 25.4375L7.17338 9.25H32.1391L29.1028 25.4375H10.2097ZM13.875 32.375C13.875 32.9883 13.6314 33.5765 13.1977 34.0102C12.764 34.4439 12.1758 34.6875 11.5625 34.6875C10.9492 34.6875 10.361 34.4439 9.92732 34.0102C9.49364 33.5765 9.25 32.9883 9.25 32.375C9.25 31.7617 9.49364 31.1735 9.92732 30.7398C10.361 30.3061 10.9492 30.0625 11.5625 30.0625C12.1758 30.0625 12.764 30.3061 13.1977 30.7398C13.6314 31.1735 13.875 31.7617 13.875 32.375ZM30.0625 32.375C30.0625 32.9883 29.8189 33.5765 29.3852 34.0102C28.9515 34.4439 28.3633 34.6875 27.75 34.6875C27.1367 34.6875 26.5485 34.4439 26.1148 34.0102C25.6811 33.5765 25.4375 32.9883 25.4375 32.375C25.4375 31.7617 25.6811 31.1735 26.1148 30.7398C26.5485 30.3061 27.1367 30.0625 27.75 30.0625C28.3633 30.0625 28.9515 30.3061 29.3852 30.7398C29.8189 31.1735 30.0625 31.7617 30.0625 32.375Z" fill="black"/> </g> <defs> <clipPath id="clip0_2_692"> <rect width="37" height="37" fill="white"/> </clipPath> </defs> </svg>
+                <span class="prod_in_cart">3</span>
+              </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+              <!-- modal содержимое корзины -->
+              <div class="cart_menu">
+                <div class="cart_menu_content">
+                  <div class="cart_menu_header mb-3">Ваши товары</div>
+                  <div class="cart_menu_list">
+                    <div class="d-flex justify-content-between cart_menu_item">
+                      <div class="cart_menu_item_img">
+                        <a href="/goods/product.html"><img class="w-100" src={% static "images/cart-item.jpg" %} alt="Фото"></a>
+                      </div>
+                      <div class="cart_menu_item_content">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                          <div class="cart_menu_item_title"><a href="/goods/product.html">Название товара</a></div>
+                          <button type="button" class="del_cart_btn">
+                            <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="   ">
+                          </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pe-2">
+                          <div class="cart_menu_q">
+                            <button type="button" class="q_btn dec">-</button>
+                            <input type="text" name="q_item" class="cart_menu_item_q" value="1">
+                            <button type="button" class="q_btn inc">+</button>
+                          </div>
+                          <div class="cart_menu_item_price">99 999 ₽</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between cart_menu_item mb-4">
+                      <div class="cart_menu_item_img">
+                        <a href="/goods/product.html"><img class="w-100" src={% static "images/cart-item.jpg" %} alt="Фото"></a>
+                      </div>
+                      <div class="cart_menu_item_content">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                          <div class="cart_menu_item_title"><a href="/goods/product.html">Название товара</a></div>
+                          <button type="button" class="del_cart_btn">
+                            <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="   ">
+                          </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pe-2">
+                          <div class="cart_menu_q">
+                            <button type="button" class="q_btn dec">-</button>
+                            <input type="text" name="q_item" class="cart_menu_item_q" value="2">
+                            <button type="button" class="q_btn inc">+</button>
+                          </div>
+                          <div class="cart_menu_item_price">9 999 ₽</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-4 cart_menu_total">
+                      <div>Заказ на сумму</div>
+                      <div>99 999 ₽</div>
+                    </div>
+                  </div>
+                  <div class="cart_menu_footer">
+                    <button class="btn primary-btn">Оформить заказ</button>
+                  </div>
+                </div>
+              </div>
 
-        <div class="col-4 collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="me-4 nav-item"><a href="{% url "catalog:index" %}" class="nav-link">Каталог</a></li>
-            <li class="me-4 nav-item"><a href="{% url "main:about" %}" class="nav-link">О бренде</a></li>
-            <li class="me-4 nav-item"><a href="#" class="nav-link">Контакты</a></li>
-          </ul>
-        </div>
-
-        <a class="col-2 navbar-text" href="#">
-          <i class="bi bi-bag"></i>
-        </a>
-          
-      </nav>     
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav ms-lg-auto me-16 mb-2 mb-lg-0 col-lg-7 justify-content-lg-between ">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Ссылка</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Ссылка</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Ссылка</a>
+                </li>
+              </ul>
+            </div>
+  
+          </div>
+        </nav>
+      </div>
     </header>
 
-    <section>
-      {% comment %} <div class="row"> {% endcomment %}
-        {% comment %} <div class="col-lg-1 col-md-1"></div> {% endcomment %}
-        {% comment %} <div class="col-10"> {% endcomment %}
-          {% block content %}
-          {% endblock %}
-        {% comment %} </div> {% endcomment %}
-      {% comment %} </div> {% endcomment %}
+    <section class="content_section"> 
+      <div class="container">
+        {% block content %}
+        {% endblock %}
+      </div>
     </section>
 
-    <footer class="footer mt-auto">
-        <div class="row w-100">
-          
-          <div class="col-3 mb-4 px-5">
-            <a class="navbar-brand" href="#">Lenka</a>
+    <footer class="footer">
+      <div class="container">
+        <div class="row flex-column flex-lg-row justify-content-lg-between">
+          <div class="col-12 col-lg-4 order-2 order-lg-1 text-center text-lg-start pt-2 mb-4 mb-lg-0">
+            <div class="mb_2_3 mb-lg-4">
+              <a href="https://wa.me/79999999999"><img class="footer_icon" src= {% static "icon/whatsapp-icon.png" %} alt=""> +7 999 999 99 99</a>
+            </div>
+
+            <div class="">
+              <a href="mailto:example@example.ru"><img class="footer_icon" src= {% static "icon/mail-icon.png" %} alt=""> example@example.ru</a>
+            </div>
+
           </div>
 
-          <div class="col-3 mb-4">
-            <a class="nav-link" href="{% url "main:silk" %}">О шёлке</a>
+          <div class="col-12 col-lg-6 order-3 order-lg-2 text-center text-lg-start pt-1 pt-lg-0">
+            <nav class="navbar pt-0">
+              <ul class="navbar-nav flex-lg-row flex-lg-wrap align-items-lg-stretch col">
+                <li class="nav-item col-lg-6"><a class="nav-link mb-4 mb-lg-3" href="#">Ссылка1</a></li>
+                <li class="nav-item col-lg-6"><a class="nav-link mb-4 mb-lg-3" href="#">Ссылка4</a></li>
+                <li class="nav-item col-lg-6"><a class="nav-link mb-4 mb-lg-3" href="#">Ссылка2</a></li>
+                <li class="nav-item col-lg-6"><a class="nav-link mb-4 mb-lg-3" href="#">Ссылка5</a></li>
+                <li class="nav-item col-lg-6"><a class="nav-link mb-4 mb-lg-3" href="#">Ссылка3</a></li>
+                <li class="nav-item col-lg-6"><a class="nav-link mb-4 mb-lg-3" href="#">Ссылка6</a></li>							
+              </ul>
+            </nav>
           </div>
 
-          <div class="col-3 mb-4">
-            <ul class="list-unstyled">
-              <li>
-                <a class="mb-4 nav-link" href="#">О бренде</a>
-              </li>
-              <li>
-                <a class="mb-4 nav-link" href="#">Контакты</a>
-              </li>
-              <li>
-                <a class="mb-4 nav-link" href="#">Доставка и оплата</a>
-              </li>
-            </ul>
+          <div class="col-12 col-lg-auto text-center order-1 order-lg-3 pt-1 mb-4 mb-lg-0">
+            <a href="{% url "main:index" %}">
+              <img class="footer_logo" src= {% static "images/logo.png" %} alt="" width="100" height="100">
+            </a>
           </div>
-
-          <div class="col-3 mb-4">
-            <ul class="list-unstyled">
-              <li>
-                <a class="mb-4 nav-link" href="#">Политика конфиденциальности</a>
-              </li>
-              <li>
-                <a class="mb-4 nav-link" href="#">Публичная оферта</a>
-              </li>
-              <li>
-                <a class="mb-4 nav-link" href="#">Согласие на обработку персональных данных</a>
-              </li>
-            </ul>
-          </div>
-
-
         </div>
-
+      </div>
+  
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-        crossorigin="anonymous"></script>
+    <script src={% static "js/bootstrap.bundle.min.js" %}></script>
+    <script src={% static "js/script.js" %}></script>	
 </body>
 
 </html>
