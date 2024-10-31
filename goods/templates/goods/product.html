@@ -85,91 +85,51 @@
 					</div>
 				</div>
 			</div>
+
+            {% if product.similar_products.all.exists %} 
             
-            <h2 class="text-center related_title mb-4">Похожие товары</h2>
-            <div class="row flex-wrap product_list">
-                <div class="product_item col-6 col-lg-4 mb-lg-2">
-                    <div class="product_item_img">
-                        <a href="#">
-                            <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="">
-                            <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="">
-                        </a>
-                    </div>
-                    <div class="product_item_info">
-                        <a class="py-2 py-lg-4" href="#">
-                            <div class="product_item_name">Название товара</div>
-                            <div class="product_item_price">от 9 999 ₽</div>
-                        </a>
-                    </div>
-                </div>
-                <div class="product_item col-6 col-lg-4 mb-lg-2">
-                    <div class="product_item_img">
-                        <a href="#">
-                            <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="">
-                            <img class="second_img" src={% static "images/product-left2.jpg" %}  class="d-block w-100" alt="">
-                        </a>
-                    </div>
-                    <div class="product_item_info">
-                        <a class="py-2 py-lg-4" href="#">
-                            <div class="product_item_name">Название товара</div>
-                            <div class="product_item_price">от 9 999 ₽</div>
-                        </a>
-                    </div>
-                </div>
-                <div class="product_item col-6 col-lg-4 mb-lg-2">
-                    <div class="product_item_img">
-                        <a href="#">
-                            <img class="first_img" src={% static "images/product-left.jpg"  %} class="d-block w-100" alt="">
-                            <img class="second_img" src={% static "images/product-left2.jpg" %}  class="d-block w-100" alt="">
-                        </a>
-                    </div>
-                    <div class="product_item_info">
-                        <a class="py-2 py-lg-4" href="#">
-                            <div class="product_item_name">Название товара</div>
-                            <div class="product_item_price">
-                                <div class="price_old">99 999 ₽</div>
-                                <div>9 999 ₽</div>
+                <h2 class="text-center related_title mb-4">Похожие товары</h2>
+
+                <div class="row flex-wrap product_list">
+                    {% for similar_product in product.similar_products.all %}
+                    
+                        <div class="product_item col-6 col-lg-4 mb-lg-2">
+                            
+                            <div class="product_item_img">
+                                <a href="{% url "catalog:product" product.slug %}">
+                                    {% if product.image %}
+                                        <img class="first_img" src="{{ product.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                        <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ product.name }}">
+                                
+                                    {% else %}
+                                        <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="No Product Image">
+                                        <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="No Product Image">
+                
+                                    {% endif %}
+                                </a>
                             </div>
-                        </a>
-                    </div>
+
+                            <div class="product_item_info">
+                                <a class="py-2 py-lg-4" href="{% url "catalog:product" product.slug %}">
+                                    <div class="product_item_name">{{ product.name }}</div>
+
+                                    {% if product.discount_price %}
+                                        <div class="product_item_price">
+                                            <div class="price_old">{{ product.price }} &#8381;</div>
+                                            <div>{{ product.discount_price }} &#8381;</div>
+                                        </div>
+
+                                    {% else %}
+                                        <div class="product_item_price">{{ product.price }} &#8381;</div>
+
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+
+                    {% endfor %}
                 </div>
-            </div>
 
-{% comment %} <div class="col-12">
-    <div class="row">
-        <div class="col-lg-1 col-md-1"></div>
-
-        <div class="col-lg-5 col-md-5">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
-            {% else %}
-                <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
             {% endif %}
-
-        </div>
-
-        <div class="col-lg-1 col-md-1"></div>
-
-        <div class="col-lg-5 col-md-5">
-            <h2 class="card-title">{{ product.name }}</h5>
-
-            {% if product.discount %}
-                <p class="card-text mt-4 fs-4"><s class="text-secondary">{{ product.price }}</s>   {{ product.sell_price }} &#8381;</p>
-            {% else %}
-                <p class="card-text mt-4 fs-4">{{ product.sell_price }} &#8381;</p>
-            {% endif %}
-            
-            <a href="#" class="btn btn-outline-dark fs-5 mt-3">Добавить в корзину</a>
-
-            <h5 class="mt-4">Описание</h5>
-            {% if product.description %}
-                <p>{{ product.description }}</p>
-            {% else %}
-                <p>Описания пока что нет.</p>
-            {% endif %}
-
-        </div>
-    </div>
-</div> {% endcomment %}
 
 {% endblock %}

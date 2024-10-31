@@ -37,6 +37,7 @@ class Products(models.Model):
     quantity = models.PositiveIntegerField(default=0, verbose_name='Количество')
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
     laundry_features = models.ManyToManyField(LaundryFeature, blank=True)
+    similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
 
     class Meta:
         db_table = 'product'
@@ -45,7 +46,7 @@ class Products(models.Model):
         ordering = ('id',)
 
     def __str__(self):
-        return f'{self.name} Кол-во - {self.quantity}'
+        return f'{self.name}'
     
     def display_id(self):
         return f'{self.id:05}'
