@@ -2,8 +2,129 @@
 {% load static %}
 
 {% block content %}
+			<div class="row justify-content-between align-items-lg-start mb-5 mb-lg_8">
+				<div class="col-12 col-lg-7 product_image_block">
+					<div id="carousel" class="carousel slide">
+						<div class="d-flex d-lg-none carousel-indicators">
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+						</div>
+						<div class="d-block d-lg-flex flex-lg-wrap carousel-inner">
+							<div class="col-lg-12 carousel-item active">
+								<img src={% static "images/product-slide.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-6 carousel-item">
+								<img src={% static "images/product-slide2.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-6 carousel-item">
+								<img src={% static "images/product-slide.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-12 carousel-item">
+								<img src={% static "images/product-slide2.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-12 carousel-item">
+								<img src={% static "images/product-slide.jpg" %} class="d-block w-100" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-12 col-lg-5 product_content_block">
+					<h1 class="product_name">Название товара</h1>
+					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
+						<div class="d-flex flex-column d-lg-block justify-content-center product_price">
+							<span class="d-block d-lg-inline price_old">99 999 ₽</span>
+							9 999 ₽
+						</div>
+						<div class="col product_option_block order-3 mt-4 mt-lg-0">
+							<div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
+							<div class="product_option">
+								<input class="select_input" type="hidden" name="" value="1">
+								<div class="select_head">option 1</div>
+								<ul class="select_list">
+									<li class="select_item">option 1</li>
+									<li class="select_item">option 2</li>
+									<li class="select_item">option 3</li>
+								</ul>
+							</div>
+						</div>
+						<div class="add2cart_block order-2">
+							<button class="btn add2cart_btn primary-btn" type="button">Добавить в корозину</button>
+						</div>
+					</div>
+					<div class="product_description">
+						<h3 class="product_description_title">Описание</h3>
+						<div class="product_description_text mb-4 mb-lg-5">
+							Lorem ipsum dolor sit amet consectetur. Vulputate sed senectus eros purus. A aliquet consectetur accumsan scelerisque viverra aliquam euismod. Fermentum diam massa quisque elementum elit netus vitae ullamcorper urna. Volutpat non lorem velit ut viverra donec massa quam eleifend. Mi tellus lectus morbi vel. Aliquam elementum adipiscing egestas elementum ipsum a. Eu consectetur dolor a at dolor vel egestas consequat at. Adipiscing rhoncus neque cursus a praesent quis. Eleifend varius mi nisl est pharetra vel nullam scelerisque viverra. 
+						</div>
+						<h3 class="product_description_title">Состав</h3>
+						<div class="product_description_text mb_2_8">
+							Lorem ipsum dolor sit amet consectetur. Vulputate sed senectus eros purus. 
+						</div>
+						<div class="product_description_icon">
+							<img class="product_icon" src={% static "icon/icon1.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
+							<img class="product_icon" src={% static "icon/icon2.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
+							<img class="product_icon" src={% static "icon/icon3.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
+							<img class="product_icon" src={% static "icon/icon4.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
+							<img class="product_icon" src={% static "icon/icon5.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
+							<img class="product_icon" src={% static "icon/icon6.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
+						</div>
+					</div>
+				</div>
+			</div>
+            
+            <h2 class="text-center related_title mb-4">Похожие товары</h2>
+            <div class="row flex-wrap product_list">
+                <div class="product_item col-6 col-lg-4 mb-lg-2">
+                    <div class="product_item_img">
+                        <a href="#">
+                            <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="">
+                            <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="">
+                        </a>
+                    </div>
+                    <div class="product_item_info">
+                        <a class="py-2 py-lg-4" href="#">
+                            <div class="product_item_name">Название товара</div>
+                            <div class="product_item_price">от 9 999 ₽</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="product_item col-6 col-lg-4 mb-lg-2">
+                    <div class="product_item_img">
+                        <a href="#">
+                            <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="">
+                            <img class="second_img" src={% static "images/product-left2.jpg" %}  class="d-block w-100" alt="">
+                        </a>
+                    </div>
+                    <div class="product_item_info">
+                        <a class="py-2 py-lg-4" href="#">
+                            <div class="product_item_name">Название товара</div>
+                            <div class="product_item_price">от 9 999 ₽</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="product_item col-6 col-lg-4 mb-lg-2">
+                    <div class="product_item_img">
+                        <a href="#">
+                            <img class="first_img" src={% static "images/product-left.jpg"  %} class="d-block w-100" alt="">
+                            <img class="second_img" src={% static "images/product-left2.jpg" %}  class="d-block w-100" alt="">
+                        </a>
+                    </div>
+                    <div class="product_item_info">
+                        <a class="py-2 py-lg-4" href="#">
+                            <div class="product_item_name">Название товара</div>
+                            <div class="product_item_price">
+                                <div class="price_old">99 999 ₽</div>
+                                <div>9 999 ₽</div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
-<div class="col-12">
+{% comment %} <div class="col-12">
     <div class="row">
         <div class="col-lg-1 col-md-1"></div>
 
@@ -38,32 +159,6 @@
 
         </div>
     </div>
-</div>
-
-{% comment %} <div class="col-lg-4 col-md-6 mt-4">
-    <div class="card" style="width: 26rem;">
-        <a href="#" class="text-decoration-none text-reset">
-
-            {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
-            {% else %}
-                <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
-            {% endif %}
-
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-
-                {% if product.discount %}
-                    <p><s>{{ product.price }}</s></p>
-                    <p class="card-text">{{ product.sell_price }}</p>
-                    <span class='badge bg-warning text-dark'>Скидка {{ product.discount }} %</span>
-                {% else %}
-                    <p class="card-text">{{ product.price }}</p>
-                {% endif %}
-                
-                <a href="#" class="btn btn-outline-dark mt-3">Добавить в корзину</a>
-            </div>
-        </a>
-    </div>
 </div> {% endcomment %}
+
 {% endblock %}
