@@ -707,7 +707,7 @@ a, a:hover, a:active, a:focus{
 		position: sticky;
 		top: 120px;
 	}
-	.select_list,,
+	.select_list,
 	.select_head {
 		min-width: 322px;
 		font-size: 1.5rem;
