@@ -46,18 +46,22 @@
 
                         {% endif %}
 
-						<div class="col product_option_block order-3 mt-4 mt-lg-0">
-							<div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
-							<div class="product_option">
-								<input class="select_input" type="hidden" name="" value="1">
-								<div class="select_head">option 1</div>
-								<ul class="select_list">
-									<li class="select_item">option 1</li>
-									<li class="select_item">option 2</li>
-									<li class="select_item">option 3</li>
-								</ul>
-							</div>
-						</div>
+                        {% if product.options and product.options.all.exists %}
+                            <div class="col product_option_block order-3 mt-4 mt-lg-0">
+                                <div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
+                                <div class="product_option">
+                                    <input class="select_input" type="hidden" name="" value="1">
+                                    <div class="select_head">option 1</div>
+                                    <ul class="select_list">
+                                        <li class="select_item">option 1</li>
+                                        <li class="select_item">option 2</li>
+                                        <li class="select_item">option 3</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        {% endif %}
+
 
 						<div class="add2cart_block order-2">
 							<button class="btn add2cart_btn primary-btn" type="button">Добавить в корозину</button>
