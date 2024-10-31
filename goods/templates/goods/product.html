@@ -31,13 +31,21 @@
 						</div>
 					</div>
 				</div>
+
 				<div class="col-12 col-lg-5 product_content_block">
-					<h1 class="product_name">Название товара</h1>
+					<h1 class="product_name">{{ product.name }}</h1>
 					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
-						<div class="d-flex flex-column d-lg-block justify-content-center product_price">
-							<span class="d-block d-lg-inline price_old">99 999 ₽</span>
-							9 999 ₽
-						</div>
+                        {% if product.discount_price %}
+						    <div class="d-flex flex-column d-lg-block justify-content-center product_price">
+							    <span class="d-block d-lg-inline price_old">{{ product.price }} &#8381;</span>
+							{{ product.discount_price }} &#8381;
+						    </div>
+                        
+                        {% else %}
+                            <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price }} &#8381;</div>
+
+                        {% endif %}
+
 						<div class="col product_option_block order-3 mt-4 mt-lg-0">
 							<div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
 							<div class="product_option">
@@ -50,27 +58,30 @@
 								</ul>
 							</div>
 						</div>
+
 						<div class="add2cart_block order-2">
 							<button class="btn add2cart_btn primary-btn" type="button">Добавить в корозину</button>
 						</div>
 					</div>
+
 					<div class="product_description">
 						<h3 class="product_description_title">Описание</h3>
 						<div class="product_description_text mb-4 mb-lg-5">
-							Lorem ipsum dolor sit amet consectetur. Vulputate sed senectus eros purus. A aliquet consectetur accumsan scelerisque viverra aliquam euismod. Fermentum diam massa quisque elementum elit netus vitae ullamcorper urna. Volutpat non lorem velit ut viverra donec massa quam eleifend. Mi tellus lectus morbi vel. Aliquam elementum adipiscing egestas elementum ipsum a. Eu consectetur dolor a at dolor vel egestas consequat at. Adipiscing rhoncus neque cursus a praesent quis. Eleifend varius mi nisl est pharetra vel nullam scelerisque viverra. 
+							{{ product.description }}
 						</div>
 						<h3 class="product_description_title">Состав</h3>
 						<div class="product_description_text mb_2_8">
-							Lorem ipsum dolor sit amet consectetur. Vulputate sed senectus eros purus. 
+							{{ product.compound }} 
 						</div>
+
+
 						<div class="product_description_icon">
-							<img class="product_icon" src={% static "icon/icon1.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
-							<img class="product_icon" src={% static "icon/icon2.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
-							<img class="product_icon" src={% static "icon/icon3.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
-							<img class="product_icon" src={% static "icon/icon4.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
-							<img class="product_icon" src={% static "icon/icon5.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
-							<img class="product_icon" src={% static "icon/icon6.png" %} alt="Описание" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Описание">
-						</div>
+                            {% for laundary in product.laundry_features.all %}
+                                {% if laundary.icon %}
+							        <img class="product_icon" src={{ laundary.icon.url }} alt="{{ laundary.name }}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ laundary.name }}">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
 					</div>
 				</div>
 			</div>
