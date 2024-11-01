@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import InfoPage, MainPageContentBox, MainPageTextBox
+from .models import InfoPage, MainPage, MainPageContentBox, MainPageTextBox
 
 @admin.register(InfoPage)
 class InfoPageAdmin(admin.ModelAdmin):
@@ -8,11 +8,17 @@ class InfoPageAdmin(admin.ModelAdmin):
     search_fields = ('title',)
 
 
-@admin.register(MainPageTextBox)
-class MainPageTextBoxAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+class MainPageTextBoxInline(admin.TabularInline):
+    model = MainPageTextBox
+    extra = 1
 
 
-@admin.register(MainPageContentBox)
-class MainPageContentBoxAdmin(admin.ModelAdmin):
+class MainPageContentBoxInline(admin.TabularInline):
+    model = MainPageContentBox
+    extra = 1
+
+
+@admin.register(MainPage)
+class MainPageAdmin(admin.ModelAdmin):
     list_display = ('title',)
+    inlines = [MainPageTextBoxInline, MainPageContentBoxInline]
