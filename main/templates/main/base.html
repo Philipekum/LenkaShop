@@ -30,7 +30,7 @@
               </a>
 
               <!-- modal содержимое корзины -->
-              <div class="cart_menu">
+              {% comment %} <div class="cart_menu">
                 <div class="cart_menu_content">
                   <div class="cart_menu_header mb-3">Ваши товары</div>
                   <div class="cart_menu_list">
@@ -85,7 +85,8 @@
                     <button class="btn primary-btn">Оформить заказ</button>
                   </div>
                 </div>
-              </div>
+              </div> {% endcomment %}
+              {% include "carts/cart_modal.html" %}
 
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
