@@ -91,6 +91,7 @@ a, a:hover, a:active, a:focus{
 .collection_slider_block .carousel {
 	margin-left: calc(var(--bs-gutter-x) * -.5);
 	margin-right: calc(var(--bs-gutter-x) * -.5);
+	height: 100%;
 }
 .carousel-indicators {margin-bottom: 2rem;}
 .product_item_name {
@@ -495,7 +496,7 @@ a, a:hover, a:active, a:focus{
 	padding-left: 15px;
 	padding-right: 25px;
 }
-.checkout_form_block {}
+/*.checkout_form_block {}*/
 .checkout_input {
 	height: 45px;
 	font-family: 'Inter';
@@ -800,7 +801,7 @@ a, a:hover, a:active, a:focus{
 		padding-bottom: 3rem;
 		margin-bottom: 4rem;
 	}
-	.checkout_form_block {}
+/*	.checkout_form_block {} */
 	.checkout_input {
 		height: 55px;
 		font-size: 1.25rem;
