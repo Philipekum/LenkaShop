@@ -19,5 +19,5 @@ app_name = 'main'
 
 urlpatterns = [
     path('', index, name='index'),
-    path('<slug:slug>/', InfoPageDetailView.as_view(), name='info_page'),
+    path('info/<slug:slug>/', InfoPageDetailView.as_view(), name='info_page'),
 ]

@@ -8,7 +8,7 @@
     
     <div class="product_item col-6 col-lg-4 mb-lg-2">
         <div class="product_item_img">
-            <a href="{% url "catalog:product" product.slug %}">
+            <a href="{% url "goods:product" product.slug %}">
                 {% if product.image %}
                     <img class="first_img" src="{{ product.image.url }}" class="d-block w-100" alt="{{ product.name }}">
                     <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ product.name }}">
@@ -22,7 +22,7 @@
         </div>
 
         <div class="product_item_info">
-            <a class="py-2 py-lg-4" href="{% url "catalog:product" product.slug %}">
+            <a class="py-2 py-lg-4" href="{% url "goods:product" product.slug %}">
                 <div class="product_item_name">{{ product.name }}</div>
 
                 {% if product.discount_price %}

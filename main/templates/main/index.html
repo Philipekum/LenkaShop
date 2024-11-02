@@ -49,7 +49,7 @@
         <div class="d-flex d-lg-block justify-content-between col-12 col-lg-4 px-0 product_aside">
           <div class="product_item w-48 w-lg-100 mb-lg-3">
             <div class="product_item_img">
-              <a href="{% url "catalog:product" block.product1.slug %}">
+              <a href="{% url "goods:product" block.product1.slug %}">
                 {% if block.product1.image %}
                   <img class="first_img" src="{{ block.product1.image.url }}" class="d-block w-100" alt="{{ block.product1.name }}">
                   <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ block.product1.name }}">
@@ -62,7 +62,7 @@
               </a>
             </div>
             <div class="product_item_info">
-              <a class="py-2 py-lg-4" href="{% url "catalog:product" block.product1.slug %}">
+              <a class="py-2 py-lg-4" href="{% url "goods:product" block.product1.slug %}">
                 <div class="product_item_name">{{ block.product1.name }}</div>
                   {% if block.product1.discount_price %}
                     <div class="product_item_price">
@@ -80,7 +80,7 @@
 
           <div class="product_item w-48 w-lg-100">
             <div class="product_item_img">
-              <a href="{% url "catalog:product" block.product2.slug %}">
+              <a href="{% url "goods:product" block.product2.slug %}">
                 {% if block.product2.image %}
                   <img class="first_img" src="{{ block.product2.image.url }}" class="d-block w-100" alt="{{ block.product2.name }}">
                   <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ block.product2.name }}">
@@ -93,7 +93,7 @@
               </a>
             </div>
             <div class="product_item_info">
-              <a class="py-2 py-lg-4" href="{% url "catalog:product" block.product2.slug %}">
+              <a class="py-2 py-lg-4" href="{% url "goods:product" block.product2.slug %}">
                 <div class="product_item_name">{{ block.product2.name }}</div>
                   {% if block.product2.discount_price %}
                   <div class="product_item_price">
