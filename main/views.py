@@ -2,6 +2,10 @@ from django.shortcuts import render
 from .models import MainPage
 
 
+def order(request):
+    return render(request, 'main/order.html')
+
+
 def index(request):
     main_page = MainPage.objects.first() 
 
