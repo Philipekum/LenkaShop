@@ -64,8 +64,11 @@
 
 
 						<div class="add2cart_block order-2">
-							<button class="btn add2cart_btn primary-btn" type="button">Добавить в корозину</button>
-						</div>
+                            <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button>
+                            </a>
+                        </div>
+
 					</div>
 
 					<div class="product_description">

@@ -1,59 +1,56 @@
 {% load static %}
-              <div class="cart_menu">
-                <div class="cart_menu_content">
-                  <div class="cart_menu_header mb-3">Ваши товары</div>
-                  <div class="cart_menu_list">
-                    <div class="d-flex justify-content-between cart_menu_item">
-                      <div class="cart_menu_item_img">
-                        <a href="/goods/product.html"><img class="w-100" src={% static "images/cart-item.jpg" %} alt="Фото"></a>
-                      </div>
-                      <div class="cart_menu_item_content">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                          <div class="cart_menu_item_title"><a href="/goods/product.html">Название товара</a></div>
+<div class="cart_menu">
+  <div class="cart_menu_content">
 
-                          <a href="{% url "cart:cart_remove" 1 %}" type="button" class="del_cart_btn">
-                            <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="Убрать">
-                          </a>
+    {% if carts %}
+      <div class="cart_menu_header mb-3">Ваши товары</div>
 
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pe-2">
-                          <div class="cart_menu_q">
-                            <button type="button" class="q_btn dec">-</button>
-                            <input type="text" name="q_item" class="cart_menu_item_q" value="1">
-                            <button type="button" class="q_btn inc">+</button>
-                          </div>
-                          <div class="cart_menu_item_price">99 999 ₽</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-between cart_menu_item mb-4">
-                      <div class="cart_menu_item_img">
-                        <a href="/goods/product.html"><img class="w-100" src={% static "images/cart-item.jpg" %} alt="Фото"></a>
-                      </div>
-                      <div class="cart_menu_item_content">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                          <div class="cart_menu_item_title"><a href="/goods/product.html">Название товара</a></div>
-                          <button type="button" class="del_cart_btn">
-                            <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="   ">
-                          </button>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center pe-2">
-                          <div class="cart_menu_q">
-                            <button type="button" class="q_btn dec">-</button>
-                            <input type="text" name="q_item" class="cart_menu_item_q" value="2">
-                            <button type="button" class="q_btn inc">+</button>
-                          </div>
-                          <div class="cart_menu_item_price">9 999 ₽</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center mt-4 cart_menu_total">
-                      <div>Заказ на сумму</div>
-                      <div>99 999 ₽</div>
-                    </div>
-                  </div>
-                  <div class="cart_menu_footer">
-                    <button class="btn primary-btn">Оформить заказ</button>
-                  </div>
-                </div>
+      <div class="cart_menu_list">
+
+        {% for cart in carts %}
+          <div class="d-flex justify-content-between cart_menu_item">
+            <div class="cart_menu_item_img">
+              <a href="{% url "goods:product" cart.product.slug %}"><img class="w-100" src="{{ product.image.url }}" alt={{ product.name }}></a>
+            </div>
+
+            <div class="cart_menu_item_content">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="cart_menu_item_title"><a href="{% url "goods:product" cart.product.slug %}">{{ cart.product.name }}</a></div>
+
+                <a href="#" type="button" class="del_cart_btn">
+                  <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="Убрать">
+                </a>
               </div>
+
+              <div class="d-flex justify-content-between align-items-center pe-2">
+                <div class="cart_menu_q">
+
+                  <button type="button" class="q_btn dec">-</button>
+                  <input type="text" name="q_item" class="cart_menu_item_q" value="1">
+                  <button type="button" class="q_btn inc">+</button>
+
+                </div>
+
+                <div class="cart_menu_item_price">{{ cart.product.price }}</div>
+
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        
+        <div class="d-flex justify-content-between align-items-center mt-4 cart_menu_total">
+          <div>Заказ на сумму</div>
+          <div>{{ cart.total_price }}</div>
+        </div>
+      </div>
+
+      <div class="cart_menu_footer">
+        <a href="{% url "main:order" %}" class="btn primary-btn">Оформить заказ</a>
+      </div>
+
+    {% else %}
+      <div class="cart_menu_footer">Корзина пуста.</div>
+    {% endif %}
+
+  </div>
+</div>
