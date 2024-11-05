@@ -40,21 +40,23 @@ if (selectSingle_title) {
 const modalCart = document.querySelector('.cart_block');
 
 modalCart.addEventListener('click', (event) => {
-	event.preventDefault();
-	event.stopPropagation();
+    if (event.target.tagName !== 'A') { // если элемент не ссылка
+        event.preventDefault();
+    }
+    event.stopPropagation();
 
-	modalCart.classList.add('open');
-	
-	document.addEventListener( 'click', hideCart)	;
+    modalCart.classList.add('open');
+    
+    document.addEventListener('click', hideCart);
 });
 
 function hideCart(e) {
-	const cartPopup = document.querySelector('.cart_menu');
+    const cartPopup = document.querySelector('.cart_menu');
 
-	if ( !cartPopup.contains(e.target) ) {
-		modalCart.classList.remove('open');
-		document.removeEventListener('click', hideCart);
-	}	
+    if (!cartPopup.contains(e.target)) {
+        modalCart.classList.remove('open');
+        document.removeEventListener('click', hideCart);
+    }    
 }
 
 
