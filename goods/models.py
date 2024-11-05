@@ -38,7 +38,13 @@ class Products(models.Model):
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
     laundry_features = models.ManyToManyField(LaundryFeature, blank=True)
     similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
+    
+    def sell_price(self):
+        if self.discount_price > 0:
+            return self.discount_price
 
+        return self.price
+    
     class Meta:
         db_table = 'product'
         verbose_name = 'Продукт'

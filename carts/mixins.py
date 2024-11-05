@@ -4,11 +4,14 @@ from .models import Cart
 
 
 class CartMixin:
-    def get_cart(self, request, product=None):
+    def get_cart(self, request, product=None, cart_id=None):
         query_kwargs = {"session_key": request.session.session_key}
 
         if product:
             query_kwargs["product"] = product
+        
+        if cart_id:
+            query_kwargs["id"] = cart_id
         
         return Cart.objects.filter(**query_kwargs).first()
     

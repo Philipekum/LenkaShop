@@ -3,55 +3,64 @@
 
 {% block content %}
     <h1 class="page_title">Корзина</h1>
+    
+    {% if carts %}
     <div class="cart_list_block">
-        <div class="row justify-content-between align-items-lg-center cart_product_block">
-            <div class="cart_product_image_block">
-                <img src="/static/images/product-slide.jpg" class="d-block w-100" alt="">
-            </div>
-            <div class="row justify-content-between align-items-lg-center cart_product_info">
-                <div class="col-12 col-lg-5 cart_product_name_block">
-                    <div class="d-block d-lg-inline mb-2 mb-lg-0">Название товара</div>
-                    <div class="d-block d-lg-inline">option 1</div>
+    <div class="cart-container" id="cart-items-container">
+        {% for cart in carts %}
+        
+            <div class="row justify-content-between align-items-lg-center cart_product_block">
+                <div class="cart_product_image_block">
+                    <a href="{% url "goods:product" cart.product.slug %}">
+                        <img src="{{ cart.product.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
+                    </a>
                 </div>
-                <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
-                    99 999 ₽
+
+                <div class="row justify-content-between align-items-lg-center cart_product_info">
+                    <div class="col-12 col-lg-5 cart_product_name_block">
+                        <div class="d-block d-lg-inline mb-2 mb-lg-0">{{ cart.product.name }}</div>
+                        {% if product.options and product.options.all.exists %}
+                            <div class="d-block d-lg-inline">option 1</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
+                        {% if cart.product.discount_price %}
+                        <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price }}</span>
+                        {{ cart.product.sell_price }} &#8381;
+
+                        {% else %}
+                        {{ cart.product.sell_price }}
+                        
+                        {% endif %}
+                    </div>
+
+                    <div class="cart_q">
+                        <button type="button" class="q_btn dec">-</button>
+                        <input type="text" name="q_item" class="cart_item_q" value="{{ cart.quantity }}">
+                        <button type="button" class="q_btn inc">+</button>
+                    </div>					
+
+                    <div class="col-auto catr_product_price">{{ cart.total_price }}</div>
+
+                    <div class="col-auto">
+                        <a href="{% url "carts:cart_remove" %}" class="remove-from-cart" data-cart-id="{{ cart.id }}">
+                            {% csrf_token %}
+                            <button class="cart_btn_del"></button>
+                        </a>
+                    </div>
                 </div>
-                <div class="cart_q">
-                    <button type="button" class="q_btn dec">-</button>
-                    <input type="text" name="q_item" class="cart_item_q" value="1">
-                    <button type="button" class="q_btn inc">+</button>
-                </div>					
-                <div class="col-auto catr_product_price">99 999 ₽</div>
-                <div class="col-auto"><button class="cart_btn_del"></button></div>
             </div>
-        </div>
-        <div class="row justify-content-between align-items-lg-center cart_product_block">
-            <div class="cart_product_image_block">
-                <img src="/static/images/product-slide.jpg" class="d-block w-100" alt="">
-            </div>
-            <div class="row justify-content-between align-items-lg-center cart_product_info">
-                <div class="col-12 col-lg-5 cart_product_name_block">
-                    <div class="d-block d-lg-inline mb-2 mb-lg-0">Название товара___________</div>
-                    <div class="d-block d-lg-inline">option 2</div>
-                </div>
-                <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
-                    <span class="d-block d-xl-inline price_old mb-0">99 999 ₽</span>
-                    9 999 ₽
-                </div>
-                <div class="cart_q">
-                    <button type="button" class="q_btn dec">-</button>
-                    <input type="text" name="q_item" class="cart_item_q" value="2">
-                    <button type="button" class="q_btn inc">+</button>
-                </div>					
-                <div class="col-auto catr_product_price">99 999 ₽</div>
-                <div class="col-auto"><button class="cart_btn_del"></button></div>
-            </div>
-        </div>
+        
+        {% endfor %}
+
+
     </div>
+
     <div class="cart_total_block">
         <div class="row align-items-center justify-content-between justify-content-lg-start mb-3 mb-lg-4">
             <div class="col-8 col-lg-10 me-2">Общая стоимость покупки:</div>
-            <div class="col-auto">99 999 ₽</div>
+            <div class="col-auto">{{ carts.total_price }} &#8381;</div>
         </div>
         <div class="row align-items-center justify-content-between justify-content-lg-start mb_2_3 mb-lg_4">
             <div class="col-8 col-lg-10 me-2">Стоимость доставки:</div>
@@ -62,6 +71,7 @@
             <div class="col-auto">99 999 ₽</div>
         </div>
     </div>
+
     <div class="row align-items-lg-start justify-content-between">
         <div class="col-12 col-lg-6 checkout_form_block order-2 order-lg-1">
             <form action="">
@@ -88,5 +98,13 @@
             <p>Porta gravida lobortis. In vestibulum vestibulum lectus, non luctus sem semper nec. Duis nec est sodales turpis iaculis faucibus. Cras suscipit varius eros auctor gravida. Sed eget felis sit amet nisl rhoncus convallis a in orci. Curabitur tempor, eros in volutpat finibus, orci odio aliquam turpis, quis blandit.</p>
         </div>
     </div>
+
+    {% else %}
+
+    <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
+
+    {% endif %}
+        
+
     
 {% endblock %}

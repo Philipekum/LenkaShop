@@ -128,14 +128,6 @@ $(document).ready(function () {
                 csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
             },
             success: function (data) {
-                // Сообщение
-                successMessage.html(data.message);
-                successMessage.fadeIn(400);
-                // Через 7сек убираем сообщение
-                setTimeout(function () {
-                    successMessage.fadeOut(400);
-                }, 7000);
-    
                 // Уменьшаем количество товаров в корзине (отрисовка)
                 cartCount -= data.quantity_deleted;
                 goodsInCartCount.text(cartCount);

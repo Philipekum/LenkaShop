@@ -38,7 +38,7 @@
                         {% if product.discount_price %}
 						    <div class="d-flex flex-column d-lg-block justify-content-center product_price">
 							    <span class="d-block d-lg-inline price_old">{{ product.price }} &#8381;</span>
-							{{ product.discount_price }} &#8381;
+							{{ product.sell_price }} &#8381;
 						    </div>
                         
                         {% else %}
@@ -68,12 +68,6 @@
                                 <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button>
                             </a>
                         </div>
-
-                        <a href="{% url "carts:cart_remove" %}" class="del_cart_btn remove-from-cart" data-cart-id="{{ cart.id }}">
-                            {% csrf_token %}
-                            <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="Убрать">
-                        </a>
-
 					</div>
 
 					<div class="product_description">
@@ -128,7 +122,7 @@
                                     {% if product.discount_price %}
                                         <div class="product_item_price">
                                             <div class="price_old">{{ product.price }} &#8381;</div>
-                                            <div>{{ product.discount_price }} &#8381;</div>
+                                            <div>{{ product.sell_price }} &#8381;</div>
                                         </div>
 
                                     {% else %}
