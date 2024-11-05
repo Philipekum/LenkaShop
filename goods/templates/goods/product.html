@@ -69,6 +69,11 @@
                             </a>
                         </div>
 
+                        <a href="{% url "carts:cart_remove" %}" class="del_cart_btn remove-from-cart" data-cart-id="{{ cart.id }}">
+                            {% csrf_token %}
+                            <img class="w-100" src={% static "icon/cart-mini-del.png" %} alt="Убрать">
+                        </a>
+
 					</div>
 
 					<div class="product_description">
