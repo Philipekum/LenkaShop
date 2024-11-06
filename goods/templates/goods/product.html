@@ -2,68 +2,140 @@
 {% load static %}
 
 {% block content %}
+			<div class="row justify-content-between align-items-lg-start mb-5 mb-lg_8">
+				<div class="col-12 col-lg-7 product_image_block">
+					<div id="carousel" class="carousel slide">
+						<div class="d-flex d-lg-none carousel-indicators">
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+							<button type="button" data-bs-target="#carousel" data-bs-slide-to="4" aria-label="Slide 5"></button>
+						</div>
+						<div class="d-block d-lg-flex flex-lg-wrap carousel-inner">
+							<div class="col-lg-12 carousel-item active">
+								<img src={% static "images/product-slide.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-6 carousel-item">
+								<img src={% static "images/product-slide2.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-6 carousel-item">
+								<img src={% static "images/product-slide.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-12 carousel-item">
+								<img src={% static "images/product-slide2.jpg" %} class="d-block w-100" alt="">
+							</div>
+							<div class="col-lg-12 carousel-item">
+								<img src={% static "images/product-slide.jpg" %} class="d-block w-100" alt="">
+							</div>
+						</div>
+					</div>
+				</div>
 
-<div class="col-12">
-    <div class="row">
-        <div class="col-lg-1 col-md-1"></div>
+				<div class="col-12 col-lg-5 product_content_block">
+					<h1 class="product_name">{{ product.name }}</h1>
+					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
+                        {% if product.discount_price %}
+						    <div class="d-flex flex-column d-lg-block justify-content-center product_price">
+							    <span class="d-block d-lg-inline price_old">{{ product.price }} &#8381;</span>
+							{{ product.sell_price }} &#8381;
+						    </div>
+                        
+                        {% else %}
+                            <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price }} &#8381;</div>
 
-        <div class="col-lg-5 col-md-5">
-            {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
-            {% else %}
-                <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
-            {% endif %}
+                        {% endif %}
 
-        </div>
+                        {% if product.options and product.options.all.exists %}
+                            <div class="col product_option_block order-3 mt-4 mt-lg-0">
+                                <div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
+                                <div class="product_option">
+                                    <input class="select_input" type="hidden" name="" value="1">
+                                    <div class="select_head">option 1</div>
+                                    <ul class="select_list">
+                                        <li class="select_item">option 1</li>
+                                        <li class="select_item">option 2</li>
+                                        <li class="select_item">option 3</li>
+                                    </ul>
+                                </div>
+                            </div>
 
-        <div class="col-lg-1 col-md-1"></div>
+                        {% endif %}
 
-        <div class="col-lg-5 col-md-5">
-            <h2 class="card-title">{{ product.name }}</h5>
 
-            {% if product.discount %}
-                <p class="card-text mt-4 fs-4"><s class="text-secondary">{{ product.price }}</s>   {{ product.sell_price }} &#8381;</p>
-            {% else %}
-                <p class="card-text mt-4 fs-4">{{ product.sell_price }} &#8381;</p>
-            {% endif %}
+						<div class="add2cart_block order-2">
+                            <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button>
+                            </a>
+                        </div>
+					</div>
+
+					<div class="product_description">
+						<h3 class="product_description_title">Описание</h3>
+						<div class="product_description_text mb-4 mb-lg-5">
+							{{ product.description }}
+						</div>
+						<h3 class="product_description_title">Состав</h3>
+						<div class="product_description_text mb_2_8">
+							{{ product.compound }} 
+						</div>
+
+
+						<div class="product_description_icon">
+                            {% for laundary in product.laundry_features.all %}
+                                {% if laundary.icon %}
+							        <img class="product_icon" src={{ laundary.icon.url }} alt="{{ laundary.name }}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ laundary.name }}">
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+					</div>
+				</div>
+			</div>
+
+            {% if product.similar_products.all.exists %} 
             
-            <a href="#" class="btn btn-outline-dark fs-5 mt-3">Добавить в корзину</a>
+                <h2 class="text-center related_title mb-4">Похожие товары</h2>
 
-            <h5 class="mt-4">Описание</h5>
-            {% if product.description %}
-                <p>{{ product.description }}</p>
-            {% else %}
-                <p>Описания пока что нет.</p>
-            {% endif %}
-
-        </div>
-    </div>
-</div>
-
-{% comment %} <div class="col-lg-4 col-md-6 mt-4">
-    <div class="card" style="width: 26rem;">
-        <a href="#" class="text-decoration-none text-reset">
-
-            {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top img-fluid" alt="{{ product.name }}">
-            {% else %}
-                <img src={% static "images/no-product-image.jpeg" %} class="card-img-top img-fluid" alt="No Product Image">
-            {% endif %}
-
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-
-                {% if product.discount %}
-                    <p><s>{{ product.price }}</s></p>
-                    <p class="card-text">{{ product.sell_price }}</p>
-                    <span class='badge bg-warning text-dark'>Скидка {{ product.discount }} %</span>
-                {% else %}
-                    <p class="card-text">{{ product.price }}</p>
-                {% endif %}
+                <div class="row flex-wrap product_list">
+                    {% for similar_product in product.similar_products.all %}
+                    
+                        <div class="product_item col-6 col-lg-4 mb-lg-2">
+                            
+                            <div class="product_item_img">
+                                <a href="{% url "goods:product" product.slug %}">
+                                    {% if product.image %}
+                                        <img class="first_img" src="{{ product.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                        <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ product.name }}">
+                                
+                                    {% else %}
+                                        <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="No Product Image">
+                                        <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="No Product Image">
                 
-                <a href="#" class="btn btn-outline-dark mt-3">Добавить в корзину</a>
-            </div>
-        </a>
-    </div>
-</div> {% endcomment %}
+                                    {% endif %}
+                                </a>
+                            </div>
+
+                            <div class="product_item_info">
+                                <a class="py-2 py-lg-4" href="{% url "goods:product" product.slug %}">
+                                    <div class="product_item_name">{{ product.name }}</div>
+
+                                    {% if product.discount_price %}
+                                        <div class="product_item_price">
+                                            <div class="price_old">{{ product.price }} &#8381;</div>
+                                            <div>{{ product.sell_price }} &#8381;</div>
+                                        </div>
+
+                                    {% else %}
+                                        <div class="product_item_price">{{ product.price }} &#8381;</div>
+
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+
+            {% endif %}
+
 {% endblock %}
