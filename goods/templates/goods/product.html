@@ -3,7 +3,7 @@
 
 {% block content %}
 			<div class="row justify-content-between align-items-lg-start mb-5 mb-lg_8">
-				<div class="col-12 col-lg-7 product_image_block">
+				{% comment %} <div class="col-12 col-lg-7 product_image_block">
 					<div id="carousel" class="carousel slide">
 						<div class="d-flex d-lg-none carousel-indicators">
 							<button type="button" data-bs-target="#carousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -30,7 +30,41 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> {% endcomment %}
+                
+                <div class="col-12 col-lg-7 product_image_block">
+                    <div id="carousel" class="carousel slide">
+                        <div class="d-flex d-lg-none carousel-indicators">
+                            {% for image in product.images.all %}
+                                <button type="button" 
+                                        data-bs-target="#carousel" 
+                                        data-bs-slide-to="{{ forloop.counter0 }}" 
+                                        class="{% if forloop.first %}active{% endif %}" 
+                                        aria-current="{% if forloop.first %}true{% endif %}" 
+                                        aria-label="Slide {{ forloop.counter }}">
+                                </button>
+                            {% endfor %}
+                        </div>
+
+                        <div class="d-block d-lg-flex flex-lg-wrap carousel-inner">
+                            {% for image in product.images.all %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %} {% if image.layout == 'large' %}col-lg-12{% else %}col-lg-6{% endif %}">
+                                    {% if image.image %}
+                                        <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                    {% else %}
+                                        <img src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                                    {% endif %}
+                                </div>
+                            {% empty %}
+                                <div class="carousel-item active col-lg-12">
+                                    <img src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+
 
 				<div class="col-12 col-lg-5 product_content_block">
 					<h1 class="product_name">{{ product.name }}</h1>
