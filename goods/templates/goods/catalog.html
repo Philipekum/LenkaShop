@@ -9,15 +9,17 @@
     <div class="product_item col-6 col-lg-4 mb-lg-2">
         <div class="product_item_img">
             <a href="{% url "goods:product" product.slug %}">
-                {% if product.image %}
-                    <img class="first_img" src="{{ product.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                    <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ product.name }}">
-                
-                {% else %}
-                    <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="No Product Image">
-                    <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="No Product Image">
-
-                {% endif %}
+                {% with main_image=product.images.all.0 image_alt=product.images.all.1 %}
+                    {% if main_image %}
+                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% else %}
+                        <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                    {% endif %}
+                    
+                    {% if image_alt %}
+                        <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% endif %}
+                {% endwith %}
             </a>
         </div>
 
