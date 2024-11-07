@@ -6,6 +6,10 @@ def order(request):
     return render(request, 'main/order.html')
 
 
+def handle_page_not_found(request, exception):
+    return render(request, 'main/404.html', status=404)
+
+
 def index(request):
     main_page = MainPage.objects.first() 
 

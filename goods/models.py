@@ -31,7 +31,6 @@ class Products(models.Model):
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     compound = models.TextField(blank=True, null=True, verbose_name='Состав')
-    image = models.ImageField(upload_to='goods_images', blank=True, null=True)
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
     quantity = models.PositiveIntegerField(default=0, verbose_name='Количество')
@@ -56,4 +55,22 @@ class Products(models.Model):
     
     def display_id(self):
         return f'{self.id:05}'
-    
+
+
+class ProductImage(models.Model):
+    LAYOUT_CHOICES = [
+        ('large', 'Большая'),
+        ('small', 'Маленькая'),
+    ]
+
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images', verbose_name='Продукт')
+    image = models.ImageField(upload_to='goods_images', verbose_name='Фото')
+    layout = models.CharField(max_length=10, choices=LAYOUT_CHOICES, blank=True, null=True, verbose_name='Размер')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+
+    class Meta:
+        db_table = 'product_image'
+        verbose_name = 'Фото продукта'
+        verbose_name_plural = 'Фото продуктов'
+        ordering = ['order']
+        

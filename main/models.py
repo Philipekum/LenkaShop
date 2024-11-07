@@ -55,9 +55,13 @@ class MainPageContentBox(models.Model):
 
 
 class InfoPage(models.Model):
+
+    POSITION_CHOICES = [(i, f'Позиция {i}') for i in range(1, 9)]
+
     title = models.CharField(max_length=150, verbose_name='Название страницы')
     slug = models.SlugField(unique=True, verbose_name='URL')
     content = models.TextField(verbose_name='Контент страницы')
+    position = models.PositiveSmallIntegerField(choices=POSITION_CHOICES, blank=True, null=True, verbose_name='Позиция для отображения')
 
     class Meta:
         db_table = 'info_page'

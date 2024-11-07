@@ -28,6 +28,8 @@ urlpatterns = [
     path('cart/', include('carts.urls', namespace='cart')),
 ]
 
+handler404 = 'main.views.handle_page_not_found'
+
 if settings.DEBUG:
     urlpatterns += [
         path('__debug__/', include('debug_toolbar.urls')),
