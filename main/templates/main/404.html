@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <h1 class="page_title">Страница не найдена.</h1>
+                
+    <div class="mb_3_8 mb-lg_6">
+        <p>Извините, страница не найдена. Возможно, вы найдете то, что ищете, в нашем <a href="{% url "goods:index" %}"><u>каталоге</u></a>.</p>
+    </div>
+
+{% endblock %}
