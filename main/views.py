@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import MainPage
 
 
@@ -13,6 +13,9 @@ def handle_page_not_found(request, exception):
 def index(request):
     main_page = MainPage.objects.first() 
 
+    if main_page is None:
+        return redirect('goods:index')
+
     text_blocks = main_page.text_boxes.all()
     content_blocks = main_page.content_boxes.all()
 
@@ -25,6 +28,9 @@ def index(request):
         blocks.append((block, 'content'))
 
     blocks.sort(key=lambda x: x[0].order)
+
+    if not blocks:
+        return redirect('goods:index')
 
     context = {
         'title': 'Главная страница',
