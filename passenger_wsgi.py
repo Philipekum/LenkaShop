@@ -1,11 +1,8 @@
 import os, sys
-from dotenv import load_dotenv
 
 
-load_dotenv()
-
-sys.path.insert(0, os.getenv('PROJECT_PATH'))
-sys.path.insert(1, os.getenv('VENV_PATH'))
+sys.path.insert(0, '/var/www/u2775036/data/www/lnkstore.ru')
+sys.path.insert(1, '/var/www/u2775036/data/venv3.9/lib/python3.9/site-packages')
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'app.settings'
 
