@@ -9,6 +9,7 @@ class MainPage(models.Model):
     class Meta:
         db_table = 'main_page'
         verbose_name = 'Главная страница'
+        verbose_name_plural = 'Главные страницы'
 
     def __str__(self):
         return self.title
@@ -17,7 +18,7 @@ class MainPage(models.Model):
 class MainPageTextBox(models.Model):
     title = models.CharField(max_length=150, blank=True, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
     main_page = models.ForeignKey(MainPage, blank=True, null=True, on_delete=models.CASCADE, related_name='text_boxes')
 
     class Meta:
@@ -30,6 +31,31 @@ class MainPageTextBox(models.Model):
         return self.title
 
 
+class Carousel(models.Model):
+    title = models.CharField(max_length=255, verbose_name='Название карусели')
+
+    class Meta:
+        verbose_name = 'Карусель'
+        verbose_name_plural = 'Карусели'
+
+    def __str__(self):
+        return self.title
+
+
+class CarouselImage(models.Model):
+    caroisel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel_images', verbose_name='Карусель', null=True)
+    image = models.ImageField(upload_to='carousels/', verbose_name='Изображение')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+
+    class Meta:
+        verbose_name = 'Фото карусели'
+        verbose_name_plural = 'Фото каруселей'
+        ordering = ['order']
+
+    def __str__(self):
+        return f"Фото {self.order}"
+
+
 class MainPageContentBox(models.Model):
     ALIGNMENT_CHOICES = [
         ('left', 'Слева'),
@@ -38,10 +64,11 @@ class MainPageContentBox(models.Model):
 
     title = models.CharField(max_length=150, blank=True, verbose_name='Заголовок')
     image1 = models.ImageField(upload_to='main_page_images', verbose_name='Большое фото 1')
+    images = models.ForeignKey(Carousel, null=True, blank=True, on_delete=models.SET_NULL, related_name='content_boxes', verbose_name='Карусель')
     product1 = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_1', verbose_name='Продукт 1')
     product2 = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_2', verbose_name='Продукт 2')
     alignment = models.CharField(max_length=5, choices=ALIGNMENT_CHOICES, default='left', verbose_name='Расположение')
-    order = models.PositiveIntegerField(default=0)
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
     main_page = models.ForeignKey(MainPage, blank=True, null=True, on_delete=models.CASCADE, related_name='content_boxes')
 
     class Meta:
@@ -52,7 +79,7 @@ class MainPageContentBox(models.Model):
 
     def __str__(self):
         return self.title
-
+    
 
 class InfoPage(models.Model):
 

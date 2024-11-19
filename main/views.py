@@ -17,7 +17,7 @@ def index(request):
         return redirect('goods:index')
 
     text_blocks = main_page.text_boxes.all()
-    content_blocks = main_page.content_boxes.all()
+    content_blocks = main_page.content_boxes.prefetch_related('images').all()
 
     blocks = []
     
@@ -34,7 +34,7 @@ def index(request):
 
     context = {
         'title': 'Главная страница',
-        'blocks': blocks 
+        'blocks': blocks,
     }
 
     return render(request, 'main/index.html', context)

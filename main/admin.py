@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import InfoPage, MainPage, MainPageContentBox, MainPageTextBox
+from .models import *
 
 @admin.register(InfoPage)
 class InfoPageAdmin(admin.ModelAdmin):
@@ -17,6 +17,18 @@ class MainPageTextBoxInline(admin.TabularInline):
 class MainPageContentBoxInline(admin.TabularInline):
     model = MainPageContentBox
     extra = 1
+
+
+class CarouselImageInline(admin.TabularInline):
+    model = CarouselImage
+    extra = 1
+    fields = ('image',)
+
+
+@admin.register(Carousel)
+class CarouselAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+    inlines = [CarouselImageInline]
 
 
 @admin.register(MainPage)
