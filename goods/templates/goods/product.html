@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load format_tags %}
 
 {% block content %}
 			<div class="row justify-content-between align-items-lg-start mb-5 mb-lg_8">
@@ -71,12 +72,12 @@
 					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
                         {% if product.discount_price %}
 						    <div class="d-flex flex-column d-lg-block justify-content-center product_price">
-							    <span class="d-block d-lg-inline price_old">{{ product.price }} &#8381;</span>
-							{{ product.sell_price }} &#8381;
+							    <span class="d-block d-lg-inline price_old">{{ product.price|format_price }}</span>
+							{{ product.sell_price|format_price }}
 						    </div>
                         
                         {% else %}
-                            <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price }} &#8381;</div>
+                            <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price|format_price }}</div>
 
                         {% endif %}
 
@@ -136,31 +137,33 @@
                         <div class="product_item col-6 col-lg-4 mb-lg-2">
                             
                             <div class="product_item_img">
-                                <a href="{% url "goods:product" product.slug %}">
-                                    {% if product.image %}
-                                        <img class="first_img" src="{{ product.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                                        <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ product.name }}">
-                                
-                                    {% else %}
-                                        <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="No Product Image">
-                                        <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="No Product Image">
-                
-                                    {% endif %}
-                                </a>
+                                {% with main_image=similar_product.images.all.0 image_alt=similar_product.images.all.1 %}
+                                    <a href="{% url "goods:product" similar_product.slug %}">
+                                        {% if main_image %}
+                                            <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                        {% else %}
+                                            <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                                        {% endif %}
+                                        
+                                        {% if image_alt %}
+                                            <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                                        {% endif %}
+                                    </a>
+                                {% endwith %}
                             </div>
 
                             <div class="product_item_info">
-                                <a class="py-2 py-lg-4" href="{% url "goods:product" product.slug %}">
-                                    <div class="product_item_name">{{ product.name }}</div>
+                                <a class="py-2 py-lg-4" href="{% url "goods:product" similar_product.slug %}">
+                                    <div class="product_item_name">{{ similar_product.name }}</div>
 
-                                    {% if product.discount_price %}
+                                    {% if similar_product.discount_price %}
                                         <div class="product_item_price">
-                                            <div class="price_old">{{ product.price }} &#8381;</div>
-                                            <div>{{ product.sell_price }} &#8381;</div>
+                                            <div class="price_old">{{ similar_product.price|format_price }}</div>
+                                            <div>{{ similar_product.sell_price|format_price }}</div>
                                         </div>
 
-                                    {% else %}
-                                        <div class="product_item_price">{{ product.price }} &#8381;</div>
+                                    {% else %} 
+                                        <div class="product_item_price">{{ similar_product.price|format_price }}</div>
 
                                     {% endif %}
                                 </a>

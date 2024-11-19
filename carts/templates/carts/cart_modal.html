@@ -1,4 +1,7 @@
 {% load static %}
+{% load format_tags %}
+
+
 <div class="cart_menu">
   <div class="cart_menu_content">
 
@@ -10,7 +13,7 @@
         {% for cart in carts %}
           <div class="d-flex justify-content-between cart_menu_item">
             <div class="cart_menu_item_img">
-              <a href="{% url "goods:product" cart.product.slug %}"><img class="w-100" src="{{ cart.product.image.url }}" alt={{ cart.product.name }}></a>
+              <a href="{% url "goods:product" cart.product.slug %}"><img class="w-100" src="{{ cart.product.images.all.0.image.url }}" alt={{ cart.product.name }}></a>
             </div>
 
             <div class="cart_menu_item_content">
@@ -32,7 +35,7 @@
 
                 </div>
 
-                <div class="cart_menu_item_price">{{ cart.product.sell_price }}</div>
+                <div class="cart_menu_item_price">{{ cart.product.sell_price|format_price }}</div>
 
               </div>
             </div>
@@ -41,7 +44,7 @@
         
         <div class="d-flex justify-content-between align-items-center mt-4 cart_menu_total">
           <div>Заказ на сумму</div>
-          <div>{{ carts.total_price }}</div>
+          <div>{{ carts.total_price|format_price }}</div>
         </div>
       </div>
 

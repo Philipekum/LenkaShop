@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load format_tags %}
 
 {% block content %}
 
@@ -50,15 +51,17 @@
           <div class="product_item w-48 w-lg-100 mb-lg-3">
             <div class="product_item_img">
               <a href="{% url "goods:product" block.product1.slug %}">
-                {% if block.product1.image %}
-                  <img class="first_img" src="{{ block.product1.image.url }}" class="d-block w-100" alt="{{ block.product1.name }}">
-                  <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ block.product1.name }}">
-            
-                {% else %}
-                  <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="No Product Image">
-                  <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="No Product Image">
-
-                {% endif %}
+                {% with main_image=block.product1.images.all.0 image_alt=block.product1.images.all.1 %}
+                    {% if main_image %}
+                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% else %}
+                        <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                    {% endif %}
+                    
+                    {% if image_alt %}
+                        <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% endif %}
+                {% endwith %}
               </a>
             </div>
             <div class="product_item_info">
@@ -66,12 +69,12 @@
                 <div class="product_item_name">{{ block.product1.name }}</div>
                   {% if block.product1.discount_price %}
                     <div class="product_item_price">
-                        <div class="price_old">{{ block.product1.price }} &#8381;</div>
-                        <div>{{ block.product1.discount_price }} &#8381;</div>
+                        <div class="price_old">{{ block.product1.price|format_price }}</div>
+                        <div>{{ block.product1.discount_price|format_price }}</div>
                     </div>
 
                   {% else %}
-                    <div class="product_item_price">{{ block.product1.price }} &#8381;</div>
+                    <div class="product_item_price">{{ block.product1.price|format_price }}</div>
                   
                   {% endif %}
               </a>
@@ -81,15 +84,17 @@
           <div class="product_item w-48 w-lg-100">
             <div class="product_item_img">
               <a href="{% url "goods:product" block.product2.slug %}">
-                {% if block.product2.image %}
-                  <img class="first_img" src="{{ block.product2.image.url }}" class="d-block w-100" alt="{{ block.product2.name }}">
-                  <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="{{ block.product2.name }}">
-            
-                {% else %}
-                  <img class="first_img" src={% static "images/product-left.jpg" %} class="d-block w-100" alt="No Product Image">
-                  <img class="second_img" src={% static "images/product-left2.jpg" %} class="d-block w-100" alt="No Product Image">
-
-                {% endif %}
+                {% with main_image=block.product2.images.all.0 image_alt=block.product2.images.all.1 %}
+                    {% if main_image %}
+                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% else %}
+                        <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                    {% endif %}
+                    
+                    {% if image_alt %}
+                        <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% endif %}
+                {% endwith %}
               </a>
             </div>
             <div class="product_item_info">
@@ -97,12 +102,12 @@
                 <div class="product_item_name">{{ block.product2.name }}</div>
                   {% if block.product2.discount_price %}
                   <div class="product_item_price">
-                      <div class="price_old">{{ block.product2.price }} &#8381;</div>
-                      <div>{{ block.product2.discount_price }} &#8381;</div>
+                      <div class="price_old">{{ block.product2.price|format_price }}</div>
+                      <div>{{ block.product2.discount_price|format_price }}</div>
                   </div>
 
                   {% else %}
-                    <div class="product_item_price">{{ block.product2.price }} &#8381;</div>
+                    <div class="product_item_price">{{ block.product2.price|format_price }}</div>
                 
                   {% endif %}
               </a>

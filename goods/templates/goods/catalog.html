@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load format_tags %}
 
 {% block content %}
 
@@ -29,12 +30,12 @@
 
                 {% if product.discount_price %}
                     <div class="product_item_price">
-                        <div class="price_old">{{ product.price }} &#8381;</div>
-                        <div>{{ product.sell_price }} &#8381;</div>
+                        <div class="price_old">{{ product.price|format_price }}</div>
+                        <div>{{ product.sell_price|format_price }}</div>
                     </div>
 
                 {% else %}
-                    <div class="product_item_price">{{ product.price }} &#8381;</div>
+                    <div class="product_item_price">{{ product.price|format_price }}</div>
                 
                 {% endif %}
             </a>

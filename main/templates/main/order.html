@@ -1,5 +1,6 @@
 {% extends "main/base.html" %}
 {% load static %}
+{% load format_tags %}
 
 {% block content %}
     <h1 class="page_title">Корзина</h1>
@@ -12,7 +13,7 @@
             <div class="row justify-content-between align-items-lg-center cart_product_block">
                 <div class="cart_product_image_block">
                     <a href="{% url "goods:product" cart.product.slug %}">
-                        <img src="{{ cart.product.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
+                        <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
                     </a>
                 </div>
 
@@ -26,11 +27,11 @@
 
                     <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
                         {% if cart.product.discount_price %}
-                        <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price }}</span>
-                        {{ cart.product.sell_price }} &#8381;
+                        <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price|format_price }}</span>
+                        {{ cart.product.sell_price|format_price }}
 
                         {% else %}
-                        {{ cart.product.sell_price }}
+                        {{ cart.product.sell_price|format_price }}
                         
                         {% endif %}
                     </div>
@@ -60,7 +61,7 @@
     <div class="cart_total_block">
         <div class="row align-items-center justify-content-between justify-content-lg-start mb-3 mb-lg-4">
             <div class="col-8 col-lg-10 me-2">Общая стоимость покупки:</div>
-            <div class="col-auto">{{ carts.total_price }} &#8381;</div>
+            <div class="col-auto">{{ carts.total_price|format_price }}</div>
         </div>
         <div class="row align-items-center justify-content-between justify-content-lg-start mb_2_3 mb-lg_4">
             <div class="col-8 col-lg-10 me-2">Стоимость доставки:</div>
