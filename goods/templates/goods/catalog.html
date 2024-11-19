@@ -19,6 +19,10 @@
                     
                     {% if image_alt %}
                         <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                    {% elif not main_image %}
+                        <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                    {% else %}
+                        <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
                     {% endif %}
                 {% endwith %}
             </a>
