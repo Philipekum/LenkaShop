@@ -57,15 +57,19 @@
             <div class="product_item_img">
               <a href="{% url "goods:product" block.product1.slug %}">
                 {% with main_image=block.product1.images.all.0 image_alt=block.product1.images.all.1 %}
-                    {% if main_image %}
-                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                    {% else %}
-                        <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                    {% endif %}
-                    
-                    {% if image_alt %}
-                        <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                    {% endif %}
+                  {% if main_image %}
+                    <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product2.name }}">
+                  {% else %}
+                    <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                  {% endif %}
+                
+                  {% if image_alt %}
+                    <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product2.name }}">
+                  {% elif not main_image %}
+                    <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                  {% else %}
+                    <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product2.name }}">
+                  {% endif %}
                 {% endwith %}
               </a>
             </div>
@@ -91,17 +95,17 @@
               <a href="{% url "goods:product" block.product2.slug %}">
                 {% with main_image=block.product2.images.all.0 image_alt=block.product2.images.all.1 %}
                     {% if main_image %}
-                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product2.name }}">
                     {% else %}
                         <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
                     {% endif %}
                     
                     {% if image_alt %}
-                      <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                      <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product2.name }}">
                     {% elif not main_image %}
                       <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
                     {% else %}
-                      <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                      <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product2.name }}">
                     {% endif %}
                 {% endwith %}
               </a>
