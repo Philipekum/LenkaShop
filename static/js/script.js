@@ -131,11 +131,18 @@ $(document).ready(function () {
                 // Уменьшаем количество товаров в корзине (отрисовка)
                 cartCount -= data.quantity_deleted;
                 goodsInCartCount.text(cartCount);
-    
-                // Меняем содержимое корзины на ответ от django (новый отрисованный фрагмент разметки корзины)
-                var cartItemsContainer = $("#cart-items-container");
-                cartItemsContainer.html(data.cart_items_html);
-    
+
+                // Удаляем товар из DOM
+                $("#cart-item-" + cart_id).remove();
+
+                // Обновляем общую стоимость
+                $(".cart_total_block .row:first-child .col-auto").text(data.total_price);
+
+                // Если корзина пустая, обновляем содержимое
+                if (cartCount === 0) {
+                    $("#cart-items-container").html(data.cart_items_html);
+                    location.reload();
+                }
             },
     
             error: function (data) {
