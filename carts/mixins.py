@@ -5,6 +5,9 @@ from .models import Cart
 
 class CartMixin:
     def get_cart(self, request, product=None, cart_id=None):
+        if not request.session.session_key:
+            request.session.create()
+
         query_kwargs = {"session_key": request.session.session_key}
 
         if product:
