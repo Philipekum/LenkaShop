@@ -2,7 +2,7 @@
 {% load format_tags %}
 
 
-<div class="cart_menu">
+<div id="modal-cart-items-container" class="cart_menu">
   <div class="cart_menu_content">
 
     {% if carts %}
@@ -11,7 +11,7 @@
       <div class="cart_menu_list">
 
         {% for cart in carts %}
-          <div class="d-flex justify-content-between cart_menu_item">
+          <div id="modal-cart-item-{{ cart.id }}" class="d-flex justify-content-between cart_menu_item">
             <div class="cart_menu_item_img">
               <a href="{% url "goods:product" cart.product.slug %}"><img class="w-100" src="{{ cart.product.images.all.0.image.url }}" alt={{ cart.product.name }}></a>
             </div>
@@ -27,11 +27,11 @@
               </div>
 
               <div class="d-flex justify-content-between align-items-center pe-2">
-                <div class="cart_menu_q">
+                <div class="cart_menu_q input-group">
 
-                  <button type="button" class="q_btn dec">-</button>
-                  <input type="text" name="q_item" class="cart_menu_item_q" value="{{ cart.quantity }}">
-                  <button type="button" class="q_btn inc">+</button>
+                  <button type="button" class="q_btn decrement" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url "cart:cart_change" %}">{% csrf_token %}-</button>
+                  <input id="goods-in-cart-count" type="text" name="q_item" class="cart_menu_item_q number" value="{{ cart.quantity }}" readonly>
+                  <button type="button" class="q_btn increment" data-cart-id="{{ cart.id }}" data-cart-change-url="{% url "cart:cart_change" %}">{% csrf_token %}+</button>
 
                 </div>
 
@@ -44,7 +44,7 @@
         
         <div class="d-flex justify-content-between align-items-center mt-4 cart_menu_total">
           <div>Заказ на сумму</div>
-          <div>{{ carts.total_price|format_price }}</div>
+          <div id="modal-cart-total-price">{{ carts.total_price|format_price }}</div>
         </div>
       </div>
 

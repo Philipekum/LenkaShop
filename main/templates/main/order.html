@@ -7,55 +7,66 @@
     
     {% if carts %}
     <div class="cart_list_block">
-    <div class="cart-container" id="cart-items-container">
-        {% for cart in carts %}
-        
-            <div class="row justify-content-between align-items-lg-center cart_product_block">
-                <div class="cart_product_image_block">
-                    <a href="{% url "goods:product" cart.product.slug %}">
-                        <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
-                    </a>
-                </div>
-
-                <div class="row justify-content-between align-items-lg-center cart_product_info">
-                    <div class="col-12 col-lg-5 cart_product_name_block">
-                        <div class="d-block d-lg-inline mb-2 mb-lg-0">{{ cart.product.name }}</div>
-                        {% if product.options and product.options.all.exists %}
-                            <div class="d-block d-lg-inline">option 1</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
-                        {% if cart.product.discount_price %}
-                        <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price|format_price }}</span>
-                        {{ cart.product.sell_price|format_price }}
-
-                        {% else %}
-                        {{ cart.product.sell_price|format_price }}
-                        
-                        {% endif %}
-                    </div>
-
-                    <div class="cart_q">
-                        <button type="button" class="q_btn dec">-</button>
-                        <input type="text" name="q_item" class="cart_item_q" value="{{ cart.quantity }}">
-                        <button type="button" class="q_btn inc">+</button>
-                    </div>					
-
-                    <div class="col-auto catr_product_price">{{ cart.total_price }}</div>
-
-                    <div class="col-auto">
-                        <a href="{% url "carts:cart_remove" %}" class="remove-from-cart" data-cart-id="{{ cart.id }}">
-                            {% csrf_token %}
-                            <button class="cart_btn_del"></button>
+        <div class="cart-container" id="cart-items-container">
+            {% for cart in carts %}
+            
+                <div class="row justify-content-between align-items-lg-center cart_product_block" id="cart-item-{{ cart.id }}">
+                    <div class="cart_product_image_block">
+                        <a href="{% url "goods:product" cart.product.slug %}">
+                            <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
                         </a>
                     </div>
+
+                    <div class="row justify-content-between align-items-lg-center cart_product_info">
+                        <div class="col-12 col-lg-5 cart_product_name_block">
+                            <div class="d-block d-lg-inline mb-2 mb-lg-0">{{ cart.product.name }}</div>
+                            {% if product.options and product.options.all.exists %}
+                                <div class="d-block d-lg-inline">option 1</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
+                            {% if cart.product.discount_price %}
+                            <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price|format_price }}</span>
+                            {{ cart.product.sell_price|format_price }}
+
+                            {% else %}
+                            {{ cart.product.sell_price|format_price }}
+                            
+                            {% endif %}
+                        </div>
+
+                        <div class="cart_q input-group">
+                            <button type="button" class="q_btn decrement" 
+                                    data-cart-id="{{ cart.id }}" 
+                                    data-cart-change-url="{% url "carts:cart_change" %}">
+                                    {% csrf_token %}-</button>
+
+                            <input id="goods-in-cart-count" type="text" name="q_item" 
+                                class="cart_item_q number" value="{{ cart.quantity }}" readonly>
+                            
+                            <button type="button" class="q_btn increment" 
+                                    data-cart-id="{{ cart.id }}" 
+                                    data-cart-change-url="{% url "carts:cart_change" %}">
+                                    {% csrf_token %}+</button>
+                        </div>					
+
+                        <div class="col-auto catr_product_price">{{ cart.total_price }}</div>
+
+                        <div class="col-auto">
+                            <a href="{% url "carts:cart_remove" %}" class="remove-from-cart" 
+                            data-cart-id="{{ cart.id }}">
+                                {% csrf_token %}
+                                <button class="cart_btn_del"></button>
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        
-        {% endfor %}
+            
+            {% endfor %}
 
 
+        </div>
     </div>
 
     <div class="cart_total_block">

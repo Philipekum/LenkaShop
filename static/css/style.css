@@ -214,8 +214,8 @@ a, a:hover, a:active, a:focus{
 	background:transparent;
 	font-size:1.25rem;
 }
-.q_btn.dec{left:0;}
-.q_btn.inc{right:0;}
+.q_btn.decrement{left:0;}
+.q_btn.increment{right:0;}
 .cart_menu_total{
 	font-size:1rem;
 	line-height:1.1875rem;

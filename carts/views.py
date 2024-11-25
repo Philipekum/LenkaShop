@@ -1,6 +1,7 @@
 from django.views import View
 from django.http import JsonResponse
 from goods.models import Products
+from goods.templatetags.format_tags import format_price
 from .models import Cart
 from .mixins import CartMixin
 
@@ -34,10 +35,41 @@ class CartRemoveView(CartMixin, View):
         quantity = cart.quantity
         cart.delete()
 
+        total_price = Cart.objects.filter(session_key=request.session.session_key).total_price()
+        total_price = format_price(total_price)
+
         response_data = {
             "message": "Товар удален из корзины",
             "quantity_deleted": quantity,
-            "cart_items_html": self.render_cart(request)
+            "cart_items_html": self.render_cart(request),
+            "total_price": total_price,
         }
 
         return JsonResponse(response_data)
+
+
+class CartChangeView(CartMixin, View):
+    def post(self, request):
+        cart_id = request.POST.get('cart_id')
+
+        quantity = request.POST.get('quantity')
+
+        cart = self.get_cart(request, cart_id=cart_id)
+
+        cart.quantity = request.POST.get('quantity')
+        cart.save()
+
+        total_price = Cart.objects.filter(session_key=request.session.session_key).total_price()
+        total_price = format_price(total_price)
+
+        quantity = cart.quantity
+
+        response_data = {
+            "message": "Количество изменено",
+            "quantity": quantity,
+            "cart_items_html": self.render_cart(request),
+            "total_price": total_price,
+        }
+
+        return JsonResponse(response_data)
+    
