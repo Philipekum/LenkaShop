@@ -2,10 +2,6 @@ from django.shortcuts import render, redirect
 from .models import MainPage
 
 
-def order(request):
-    return render(request, 'main/order.html')
-
-
 def handle_page_not_found(request, exception):
     return render(request, 'main/404.html', status=404)
 
