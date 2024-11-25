@@ -8,6 +8,25 @@ from .models import Order, OrderItem
 from carts.models import Cart
 
 
+def success_order(request):
+    context = {
+        'title': 'Заказ обработан',
+        'order_details': [
+                ('Номер заказа', '104'),
+                ('Дата', '11'),
+                ('Общая стоимость заказа', '56343654'),
+                ('ФИО', 'Жмых'),
+                ('EMAIL', 'ваыпыв@вапвы'),
+                ('Номер телефона', '42342314132'),
+                ('Статус', 'обрабатывается'),
+                ('Доставка', 'dev'),
+                ('Чек', 'dev'),
+            ],
+    }
+
+    return render(request, 'orders/success_order.html', context=context)
+
+
 def order(request):
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
