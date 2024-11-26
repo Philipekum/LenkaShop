@@ -43,7 +43,7 @@ class OrderTabulareAdmin(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
+        "order_id",
         "first_name",
         "last_name",
         "status",
@@ -52,7 +52,7 @@ class OrderAdmin(admin.ModelAdmin):
     )
 
     search_fields = (
-        "id",
+        "order_id",
     )
 
     readonly_fields = ("created_timestamp",)

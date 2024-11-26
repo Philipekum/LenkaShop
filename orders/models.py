@@ -1,5 +1,14 @@
+import random
+
 from django.db import models
 from goods.models import Products
+
+
+def generate_unique_order_id():
+    while True:
+        order_id = random.randint(100000000, 999999999)
+        if not Order.objects.filter(order_id=order_id).exists(): 
+            return order_id 
 
 
 class OrderitemQueryset(models.QuerySet):
@@ -13,7 +22,14 @@ class OrderitemQueryset(models.QuerySet):
 
 
 class Order(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Ожидает оплаты'),
+        ('paid', 'Оплачен'),
+        ('shipped', 'Отправлен'),
+    ]
+
     session_key = models.CharField(max_length=32, null=True, blank=True, verbose_name='Сессия')
+    order_id = models.BigIntegerField(unique=True, editable=False, default=generate_unique_order_id)
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания заказа")
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
@@ -21,7 +37,7 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=20, verbose_name="Номер телефона")
     delivery_address = models.TextField(null=True, blank=True, verbose_name="Адрес доставки")
     is_paid = models.BooleanField(default=False, verbose_name="Оплачено")
-    status = models.CharField(max_length=50, default='В обработке', verbose_name="Статус заказа")
+    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending', verbose_name="Статус заказа")
 
     class Meta:
         db_table = 'order'
@@ -30,7 +46,7 @@ class Order(models.Model):
         ordering = ('id',)
     
     def __str__(self):
-        return f'Заказ № {self.pk}, Покупатель {self.first_name} {self.last_name}'
+        return f'Заказ № {self.order_id}, Покупатель {self.first_name} {self.last_name}'
 
 
 class OrderItem(models.Model):
@@ -53,4 +69,4 @@ class OrderItem(models.Model):
         return self.product.sell_price() * self.quantity
 
     def __str__(self):
-        return f"Товар {self.name} | Заказ № {self.order.pk}"
+        return f"Товар {self.name} | Заказ № {self.order.order_id}"

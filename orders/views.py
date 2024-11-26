@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db import transaction
 from django.forms import ValidationError
 from django.contrib import messages
@@ -8,18 +8,19 @@ from .models import Order, OrderItem
 from carts.models import Cart
 
 
-def success_order(request):
+def success_order(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+
     context = {
         'title': 'Заказ обработан',
         'order_details': [
-                ('Номер заказа', '104'),
-                ('Дата', '11'),
-                ('Общая стоимость заказа', '56343654'),
-                ('ФИО', 'Жмых'),
-                ('EMAIL', 'ваыпыв@вапвы'),
-                ('Номер телефона', '42342314132'),
-                ('Статус', 'обрабатывается'),
-                ('Доставка', 'dev'),
+                ('Номер заказа', order.order_id),
+                ('Дата', order.created_timestamp),
+                ('ФИО', f'{order.first_name} {order.last_name}'),
+                ('EMAIL', order.email),
+                ('Номер телефона', order.phone_number),
+                ('Статус', order.status),
+                ('Доставка', order.delivery_address),
                 ('Чек', 'dev'),
             ],
     }
@@ -51,7 +52,7 @@ def order(request):
                             product = cart_item.product
                             name = cart_item.product.name
                             price = cart_item.product.sell_price()
-                            quantity = cart_item.product.quantity
+                            quantity = cart_item.quantity
 
                             if product.quantity < quantity:
                                 raise ValidationError(f'Недостаточное количество товара {product.name}: запрашивается - {quantity}, в наличии - {product.quantity}')
