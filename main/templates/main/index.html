@@ -76,6 +76,7 @@
             <div class="product_item_info">
               <a class="py-2 py-lg-4" href="{% url "goods:product" block.product1.slug %}">
                 <div class="product_item_name">{{ block.product1.name }}</div>
+                {% if block.product1.quantity >= 1 %}
                   {% if block.product1.discount_price %}
                     <div class="product_item_price">
                         <div class="price_old">{{ block.product1.price|format_price }}</div>
@@ -86,6 +87,11 @@
                     <div class="product_item_price">{{ block.product1.price|format_price }}</div>
                   
                   {% endif %}
+                
+                {% else %}
+                  <div class="product_item_price">Нет в наличии</div>
+                    
+                {% endif %}
               </a>
             </div>
           </div>
@@ -113,6 +119,7 @@
             <div class="product_item_info">
               <a class="py-2 py-lg-4" href="{% url "goods:product" block.product2.slug %}">
                 <div class="product_item_name">{{ block.product2.name }}</div>
+                {% if block.product2.quantity >= 1 %}                
                   {% if block.product2.discount_price %}
                   <div class="product_item_price">
                       <div class="price_old">{{ block.product2.price|format_price }}</div>
@@ -123,6 +130,11 @@
                     <div class="product_item_price">{{ block.product2.price|format_price }}</div>
                 
                   {% endif %}
+                
+                {% else %}
+                  <div class="product_item_price">Нет в наличии</div>
+
+                {% endif %}
               </a>
             </div>
           </div>

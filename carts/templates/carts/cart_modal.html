@@ -35,7 +35,12 @@
 
                 </div>
 
-                <div class="cart_menu_item_price">{{ cart.product.sell_price|format_price }}</div>
+                {% if cart.product.quantity >= 1 %}
+                  <div class="cart_menu_item_price">{{ cart.product.sell_price|format_price }}</div>
+                
+                {% else %}
+                  <div class="cart_menu_item_price text-warning">Закончился</div>
+                {% endif %}
 
               </div>
             </div>
