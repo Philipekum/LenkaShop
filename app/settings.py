@@ -63,6 +63,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+    'app.middlewares.TemporaryRedirectMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
