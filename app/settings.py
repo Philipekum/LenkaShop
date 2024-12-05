@@ -63,9 +63,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-
-    'app.middlewares.TemporaryRedirectMiddleware',
 ]
+
+if os.getenv('MY_REDIRECT', 'False') == 'True':
+    MIDDLEWARE.append('app.middlewares.TemporaryRedirectMiddleware')
 
 ROOT_URLCONF = 'app.urls'
 
