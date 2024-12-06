@@ -150,13 +150,13 @@ USE_TZ = True
 if not DEBUG:
     STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATIC_URL = 'new-site/static/'
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
     ]
 
-MEDIA_URL = 'new-site/media/'
+MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 

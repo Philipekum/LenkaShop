@@ -15,34 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include, re_path
+from django.urls import path, include
 from django.conf.urls.static import static
-from django.http import HttpResponseRedirect
-
-from dotenv import load_dotenv
-import os
-from urllib.parse import urljoin
 
 from app import settings
 
-load_dotenv()
-
-
-def external_redirect_view(request, path):
-    target_site = os.getenv('MY_REDIRECT_URL')
-    redirect_url = urljoin(target_site, path)
-    return HttpResponseRedirect(redirect_url)
-
 
 urlpatterns = [
-    path('new-site/', include([
-        path('admin/', admin.site.urls),
-        path('', include('main.urls', namespace='main')),
-        path('catalog/', include('goods.urls', namespace='goods')),
-        path('cart/', include('carts.urls', namespace='cart')),
-    ])),
-
-    re_path(r'^(?P<path>.*)$', external_redirect_view),
+    path('new-site/admin/', admin.site.urls),
+    path('new-site/', include('main.urls', namespace='main')),
+    path('new-site/catalog/', include('goods.urls', namespace='goods')),
+    path('new-site/cart/', include('carts.urls', namespace='cart')),
 ]
 
 handler404 = 'main.views.handle_page_not_found'
