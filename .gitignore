@@ -10,4 +10,4 @@ fixtures/
 staticfiles/
 
 .env
-.sql
+*.sql
