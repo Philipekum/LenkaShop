@@ -35,7 +35,12 @@
 
                 </div>
 
-                <div class="cart_menu_item_price">{{ cart.product.sell_price|format_price }}</div>
+                {% if cart.product.quantity >= 1 %}
+                  <div class="cart_menu_item_price">{{ cart.product.sell_price|format_price }}</div>
+                
+                {% else %}
+                  <div class="cart_menu_item_price text-warning">Закончился</div>
+                {% endif %}
 
               </div>
             </div>
@@ -49,7 +54,7 @@
       </div>
 
       <div class="cart_menu_footer">
-        <a href="{% url "main:order" %}" class="btn primary-btn">Оформить заказ</a>
+        <a href="{% url "orders:order" %}" class="btn primary-btn">Оформить заказ</a>
       </div>
 
     {% else %}

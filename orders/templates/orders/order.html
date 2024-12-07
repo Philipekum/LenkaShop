@@ -26,12 +26,18 @@
                         </div>
 
                         <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
-                            {% if cart.product.discount_price %}
-                            <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price|format_price }}</span>
-                            {{ cart.product.sell_price|format_price }}
+                            {% if cart.product.quantity >= 1 %}
+                                {% if cart.product.discount_price %}
+                                    <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price|format_price }}</span>
+                                    {{ cart.product.sell_price|format_price }}
 
+                                {% else %}
+                                    {{ cart.product.sell_price|format_price }}
+                                
+                                {% endif %}
+                            
                             {% else %}
-                            {{ cart.product.sell_price|format_price }}
+                                <div class="text-warning">Нет в наличии</div>
                             
                             {% endif %}
                         </div>
@@ -45,10 +51,12 @@
                             <input id="goods-in-cart-count" type="text" name="q_item" 
                                 class="cart_item_q number" value="{{ cart.quantity }}" readonly>
                             
-                            <button type="button" class="q_btn increment" 
-                                    data-cart-id="{{ cart.id }}" 
-                                    data-cart-change-url="{% url "carts:cart_change" %}">
-                                    {% csrf_token %}+</button>
+                            {% if cart.quantity < cart.product.quantity %}
+                                <button type="button" class="q_btn increment" 
+                                        data-cart-id="{{ cart.id }}" 
+                                        data-cart-change-url="{% url "carts:cart_change" %}">
+                                        {% csrf_token %}+</button>   
+                            {% endif %}
                         </div>					
 
                         <div class="col-auto catr_product_price">{{ cart.total_price }}</div>
@@ -86,13 +94,24 @@
 
     <div class="row align-items-lg-start justify-content-between">
         <div class="col-12 col-lg-6 checkout_form_block order-2 order-lg-1">
-            <form action="">
-                <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 1:">
+            <form action="{% url "orders:order" %}" method="post">
+                {% csrf_token %}
+                <input class="checkout_input" type="text" name="first_name" value="" placeholder="Имя">
+                <input class="checkout_input" type="text" name="last_name" value="" placeholder="Фамилия">
+                <input class="checkout_input" type="text" name="phone_number" value="" placeholder="Номер телефона">
+                <input class="checkout_input" type="text" name="email" value="" placeholder="EMAIL">
+                <input class="checkout_input" type="text" name="delivery_address" value="" placeholder="Адресс доставки">
+
+
+
+
+
+                {% comment %} <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 1:">
                 <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 2:">
                 <input class="checkout_input" type="text" name="" value="" placeholder="EMAIL:">
                 <input class="checkout_input" type="text" name="" value="" placeholder="ТЕЛЕФОН:">
                 <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 3:">
-                <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 4:">
+                <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 4:"> {% endcomment %}
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">

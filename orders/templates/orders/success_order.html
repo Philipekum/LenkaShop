@@ -1,0 +1,20 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load format_tags %}
+
+{% block content %}
+
+    <h1 class="page_title">Заказ успешно создан</h1>
+
+    <div class="mb_3_8 mb-lg_6">
+        <p>Ваш заказ был успешно собран. Пожалуйста, проверьте ваш email.</p>
+        <h2>Детали заказа:</h2>
+        <ul class="list-group">
+            {% for name, value in order_details %}
+                <li class="list-group-item">{{ name }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url "main:index" %}"><u>Вернуться на главную страницу.</u></a>
+    </div>
+
+{% endblock  %}

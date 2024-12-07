@@ -41,14 +41,18 @@
 				<div class="col-12 col-lg-5 product_content_block">
 					<h1 class="product_name">{{ product.name }}</h1>
 					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
-                        {% if product.discount_price %}
-						    <div class="d-flex flex-column d-lg-block justify-content-center product_price">
-							    <span class="d-block d-lg-inline price_old">{{ product.price|format_price }}</span>
-							{{ product.sell_price|format_price }}
-						    </div>
-                        
-                        {% else %}
-                            <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price|format_price }}</div>
+                        {% if product.quantity >= 1 %}
+
+                            {% if product.discount_price %}
+                                <div class="d-flex flex-column d-lg-block justify-content-center product_price">
+                                    <span class="d-block d-lg-inline price_old">{{ product.price|format_price }}</span>
+                                {{ product.sell_price|format_price }}
+                                </div>
+                            
+                            {% else %}
+                                <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price|format_price }}</div>
+
+                            {% endif %}
 
                         {% endif %}
 
@@ -70,9 +74,14 @@
 
 
 						<div class="add2cart_block order-2">
-                            <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}">
-                                <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button>
-                            </a>
+
+                            {% if product.quantity >= 1 %}
+                                <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                    <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button>
+                                </a>
+                            {% else %}
+                                <button class="btn add2cart_btn primary-btn disabled" type="button">Нет в наличии</button>
+                            {% endif %}
                         </div>
 					</div>
 
@@ -130,16 +139,21 @@
                             <div class="product_item_info">
                                 <a class="py-2 py-lg-4" href="{% url "goods:product" similar_product.slug %}">
                                     <div class="product_item_name">{{ similar_product.name }}</div>
+                                
+                                    {% if similar_product.quantity >= 1 %}
+                                        {% if similar_product.discount_price %}
+                                            <div class="product_item_price">
+                                                <div class="price_old">{{ similar_product.price|format_price }}</div>
+                                                <div>{{ similar_product.sell_price|format_price }}</div>
+                                            </div>
 
-                                    {% if similar_product.discount_price %}
-                                        <div class="product_item_price">
-                                            <div class="price_old">{{ similar_product.price|format_price }}</div>
-                                            <div>{{ similar_product.sell_price|format_price }}</div>
-                                        </div>
+                                        {% else %} 
+                                            <div class="product_item_price">{{ similar_product.price|format_price }}</div>
 
-                                    {% else %} 
-                                        <div class="product_item_price">{{ similar_product.price|format_price }}</div>
-
+                                        {% endif %}
+                                    {% else %}
+                                        <div class="product_item_price">Нет в наличии</div>
+                                    
                                     {% endif %}
                                 </a>
                             </div>
