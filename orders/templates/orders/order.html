@@ -45,12 +45,10 @@
                             <input id="goods-in-cart-count" type="text" name="q_item" 
                                 class="cart_item_q number" value="{{ cart.quantity }}" readonly>
                             
-                            {% if cart.quantity < cart.product.quantity %}
                                 <button type="button" class="q_btn increment" 
                                         data-cart-id="{{ cart.id }}" 
                                         data-cart-change-url="{% url "carts:cart_change" %}">
                                         {% csrf_token %}+</button>   
-                            {% endif %}
                         </div>					
 
                         <div class="col-auto catr_product_price">{{ cart.total_price }}</div>

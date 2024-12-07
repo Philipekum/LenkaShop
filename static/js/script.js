@@ -225,6 +225,8 @@ $(document).ready(function () {
                 cartCount += change;
                 goodsInCartCount.text(cartCount);
 
+                $("#goods-in-cart-count-modal").val(cartCount);
+
                 $(".cart_total_block .row:first-child .col-auto").text(data.total_price);
 
 

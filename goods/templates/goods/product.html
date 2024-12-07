@@ -41,7 +41,6 @@
 				<div class="col-12 col-lg-5 product_content_block">
 					<h1 class="product_name">{{ product.name }}</h1>
 					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
-                        {% if product.quantity >= 1 %}
 
                             {% if product.discount_price %}
                                 <div class="d-flex flex-column d-lg-block justify-content-center product_price">
@@ -54,7 +53,6 @@
 
                             {% endif %}
 
-                        {% endif %}
                         {% if product.options.exists %}
                             <div class="col product_option_block order-3 mt-4 mt-lg-0">
                                 <div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
