@@ -48,7 +48,7 @@
 
     {% endfor %}
 
-    {% if products.has_other_pages %}
+    {% comment %} {% if products.has_other_pages %}
         <nav>
             <ul class="pagination justify-content-center">
                 {% for page in products.paginator.page_range %}
@@ -60,6 +60,6 @@
                 {% endfor %}
             </ul>
         </nav>
-    {% endif %}
+    {% endif %} {% endcomment %}
 
 {% endblock %}
