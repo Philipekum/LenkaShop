@@ -32,7 +32,6 @@
             <a class="py-2 py-lg-4" href="{% url "goods:product" product.slug %}">
                 <div class="product_item_name">{{ product.name }}</div>
 
-                {% if product.quantity >= 1 %}
                     {% if product.discount_price %}
                         <div class="product_item_price">
                             <div class="price_old">{{ product.price|format_price }}</div>
@@ -43,11 +42,6 @@
                         <div class="product_item_price">{{ product.price|format_price }}</div>
                     
                     {% endif %}
-
-                {% else %}
-                    <div class="product_item_price">Нет в наличии</div>
-
-                {% endif %}
             </a>
         </div>
     </div>

@@ -26,7 +26,6 @@
                         </div>
 
                         <div class="col d-none d-lg-block d-xl-flex justify-content-between catr_product_price">
-                            {% if cart.product.quantity >= 1 %}
                                 {% if cart.product.discount_price %}
                                     <span class="d-block d-xl-inline price_old mb-0">{{ cart.product.price|format_price }}</span>
                                     {{ cart.product.sell_price|format_price }}
@@ -35,11 +34,6 @@
                                     {{ cart.product.sell_price|format_price }}
                                 
                                 {% endif %}
-                            
-                            {% else %}
-                                <div class="text-warning">Нет в наличии</div>
-                            
-                            {% endif %}
                         </div>
 
                         <div class="cart_q input-group">
