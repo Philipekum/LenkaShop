@@ -4,6 +4,18 @@
 
 {% block content %}
 
+<nav aria-label="Категории">
+    <ul class="category-buttons">
+        {% for category in categories %}
+            <li><a href="?category={{ category.slug }}" 
+                   class="category-button {% if request.GET.category == category.slug %}active{% endif %}">
+                   {{ category.name }}</a></li>
+
+        {% endfor %}
+    </ul>
+</nav>
+
+
 <div class="row flex-wrap product_list">
     {% for product in products %}
     
