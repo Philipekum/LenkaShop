@@ -54,8 +54,8 @@ def order(request):
                             price = cart_item.product.sell_price()
                             quantity = cart_item.quantity
 
-                            if product.quantity < quantity:
-                                raise ValidationError(f'Недостаточное количество товара {product.name}: запрашивается - {quantity}, в наличии - {product.quantity}')
+                            # if product.quantity < quantity:
+                            #     raise ValidationError(f'Недостаточное количество товара {product.name}: запрашивается - {quantity}, в наличии - {product.quantity}')
 
                             OrderItem.objects.create(
                                 order=order,
