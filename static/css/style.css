@@ -551,6 +551,42 @@ a, a:hover, a:active, a:focus{
 .checkout_text {padding: 0 26px;}
 .order-6 {order: 6 !important;}
 
+.category-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 auto;
+    padding: 0;
+    justify-content: center;
+    list-style: none;
+	margin-bottom: 40px;
+}
+
+.category-button {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 1px solid var(--bs-black);
+    border-radius: 10px;
+    background-color: var(--bs-white);
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    color: var(--bs-black);
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.category-button:hover,
+.category-button:focus {
+    background-color: var(--bs-black);
+    color: var(--bs-white);
+}
+
+.category-button.active {
+    background-color: var(--bs-black);
+    color: var(--bs-white);
+    font-weight: bold;
+}
 
 
 

@@ -1,23 +1,30 @@
-from django.shortcuts import render
-from django.core.paginator import Paginator
+from django.shortcuts import render, get_object_or_404
 
-from goods.models import Products
+from goods.models import Products, Categories
 
 
 def catalog(request):
-    page = int(request.GET.get('page', 1))
-
+    category_slug = request.GET.get('category')
     products = Products.objects.all()
 
-    paginator = Paginator(products, 7)
-    current_page = paginator.page(page)
+    if category_slug:
+        category = get_object_or_404(Categories, slug=category_slug)
+        products = products.filter(category=category)
+    
+    else:
+        category = None
+    
+    categories = Categories.objects.all()
 
     context = {
         'title': 'Каталог',
-        'products': current_page,
+        'products': products,
+        'categories': categories,
+        'selected_category': category,
     }
     
     return render(request, 'goods/catalog.html', context)
+
 
 def product(request, product_slug):
     product = Products.objects.get(slug=product_slug)

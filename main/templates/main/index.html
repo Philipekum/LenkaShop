@@ -112,7 +112,7 @@
             </div>
             <div class="product_item_info">
               <a class="py-2 py-lg-4" href="{% url "goods:product" block.product2.slug %}">
-                <div class="product_item_name">{{ block.product2.name }}</div>
+                <div class="product_item_name">{{ block.product2.name }}</div>            
                   {% if block.product2.discount_price %}
                   <div class="product_item_price">
                       <div class="price_old">{{ block.product2.price|format_price }}</div>

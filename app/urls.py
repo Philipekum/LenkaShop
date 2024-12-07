@@ -26,6 +26,7 @@ urlpatterns = [
     path('new-site/', include('main.urls', namespace='main')),
     path('new-site/catalog/', include('goods.urls', namespace='goods')),
     path('new-site/cart/', include('carts.urls', namespace='cart')),
+    path('new-site/order/', include('orders.urls', namespace='orders')),
 ]
 
 handler404 = 'main.views.handle_page_not_found'
