@@ -27,6 +27,8 @@ urlpatterns = [
     path('new-site/catalog/', include('goods.urls', namespace='goods')),
     path('new-site/cart/', include('carts.urls', namespace='cart')),
     path('new-site/order/', include('orders.urls', namespace='orders')),
+
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 handler404 = 'main.views.handle_page_not_found'
