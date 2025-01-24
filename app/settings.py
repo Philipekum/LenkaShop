@@ -174,3 +174,10 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TINYMCE_DEFAULT_CONFIG = {
+    'menubar': False,
+    'width': '70%',
+    'plugins': 'advlist autolink lists link image charmap print preview anchor fullscreen insertdatetime media table paste code help wordcount spellchecker',
+    'toolbar': 'undo redo | bold italic underline strikethrough | alignleft aligncenter alighnright alignright alignjustify | bullist numlist outdent indent | link image table'
+}
