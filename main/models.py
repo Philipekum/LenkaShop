@@ -7,11 +7,19 @@ import tinymce
 
 class MainPage(models.Model):
     title = models.CharField(max_length=200, default='Главная страница')
+    is_active = models.BooleanField(default=False, verbose_name='Активная страница')
+
 
     class Meta:
         db_table = 'main_page'
         verbose_name = 'Главная страница'
         verbose_name_plural = 'Главные страницы'
+    
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            MainPage.objects.exclude(id=self.id).update(is_active=False)
+            
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import MainPage
 
 
@@ -7,7 +7,7 @@ def handle_page_not_found(request, exception):
 
 
 def index(request):
-    main_page = MainPage.objects.first() 
+    main_page = MainPage.objects.filter(is_active=True).first()
 
     if main_page is None:
         return redirect('goods:index')

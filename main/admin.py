@@ -33,5 +33,7 @@ class CarouselAdmin(admin.ModelAdmin):
 
 @admin.register(MainPage)
 class MainPageAdmin(admin.ModelAdmin):
-    list_display = ('title',)
+    list_display = ('title', 'is_active')  
+    list_editable = ('is_active',)         
+    list_filter = ('is_active',) 
     inlines = [MainPageTextBoxInline, MainPageContentBoxInline]
