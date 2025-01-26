@@ -21,3 +21,13 @@ class MainPageTextBoxForm(forms.ModelForm):
     class Meta:
         model = MainPageTextBox
         fields = ['title', 'text', 'order', 'main_page']
+
+
+class MainPageContentBoxForm(forms.ModelForm):
+    title = forms.CharField(
+        widget=TinyMCE(attrs={'cols': 80, 'rows': 5}, mce_attrs={
+            "toolbar": "undo redo | bold italic underline strikethrough | fontsize | alignleft aligncenter alignright alignjustify | link",
+            "font_size_formats": "12pt 24pt 36pt",
+        }),
+        label="Заголовок"
+    )
