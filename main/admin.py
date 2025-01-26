@@ -28,6 +28,11 @@ class CarouselImageInline(admin.TabularInline):
     fields = ('image',)
 
 
+class CarouselBlockInline(admin.TabularInline):
+    model = CarouselBlock
+    extra = 1
+
+
 @admin.register(Carousel)
 class CarouselAdmin(admin.ModelAdmin):
     list_display = ('title',)
@@ -39,4 +44,4 @@ class MainPageAdmin(admin.ModelAdmin):
     list_display = ('title', 'is_active')  
     list_editable = ('is_active',)         
     list_filter = ('is_active',) 
-    inlines = [MainPageTextBoxInline, MainPageContentBoxInline]
+    inlines = [MainPageTextBoxInline, MainPageContentBoxInline, CarouselBlockInline]

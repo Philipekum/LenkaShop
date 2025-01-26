@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from .models import MainPage
 
 
@@ -14,6 +14,7 @@ def index(request):
 
     text_blocks = main_page.text_boxes.all()
     content_blocks = main_page.content_boxes.prefetch_related('images').all()
+    carousel_blocks = main_page.carousel_boxes.all()
 
     blocks = []
     
@@ -22,6 +23,9 @@ def index(request):
 
     for block in content_blocks:
         blocks.append((block, 'content'))
+
+    for block in carousel_blocks:
+        blocks.append((block, 'carousel'))
 
     blocks.sort(key=lambda x: x[0].order)
 

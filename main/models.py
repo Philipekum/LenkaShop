@@ -90,6 +90,21 @@ class MainPageContentBox(models.Model):
         return self.title
     
 
+class CarouselBlock(models.Model):
+    title = models.TextField(blank=True, verbose_name='Заголовок')
+    carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel', verbose_name='Карусель')
+    main_page = models.ForeignKey(MainPage, blank=True, null=True, on_delete=models.CASCADE, related_name='carousel_boxes')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+
+    class Meta:
+        db_table = 'main_page_carousel_box'
+        verbose_name = 'Блок-карусель'
+        verbose_name_plural = 'Блок-карусели'
+    
+    def __str__(self):
+        return self.title
+
+    
 class InfoPage(models.Model):
 
     POSITION_CHOICES = [(i, f'Позиция {i}') for i in range(1, 9)]
