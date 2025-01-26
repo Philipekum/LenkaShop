@@ -53,7 +53,7 @@ class Carousel(models.Model):
 
 
 class CarouselImage(models.Model):
-    caroisel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel_images', verbose_name='Карусель', null=True)
+    carousel = models.ForeignKey(Carousel, on_delete=models.CASCADE, related_name='carousel_images', verbose_name='Карусель', null=True)
     image = models.ImageField(upload_to='carousels/', verbose_name='Изображение')
     order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
 
@@ -73,7 +73,7 @@ class MainPageContentBox(models.Model):
     ]
 
     title = models.TextField(max_length=150, blank=True, verbose_name='Заголовок')
-    images = models.ForeignKey(Carousel, null=True, blank=True, on_delete=models.SET_NULL, related_name='content_boxes', verbose_name='Карусель')
+    carousel = models.ForeignKey(Carousel, null=True, blank=True, on_delete=models.SET_NULL, related_name='content_boxes', verbose_name='Карусель')
     product1 = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_1', verbose_name='Продукт 1')
     product2 = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_2', verbose_name='Продукт 2')
     alignment = models.CharField(max_length=5, choices=ALIGNMENT_CHOICES, default='left', verbose_name='Расположение')

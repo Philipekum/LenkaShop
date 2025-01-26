@@ -20,7 +20,7 @@
           <div id="carousel{{ block.id }}" class="carousel slide">
 
             <div class="carousel-indicators">
-              {% for image in block.images.carousel_images.all %}
+              {% for image in block.filtered_images %}
                 <button type="button" data-bs-target="#carousel{{ block.id }}" 
                         data-bs-slide-to="{{ forloop.counter0 }}" 
                         class="{% if forloop.first %}active{% endif %}" 
@@ -31,7 +31,7 @@
             </div>
 
             <div class="carousel-inner">
-              {% for image in block.images.carousel_images.all %}
+              {% for image in block.filtered_images %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
                   <img src="{{ image.image.url }}" class="d-block w-100" alt="">
                 </div>
@@ -136,25 +136,21 @@
       <div id="carousel{{ block.id }}" class="carousel slide">
 
         <div class="carousel-indicators">
-          {% for image in block.carousel.carousel_images.all %}
-            {% if image.image %}
+          {% for image in block.filtered_images %}
               <button type="button" data-bs-target="#carousel{{ block.id }}" 
                       data-bs-slide-to="{{ forloop.counter0 }}" 
                       class="{% if forloop.first %}active{% endif %}" 
                       aria-current="{% if forloop.first %}true{% endif %}" 
                       aria-label="Slide {{ forloop.counter }}">
               </button>
-            {% endif %}
           {% endfor %}
         </div>
 
         <div class="carousel-inner">
-          {% for image in block.carousel.carousel_images.all %}
-            {% if image.image %}
+          {% for image in block.filtered_images %}
               <div class="carousel-item {% if forloop.first %}active{% endif %}">
                 <img src="{{ image.image.url }}" class="d-block w-100" alt="">
               </div>            
-            {% endif %}
           {% endfor %}
         </div>
 
