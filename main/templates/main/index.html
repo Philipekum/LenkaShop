@@ -6,9 +6,9 @@
 
 {% for block, block_type in blocks %}
   {% if block_type == 'text' %}
-    <div class="text-center mb_3_8 mb-lg_6">
-      <h1>{{ block.title }}</h1>
-      <p>{{ block.text }}</p>
+    <div class="mb_3_8 mb-lg_6">
+      <h1>{{ block.title|safe }}</h1>
+      <p>{{ block.text|safe }}</p>
     </div>
 
   {% elif block_type == 'content' %}

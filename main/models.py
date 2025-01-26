@@ -26,7 +26,7 @@ class MainPage(models.Model):
 
 
 class MainPageTextBox(models.Model):
-    title = models.CharField(max_length=150, blank=True, verbose_name='Заголовок')
+    title = models.TextField(blank=True, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
     order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
     main_page = models.ForeignKey(MainPage, blank=True, null=True, on_delete=models.CASCADE, related_name='text_boxes')

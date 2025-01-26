@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from .forms import MainPageTextBoxForm
 
 @admin.register(InfoPage)
 class InfoPageAdmin(admin.ModelAdmin):
@@ -11,6 +12,7 @@ class InfoPageAdmin(admin.ModelAdmin):
 
 class MainPageTextBoxInline(admin.TabularInline):
     model = MainPageTextBox
+    form = MainPageTextBoxForm
     extra = 1
 
 
