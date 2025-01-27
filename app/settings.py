@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'debug_toolbar',
+    'tinymce',
 
     'main',
     'goods',
@@ -173,3 +174,12 @@ INTERNAL_IPS = [
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+TINYMCE_DEFAULT_CONFIG = {
+    "menubar": False,
+    "width": "70%",
+    "selector": "textarea",
+    "plugins": "advlist autolink lists link image charmap preview anchor fullscreen insertdatetime media table code help wordcount autoresize",
+    "toolbar": "undo redo | bold italic underline strikethrough | fontsize | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
+    "font_size_formats": "12pt 24pt 36pt",
+}

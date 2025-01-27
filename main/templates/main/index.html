@@ -6,21 +6,21 @@
 
 {% for block, block_type in blocks %}
   {% if block_type == 'text' %}
-    <div class="text-center mb_3_8 mb-lg_6">
-      <h1>{{ block.title }}</h1>
-      <p>{{ block.text }}</p>
+    <div class="mb_3_8 mb-lg_6">
+      <h1>{{ block.title|safe }}</h1>
+      <p>{{ block.text|safe }}</p>
     </div>
 
   {% elif block_type == 'content' %}
     <div class="product_{{ block.alignment }} mb_2_8 mb-lg_5">
-      <div class="collection_name mb-4">{{ block.title }}</div>
+      <div class="collection_name mb-4">{{ block.title|safe }}</div>
       <div class="row flex-column flex-lg-row justify-content-lg-between">
         <div class="col-12 col-lg-8 mb-4 mb-lg-0 collection_slider_block">
 
           <div id="carousel{{ block.id }}" class="carousel slide">
 
             <div class="carousel-indicators">
-              {% for image in block.images.carousel_images.all %}
+              {% for image in block.filtered_images %}
                 <button type="button" data-bs-target="#carousel{{ block.id }}" 
                         data-bs-slide-to="{{ forloop.counter0 }}" 
                         class="{% if forloop.first %}active{% endif %}" 
@@ -31,7 +31,7 @@
             </div>
 
             <div class="carousel-inner">
-              {% for image in block.images.carousel_images.all %}
+              {% for image in block.filtered_images %}
                 <div class="carousel-item {% if forloop.first %}active{% endif %}">
                   <img src="{{ image.image.url }}" class="d-block w-100" alt="">
                 </div>
@@ -129,8 +129,54 @@
         </div>
       </div>
     </div>
+  
+  {% elif block_type == 'carousel' %}
 
+    <!-- Если хотите, чтобы карусель действительно 
+         растягивалась на всю ширину браузера,
+         стоит вынести её за пределы .container 
+         или использовать container-fluid -->
+    <div class="fullwidth-carousel-wrapper">
+      
+      <div class="carousel slide my-fullwidth-carousel" id="carousel{{ block.id }}">
+  
+        <div class="carousel-indicators">
+          {% for image in block.filtered_images %}
+            <button type="button" 
+                    data-bs-target="#carousel{{ block.id }}" 
+                    data-bs-slide-to="{{ forloop.counter0 }}" 
+                    class="{% if forloop.first %}active{% endif %}" 
+                    aria-current="{% if forloop.first %}true{% endif %}" 
+                    aria-label="Slide {{ forloop.counter }}">
+            </button>
+          {% endfor %}
+        </div>
+  
+        <div class="carousel-inner">
+          {% for image in block.filtered_images %}
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img src="{{ image.image.url }}" alt="">
+            </div>
+          {% endfor %}
+        </div>
+  
+        <button class="carousel-control-prev" type="button"
+                data-bs-target="#carousel{{ block.id }}" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Предыдущий</span>
+        </button>
+  
+        <button class="carousel-control-next" type="button"
+                data-bs-target="#carousel{{ block.id }}" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Следующий</span>
+        </button>
+  
+      </div> <!-- /carousel -->
+    </div> <!-- /fullwidth-carousel-wrapper -->
+  
   {% endif %}
+  
 {% endfor %}
 
 {% endblock  %}
