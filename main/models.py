@@ -27,7 +27,7 @@ class MainPage(models.Model):
 
 class MainPageTextBox(models.Model):
     title = models.TextField(blank=True, verbose_name='Заголовок')
-    text = models.TextField(verbose_name='Текст')
+    text = models.TextField(blank=True, verbose_name='Текст')
     order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
     main_page = models.ForeignKey(MainPage, blank=True, null=True, on_delete=models.CASCADE, related_name='text_boxes')
 
@@ -42,7 +42,7 @@ class MainPageTextBox(models.Model):
 
 
 class Carousel(models.Model):
-    title = models.CharField(max_length=255, verbose_name='Название карусели')
+    title = models.TextField(blank=True, verbose_name='Название карусели')
 
     class Meta:
         verbose_name = 'Карусель'
@@ -72,7 +72,7 @@ class MainPageContentBox(models.Model):
         ('right', 'Справа'),
     ]
 
-    title = models.TextField(max_length=150, blank=True, verbose_name='Заголовок')
+    title = models.TextField(blank=True, verbose_name='Заголовок')
     carousel = models.ForeignKey(Carousel, null=True, blank=True, on_delete=models.SET_NULL, related_name='content_boxes', verbose_name='Карусель')
     product1 = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_1', verbose_name='Продукт 1')
     product2 = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='product_2', verbose_name='Продукт 2')

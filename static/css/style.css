@@ -604,6 +604,62 @@ a, a:hover, a:active, a:focus{
 	object-fit: cover;
 }
 
+/* Обёртка карусели на всю ширину (или ширину контейнера) */
+.fullwidth-carousel-wrapper {
+	/* Если действительно нужен на всю ширину браузера (за пределы .container),
+	   можно обнулить отступы или использовать .container-fluid */
+	width: 100%;
+	margin: 0 auto; /* на всякий случай, если хотим центрировать */
+  }
+  
+  /* Сам карусельный блок, который поддерживает соотношение 16:9 */
+  .my-fullwidth-carousel {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16/9;  /* фиксируем 16:9 */
+	/* Если вам нужны фиксированная высота, 
+	   можно использовать: height: 500px; 
+	   или любую другую, вместо aspect-ratio. */
+  }
+  
+  /* Важно тянуть .carousel-inner и .carousel-item 
+	 во всю доступную ширину/высоту родителя */
+  .my-fullwidth-carousel .carousel-inner,
+  .my-fullwidth-carousel .carousel-item {
+	width: 100%;
+	height: 100%;
+	position: relative; 
+	overflow: hidden; /* чтобы «обрезались» края */
+  }
+  
+  /* Изображение растягиваем и обрезаем лишнее */
+  .my-fullwidth-carousel .carousel-item img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;      /* «обрезаем» лишнее по краям */
+	object-position: center;/* центрируем по умолчанию */
+	display: block;
+  }
+  
+  /* Управляем позиционированием кнопок переключения */
+  .my-fullwidth-carousel .carousel-control-prev,
+  .my-fullwidth-carousel .carousel-control-next {
+	width: auto;       /* убираем слишком широкий «клик-зону» по умолчанию */
+	top: 50%;          
+	transform: translateY(-50%); 
+	/* Можете дополнительно задать left/right, 
+	   если надо придвинуть ближе или дальше к краям */
+  }
+  
+  .my-fullwidth-carousel .carousel-control-prev {
+	left: 1rem;  /* или другое значение, насколько хотите сдвинуть */
+  }
+  
+  .my-fullwidth-carousel .carousel-control-next {
+	right: 1rem; /* то же самое для правой кнопки */
+  }
+  
+
 
 @media (min-width: 576px) {
 	
