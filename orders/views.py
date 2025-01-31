@@ -1,11 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.db import transaction
 from django.forms import ValidationError
 from django.contrib import messages
 
+import yookassa
+from dotenv import load_dotenv
+
+import os
+
 from .forms import CreateOrderForm
 from .models import Order, OrderItem
 from carts.models import Cart
+from payments.models import Payment
+
+
+
+load_dotenv(override=True)
+
+yookassa.Configuration.account_id = os.getenv('PAYMENT_SHOP_ID')
+yookassa.Configuration.secret_key = os.getenv('PAYMENT_SECRET_KEY')
 
 
 def success_order(request, order_id):
@@ -48,14 +62,13 @@ def order(request):
                             delivery_address = form.cleaned_data['delivery_address'],
                         )
 
+                        total_price = 0
+
                         for cart_item in cart_items:
                             product = cart_item.product
                             name = cart_item.product.name
                             price = cart_item.product.sell_price()
                             quantity = cart_item.quantity
-
-                            # if product.quantity < quantity:
-                            #     raise ValidationError(f'Недостаточное количество товара {product.name}: запрашивается - {quantity}, в наличии - {product.quantity}')
 
                             OrderItem.objects.create(
                                 order=order,
@@ -67,12 +80,36 @@ def order(request):
 
                             product.quantity -= quantity
                             product.save()
+
+                            total_price += price * quantity
                         
                         cart_items.delete()
 
-                        messages.success(request, 'Заказ оформлен!')
+                        payment_data = {
+                            "amount": {
+                                "value": str(total_price),
+                                "currency": "RUB"
+                            },
+                            "payment_method_data": {
+                                "type": "bank_card"
+                            },
+                            "confirmation": {
+                                "type": "redirect",
+                                "return_url": request.build_absolute_uri(reverse('orders:success_order', args=[order.order_id]))
+                            },
+                            "description": f"Оплата заказа #{order.order_id}"
+                        }
 
-                        return redirect('main:index')
+                        payment = yookassa.Payment.create(payment_data)
+
+                        Payment.objects.create(
+                            order_id=order.order_id,
+                            payment_id=payment.id,
+                            status='pending',
+                            amount=total_price
+                        )
+
+                        return redirect(payment.confirmation.confirmation_url)
                     
             except ValidationError as e:
                 messages.warning(request, str(e))

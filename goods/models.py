@@ -33,7 +33,7 @@ class Products(models.Model):
     compound = models.TextField(blank=True, null=True, verbose_name='Состав')
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
-    quantity = models.PositiveIntegerField(default=0, verbose_name='Количество')
+    quantity = models.IntegerField(default=0, verbose_name='Количество')
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
     laundry_features = models.ManyToManyField(LaundryFeature, blank=True)
     similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
