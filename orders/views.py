@@ -1,44 +1,30 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.db import transaction
-from django.forms import ValidationError
 from django.contrib import messages
-
-import yookassa
-from dotenv import load_dotenv
-
-import os
-
+from carts.models import Cart
 from .forms import CreateOrderForm
 from .models import Order, OrderItem
-from carts.models import Cart
-from payments.models import Payment
-
-
-
-load_dotenv(override=True)
-
-yookassa.Configuration.account_id = os.getenv('PAYMENT_SHOP_ID')
-yookassa.Configuration.secret_key = os.getenv('PAYMENT_SECRET_KEY')
+from payments.models import PaymentTransaction
+from payments.services.create_yookassa_payment import create_yookassa_payment
 
 
 def success_order(request, order_id):
     order = get_object_or_404(Order, order_id=order_id)
-
     context = {
         'title': 'Заказ обработан',
         'order_details': [
-                ('Номер заказа', order.order_id),
-                ('Дата', order.created_timestamp),
-                ('ФИО', f'{order.first_name} {order.last_name}'),
-                ('EMAIL', order.email),
-                ('Номер телефона', order.phone_number),
-                ('Статус', order.status),
-                ('Доставка', order.delivery_address),
-                ('Чек', 'dev'),
-            ],
+            ('Номер заказа', order.order_id),
+            ('Дата', order.created_timestamp),
+            ('ФИО', f'{order.first_name} {order.last_name}'),
+            ('EMAIL', order.email),
+            ('Номер телефона', order.phone_number),
+            ('Статус', order.status),
+            ('Доставка', order.delivery_address),
+            ('Чек', 'dev'),
+        ],
     }
-
+    
     return render(request, 'orders/success_order.html', context=context)
 
 
@@ -54,20 +40,20 @@ def order(request):
 
                     if cart_items.exists():
                         order = Order.objects.create(
-                            session_key = session_key,
-                            first_name = form.cleaned_data['first_name'],
-                            last_name = form.cleaned_data['last_name'],
-                            phone_number = form.cleaned_data['phone_number'],
-                            email = form.cleaned_data['email'],
-                            delivery_address = form.cleaned_data['delivery_address'],
+                            session_key=session_key,
+                            first_name=form.cleaned_data['first_name'],
+                            last_name=form.cleaned_data['last_name'],
+                            phone_number=form.cleaned_data['phone_number'],
+                            email=form.cleaned_data['email'],
+                            delivery_address=form.cleaned_data['delivery_address'],
                         )
 
                         total_price = 0
 
                         for cart_item in cart_items:
                             product = cart_item.product
-                            name = cart_item.product.name
-                            price = cart_item.product.sell_price()
+                            name = product.name
+                            price = product.sell_price()
                             quantity = cart_item.quantity
 
                             OrderItem.objects.create(
@@ -80,48 +66,33 @@ def order(request):
 
                             product.quantity -= quantity
                             product.save()
-
                             total_price += price * quantity
                         
                         cart_items.delete()
 
-                        payment_data = {
-                            "amount": {
-                                "value": str(total_price),
-                                "currency": "RUB"
-                            },
-                            "payment_method_data": {
-                                "type": "bank_card"
-                            },
-                            "confirmation": {
-                                "type": "redirect",
-                                "return_url": request.build_absolute_uri(reverse('orders:success_order', args=[order.order_id]))
-                            },
-                            "description": f"Оплата заказа #{order.order_id}"
-                        }
+                        return_url = request.build_absolute_uri(
+                            reverse('orders:success_order', args=[order.order_id])
+                        )
 
-                        payment = yookassa.Payment.create(payment_data)
+                        payment_response = create_yookassa_payment(order, total_price, return_url)
 
-                        Payment.objects.create(
-                            order_id=order.order_id,
-                            payment_id=payment.id,
+                        PaymentTransaction.objects.create(
+                            order=order,
+                            payment_id=payment_response.id,
                             status='pending',
                             amount=total_price
                         )
 
-                        return redirect(payment.confirmation.confirmation_url)
+                        return redirect(payment_response.confirmation.confirmation_url)
                     
-            except ValidationError as e:
-                messages.warning(request, str(e))
-                
+            except Exception as e:
+                messages.warning(request, f"Ошибка при оформлении заказа: {e}")
                 return redirect('orders:order')
-    
     else:
         form = CreateOrderForm()
-
+    
     context = {
         'title': 'Оформление заказа',
         'form': form,
     }
-
     return render(request, 'orders/order.html', context=context)
