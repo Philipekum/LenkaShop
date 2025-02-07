@@ -9,7 +9,7 @@ from .utils import get_client_ip
 from payments.models import PaymentTransaction
 
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger('payments')
 
 
 class PaymentHandlerService:

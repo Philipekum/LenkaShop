@@ -193,20 +193,10 @@ LOGGING = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
         },
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'django.log', 
-        },
     },
     'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'payments': {  
-            'handlers': ['console', 'file'],
+        'payments': {
+            'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': False,
         },
