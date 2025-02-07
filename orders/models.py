@@ -26,6 +26,7 @@ class Order(models.Model):
         ('pending', 'Ожидает оплаты'),
         ('paid', 'Оплачен'),
         ('shipped', 'Отправлен'),
+        ('canceled', 'Отменен'),
     ]
 
     session_key = models.CharField(max_length=32, null=True, blank=True, verbose_name='Сессия')

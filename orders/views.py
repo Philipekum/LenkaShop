@@ -1,90 +1,108 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.db import transaction
-from django.forms import ValidationError
+from django.urls import reverse
+from django.http import JsonResponse
 from django.contrib import messages
 
+from random import shuffle
+
 from .forms import CreateOrderForm
-from .models import Order, OrderItem
-from carts.models import Cart
+from .models import Order
+from payments.models import PaymentTransaction
+from payments.services.create_yookassa_payment import create_yookassa_payment
+from orders.services.order_service import create_order_from_cart
 
 
 def success_order(request, order_id):
-    order = get_object_or_404(Order, order_id=order_id)
+    if request.method == 'POST':
+        order = get_object_or_404(Order, order_id=order_id)
+        total_price = order.orderitem_set.total_price()
 
-    context = {
-        'title': 'Заказ обработан',
-        'order_details': [
-                ('Номер заказа', order.order_id),
-                ('Дата', order.created_timestamp),
-                ('ФИО', f'{order.first_name} {order.last_name}'),
-                ('EMAIL', order.email),
-                ('Номер телефона', order.phone_number),
-                ('Статус', order.status),
-                ('Доставка', order.delivery_address),
-                ('Чек', 'dev'),
-            ],
-    }
+        return_url = request.build_absolute_uri(
+            reverse('orders:success_order', args=[order.order_id])
+        )
 
-    return render(request, 'orders/success_order.html', context=context)
+        payment_response = create_yookassa_payment(
+            order, total_price, return_url
+        )
+
+        return JsonResponse({
+            'redirect_url': payment_response.confirmation.confirmation_url
+        })
+
+    else:
+        order = get_object_or_404(Order, order_id=order_id)
+        order_items = order.orderitem_set.all()
+
+        total_price = order.orderitem_set.total_price()
+        
+        similar_products = []
+
+        for item in order_items:
+            for prod in item.product.similar_products.all():
+                if prod not in similar_products:
+                    similar_products.append(prod)
+        
+        shuffle(similar_products)
+        title = 'Спасибо за покупку!' if order.is_paid else 'Заказ ждет оплаты'
+            
+        context = {
+            'title': title,
+            'order': order,
+            'order_items': order_items,
+            'similar_products': similar_products[:3],
+            'total_price': total_price,
+        }
+
+        return render(request, 'orders/success_order.html', context=context)
 
 
 def order(request):
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
-
         if form.is_valid():
             try:
-                with transaction.atomic():
-                    session_key = request.session.session_key
-                    cart_items = Cart.objects.filter(session_key=session_key)
+                session_key = request.session.session_key
 
-                    if cart_items.exists():
-                        order = Order.objects.create(
-                            session_key = session_key,
-                            first_name = form.cleaned_data['first_name'],
-                            last_name = form.cleaned_data['last_name'],
-                            phone_number = form.cleaned_data['phone_number'],
-                            email = form.cleaned_data['email'],
-                            delivery_address = form.cleaned_data['delivery_address'],
-                        )
+                order_obj, total_price = create_order_from_cart(
+                    session_key=session_key,
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    phone_number=form.cleaned_data['phone_number'],
+                    email=form.cleaned_data['email'],
+                    delivery_address=form.cleaned_data['delivery_address'],
+                )
 
-                        for cart_item in cart_items:
-                            product = cart_item.product
-                            name = cart_item.product.name
-                            price = cart_item.product.sell_price()
-                            quantity = cart_item.quantity
+                return_url = request.build_absolute_uri(
+                    reverse('orders:success_order', args=[order_obj.order_id])
+                )
 
-                            # if product.quantity < quantity:
-                            #     raise ValidationError(f'Недостаточное количество товара {product.name}: запрашивается - {quantity}, в наличии - {product.quantity}')
+                payment_response = create_yookassa_payment(
+                    order_obj, total_price, return_url
+                )
 
-                            OrderItem.objects.create(
-                                order=order,
-                                product=product,
-                                name=name,
-                                price=price,
-                                quantity=quantity,
-                            )
+                PaymentTransaction.objects.create(
+                    order=order_obj,
+                    payment_id=payment_response.id,
+                    status='pending',
+                    amount=total_price
+                )
 
-                            product.quantity -= quantity
-                            product.save()
-                        
-                        cart_items.delete()
+                return redirect(payment_response.confirmation.confirmation_url)
 
-                        messages.success(request, 'Заказ оформлен!')
-
-                        return redirect('main:index')
-                    
-            except ValidationError as e:
-                messages.warning(request, str(e))
-                
+            except ValueError as ve:
+                messages.warning(request, f"Ошибка при оформлении заказа: {ve}")
                 return redirect('orders:order')
-    
+
+            except Exception as e:
+                messages.warning(request, f"Ошибка при оформлении заказа: {e}")
+                return redirect('orders:order')
+            
     else:
         form = CreateOrderForm()
 
-    context = {
-        'title': 'Оформление заказа',
-        'form': form,
-    }
-
-    return render(request, 'orders/order.html', context=context)
+        context = {
+            'title': 'Оформление заказа',
+            'form': form,
+        }
+        
+        return render(request, 'orders/order.html', context=context)

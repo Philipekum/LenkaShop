@@ -2,19 +2,121 @@
 {% load static %}
 {% load format_tags %}
 
+
 {% block content %}
-
-    <h1 class="page_title">Заказ успешно создан</h1>
-
-    <div class="mb_3_8 mb-lg_6">
-        <p>Ваш заказ был успешно собран. Пожалуйста, проверьте ваш email.</p>
-        <h2>Детали заказа:</h2>
-        <ul class="list-group">
-            {% for name, value in order_details %}
-                <li class="list-group-item">{{ name }}: {{ value }}</li>
-            {% endfor %}
-        </ul>
-        <a href="{% url "main:index" %}"><u>Вернуться на главную страницу.</u></a>
+<div class="mx-2">
+  <div class="row">
+    <div class="col-12">
+        <h1 class="mb-5 text-center text-lg-left">
+            {% if order.is_paid %}Спасибо за покупку!
+            {% else %}Заказ ждет оплаты{% endif %}
+        </h1>
     </div>
+  </div>
 
-{% endblock  %}
+  <div class="row mb-5">
+    <div class="col-md-6">
+      <h2 class="h5">Номер заказа</h2>
+      <p>{{ order.order_id }}</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+      <h2 class="h5">Дата заказа</h2>
+      <p>{{ order.created_timestamp|date:"d.m.Y H:i" }}</p>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-12">
+        <p>
+            Статус заказа - <strong>{{ order.get_status_display }}</strong>.
+        </p>
+      <p>
+        Информация о заказе направлена на <strong>{{ order.email }}</strong>.
+      </p>
+    </div>
+  </div>
+
+  <div class="row mb-5">
+    <div class="col-12">
+      <h3 class="mb-4">Товары в заказе</h3>
+      {% if order_items %}
+        <ul class="list-group list-group-flush px-0">
+          {% for item in order_items %}
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+              <span>{{ item.name }}</span>
+              <span>{{ item.price|format_price }}</span>
+            </li>
+          {% endfor %}
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <span><u>Общая стоимость</u></span>
+            <span><u>{{ total_price|format_price }}</u></span>
+          </li>
+        </ul>
+      {% else %}
+        <p>Список товаров пуст.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if not order.is_paid %}
+    <div class="row mb-4">
+      <div class="col-12 text-center">
+        <form action="" method="post" id="payment-form">
+            {% csrf_token %}
+            <button class="btn btn-dark btn-lg" type="submit">Оплатить заказ</button>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+  {% if similar_products and order.is_paid%}      
+  <h2 class="text-center related_title pt-5 mt-5 mb-4">Смотрите также</h2>
+
+  <div class="row flex-wrap product_list">
+      {% for similar_product in similar_products %}
+      
+          <div class="product_item col-6 col-lg-4 mb-lg-2">
+              
+              <div class="product_item_img">
+                  {% with main_image=similar_product.images.all.0 image_alt=similar_product.images.all.1 %}
+                      <a href="{% url "goods:product" similar_product.slug %}">
+                          {% if main_image %}
+                              <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                          {% else %}
+                              <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                          {% endif %}
+                          
+                          {% if image_alt %}
+                              <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
+                          {% elif not main_image %}
+                              <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
+                          {% else %}
+                              <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">                                        
+                          {% endif %}
+                      </a>
+                  {% endwith %}
+              </div>
+
+              <div class="product_item_info">
+                  <a class="py-2 py-lg-4" href="{% url "goods:product" similar_product.slug %}">
+                      <div class="product_item_name">{{ similar_product.name }}</div>                            
+                          {% if similar_product.discount_price %}
+                              <div class="product_item_price">
+                                  <div class="price_old">{{ similar_product.price|format_price }}</div>
+                                  <div>{{ similar_product.sell_price|format_price }}</div>
+                              </div>
+
+                          {% else %} 
+                              <div class="product_item_price">{{ similar_product.price|format_price }}</div>
+
+                          {% endif %}
+                  </a>
+              </div>
+          </div>
+
+      {% endfor %}
+  </div>
+
+{% endif %}
+{% endblock %}

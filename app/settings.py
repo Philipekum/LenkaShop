@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'goods',
     'carts',
     'orders',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -182,4 +183,22 @@ TINYMCE_DEFAULT_CONFIG = {
     "plugins": "advlist autolink lists link image charmap preview anchor fullscreen insertdatetime media table code help wordcount autoresize",
     "toolbar": "undo redo | bold italic underline strikethrough | fontsize | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
     "font_size_formats": "12pt 24pt 36pt",
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'payments': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
 }
