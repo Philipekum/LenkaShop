@@ -26,6 +26,23 @@ if (selectSingle_title) {
         });
     }
 }
+
+// Редирект на платежную страницу
+const form = document.getElementById('payment-form');
+form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    fetch(form.action, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    }).then(response => response.json())
+      .then(data => {
+          window.location.href = data.redirect_url;
+      });
+});
+
 //add2cart button	
 // const add2cart = document.querySelector('.add2cart_btn');
 

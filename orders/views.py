@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
+from django.http import JsonResponse
 from django.contrib import messages
 
 from random import shuffle
@@ -12,30 +13,47 @@ from orders.services.order_service import create_order_from_cart
 
 
 def success_order(request, order_id):
-    order = get_object_or_404(Order, order_id=order_id)
-    order_items = order.orderitem_set.all()
+    if request.method == 'POST':
+        order = get_object_or_404(Order, order_id=order_id)
+        total_price = order.orderitem_set.total_price()
 
-    total_price = order.orderitem_set.total_price()
-    
-    similar_products = []
+        return_url = request.build_absolute_uri(
+            reverse('orders:success_order', args=[order.order_id])
+        )
 
-    for item in order_items:
-        for prod in item.product.similar_products.all():
-            if prod not in similar_products:
-                similar_products.append(prod)
-    
-    shuffle(similar_products)
-    title = 'Спасибо за покупку!' if order.is_paid else 'Заказ ждет оплаты'
-    
-    context = {
-        'title': title,
-        'order': order,
-        'order_items': order_items,
-        'similar_products': similar_products[:3],
-        'total_price': total_price,
-    }
+        payment_response = create_yookassa_payment(
+            order, total_price, return_url
+        )
 
-    return render(request, 'orders/success_order.html', context=context)
+        return JsonResponse({
+            'redirect_url': payment_response.confirmation.confirmation_url
+        })
+
+    else:
+        order = get_object_or_404(Order, order_id=order_id)
+        order_items = order.orderitem_set.all()
+
+        total_price = order.orderitem_set.total_price()
+        
+        similar_products = []
+
+        for item in order_items:
+            for prod in item.product.similar_products.all():
+                if prod not in similar_products:
+                    similar_products.append(prod)
+        
+        shuffle(similar_products)
+        title = 'Спасибо за покупку!' if order.is_paid else 'Заказ ждет оплаты'
+            
+        context = {
+            'title': title,
+            'order': order,
+            'order_items': order_items,
+            'similar_products': similar_products[:3],
+            'total_price': total_price,
+        }
+
+        return render(request, 'orders/success_order.html', context=context)
 
 
 def order(request):

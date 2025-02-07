@@ -4,6 +4,7 @@
 
 
 {% block content %}
+<div class="mx-2">
   <div class="row">
     <div class="col-12">
         <h1 class="mb-5 text-center text-lg-left">
@@ -18,7 +19,7 @@
       <h2 class="h5">Номер заказа</h2>
       <p>{{ order.order_id }}</p>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 text-md-end">
       <h2 class="h5">Дата заказа</h2>
       <p>{{ order.created_timestamp|date:"d.m.Y H:i" }}</p>
     </div>
@@ -26,6 +27,9 @@
 
   <div class="row mb-5">
     <div class="col-12">
+        <p>
+            Статус заказа - <strong>{{ order.get_status_display }}</strong>.
+        </p>
       <p>
         Информация о заказе направлена на <strong>{{ order.email }}</strong>.
       </p>
@@ -34,18 +38,18 @@
 
   <div class="row mb-5">
     <div class="col-12">
-      <h3 class="mb-4   ">Товары в заказе</h3>
+      <h3 class="mb-4">Товары в заказе</h3>
       {% if order_items %}
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush px-0">
           {% for item in order_items %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
               <span>{{ item.name }}</span>
               <span>{{ item.price|format_price }}</span>
             </li>
           {% endfor %}
-          <li class="list-group-item d-flex justify-content-between align-items-center">
-            <span>Общая стоимость</span>
-            <span>{{ total_price|format_price }}</span>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+            <span><u>Общая стоимость</u></span>
+            <span><u>{{ total_price|format_price }}</u></span>
           </li>
         </ul>
       {% else %}
@@ -57,14 +61,17 @@
   {% if not order.is_paid %}
     <div class="row mb-4">
       <div class="col-12 text-center">
-        <a href="#" class="btn btn-dark btn-lg">Оплатить заказ</a>
+        <form action="" method="post" id="payment-form">
+            {% csrf_token %}
+            <button class="btn btn-dark btn-lg" type="submit">Оплатить заказ</button>
+        </form>
       </div>
     </div>
   {% endif %}
+</div>
 
-  <!-- Блок похожих товаров (если есть) -->
-  {% if similar_products and order.is_paid%}        
-  <h2 class="text-center related_title mb-4">Смотрите также</h2>
+  {% if similar_products and order.is_paid%}      
+  <h2 class="text-center related_title pt-5 mt-5 mb-4">Смотрите также</h2>
 
   <div class="row flex-wrap product_list">
       {% for similar_product in similar_products %}
