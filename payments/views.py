@@ -1,49 +1,54 @@
 import json
+import logging
+
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from yookassa.domain.notification import WebhookNotificationFactory
-from payments.models import PaymentTransaction
+from yookassa.domain.notification import WebhookNotificationFactory, WebhookNotificationEventType
+from yookassa.domain.common import SecurityHelper
+
+from payments.services.utils import get_client_ip
+from payments.services.webhook_handlers import PaymentHandlerService, HandlingOrderNotFoundError
+
+
+logger = logging.getLogger('payments')
 
 
 @csrf_exempt
 def payment_webhook(request):
-    if request.method == "POST":
-        try:
-            body = json.loads(request.body)
-        except json.JSONDecodeError:
-            return HttpResponse(status=400)
+    ip = get_client_ip(request)  
 
-        notification = WebhookNotificationFactory().create(body)
+    if not SecurityHelper().is_ip_trusted(ip):
+        return HttpResponse("Unauthorized IP", status=401)
 
-        if notification.event == "payment.succeeded":
-            payment_id = notification.object.id
-            try:
-                payment_obj = PaymentTransaction.objects.get(payment_id=payment_id)
-                payment_obj.status = 'succeeded'
-                payment_obj.save()
+    try:
+        event_json = json.loads(request.body)
+    except json.JSONDecodeError:
+        logger.error('Invalid JSON recieved')
+        return HttpResponse("Invalid JSON", status=400)
 
-                order = payment_obj.order
-                order.is_paid = True
-                order.status = 'paid'
-                order.save()
+    try:
+        notification_object = WebhookNotificationFactory().create(event_json)
+        response_object = notification_object.object
 
-            except PaymentTransaction.DoesNotExist:
-                return HttpResponse(status=404)
+        handler_service = PaymentHandlerService()
 
-        elif notification.event == "payment.canceled":
-            payment_id = notification.object.id
-            try:
-                payment_obj = PaymentTransaction.objects.get(payment_id=payment_id)
-                payment_obj.status = 'canceled'
-                payment_obj.save()
+        if notification_object.event == WebhookNotificationEventType.PAYMENT_SUCCEEDED:
+            handler_service.handle_payment_succeeded(response_object.id)
 
-                order = payment_obj.order
-                order.status = 'canceled'
-                order.save()
+        elif notification_object.event == WebhookNotificationEventType.PAYMENT_CANCELED:
+            handler_service.handle_payment_canceled(response_object.id)
+        
+        else:
+            logger.error(f'Unsupported event type: {notification_object.event}')
+            return HttpResponse("Unsupported event type", status=403)  
 
-            except PaymentTransaction.DoesNotExist:
-                return HttpResponse(status=404)
-
-        return HttpResponse(status=200)
+        return HttpResponse("Success", status=200)  
     
-    return HttpResponse(status=405)
+    except HandlingOrderNotFoundError as e:
+        logger.error(f'{e}')
+        return HttpResponse("Order not found", status=404)
+
+    except Exception as e:
+        logger.error(f'Unexpected error: {e}')
+        return HttpResponse("Server error", status=500)
+
