@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound
 from django.contrib import messages
 
 from random import shuffle
@@ -25,8 +25,13 @@ def success_order(request, order_id):
             order, total_price, return_url
         )
 
+        if payment_response is None:
+            return HttpResponseNotFound()
+
+        confirmation_url = payment_response.json()['confirmation']['confirmation_url']
+
         return JsonResponse({
-            'redirect_url': payment_response.confirmation.confirmation_url
+            'redirect_url': confirmation_url
         })
 
     else:
@@ -80,6 +85,11 @@ def order(request):
                     order_obj, total_price, return_url
                 )
 
+                if payment_response is None:
+                    return redirect('orders:order')
+                
+                confirmation_url = payment_response.json()['confirmation']['confirmation_url']
+
                 PaymentTransaction.objects.create(
                     order=order_obj,
                     payment_id=payment_response.id,
@@ -87,7 +97,7 @@ def order(request):
                     amount=total_price
                 )
 
-                return redirect(payment_response.confirmation.confirmation_url)
+                return redirect(confirmation_url)
 
             except ValueError as ve:
                 messages.warning(request, f"Ошибка при оформлении заказа: {ve}")
