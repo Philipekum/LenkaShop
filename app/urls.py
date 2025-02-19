@@ -35,8 +35,4 @@ urlpatterns = [
 handler404 = 'main.views.handle_page_not_found'
 
 if settings.DEBUG:
-    urlpatterns += [
-        path('__debug__/', include('debug_toolbar.urls')),
-    ]
-
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseNotFound
 from django.contrib import messages
 
 from random import shuffle
@@ -8,7 +8,7 @@ from random import shuffle
 from .forms import CreateOrderForm
 from .models import Order
 from payments.models import PaymentTransaction
-from payments.services.create_yookassa_payment import create_yookassa_payment
+from payments.services.create_payment import create_payment
 from orders.services.order_service import create_order_from_cart
 
 
@@ -21,12 +21,17 @@ def success_order(request, order_id):
             reverse('orders:success_order', args=[order.order_id])
         )
 
-        payment_response = create_yookassa_payment(
+        payment_response = create_payment(
             order, total_price, return_url
         )
 
+        if payment_response is None:
+            return HttpResponseNotFound()
+
+        confirmation_url = payment_response['confirmation']['confirmation_url']
+
         return JsonResponse({
-            'redirect_url': payment_response.confirmation.confirmation_url
+            'redirect_url': confirmation_url
         })
 
     else:
@@ -76,25 +81,28 @@ def order(request):
                     reverse('orders:success_order', args=[order_obj.order_id])
                 )
 
-                payment_response = create_yookassa_payment(
+                payment_response = create_payment(
                     order_obj, total_price, return_url
                 )
 
+                print(payment_response)
+
+                if payment_response is None:
+                    return redirect('orders:order')
+                
+                confirmation_url = payment_response['confirmation']['confirmation_url']
+
                 PaymentTransaction.objects.create(
                     order=order_obj,
-                    payment_id=payment_response.id,
+                    payment_id=payment_response["id"],
                     status='pending',
                     amount=total_price
                 )
 
-                return redirect(payment_response.confirmation.confirmation_url)
-
-            except ValueError as ve:
-                messages.warning(request, f"Ошибка при оформлении заказа: {ve}")
-                return redirect('orders:order')
+                return redirect(confirmation_url)
 
             except Exception as e:
-                messages.warning(request, f"Ошибка при оформлении заказа: {e}")
+                print(request, f"Ошибка при оформлении заказа: {e}")
                 return redirect('orders:order')
             
     else:
