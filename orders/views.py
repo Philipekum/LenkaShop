@@ -8,7 +8,7 @@ from random import shuffle
 from .forms import CreateOrderForm
 from .models import Order
 from payments.models import PaymentTransaction
-from payments.services.create_yookassa_payment import create_yookassa_payment
+from payments.services.create_payment import create_payment
 from orders.services.order_service import create_order_from_cart
 
 
@@ -21,7 +21,7 @@ def success_order(request, order_id):
             reverse('orders:success_order', args=[order.order_id])
         )
 
-        payment_response = create_yookassa_payment(
+        payment_response = create_payment(
             order, total_price, return_url
         )
 
@@ -81,7 +81,7 @@ def order(request):
                     reverse('orders:success_order', args=[order_obj.order_id])
                 )
 
-                payment_response = create_yookassa_payment(
+                payment_response = create_payment(
                     order_obj, total_price, return_url
                 )
 

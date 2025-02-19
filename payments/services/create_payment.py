@@ -4,7 +4,7 @@ import requests
 import uuid
 
 
-def create_yookassa_payment(order, total_price, return_url):
+def create_payment(order, total_price, return_url):
     load_dotenv(override=True)
 
     payment_session = requests.Session()
