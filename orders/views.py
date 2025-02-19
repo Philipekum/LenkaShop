@@ -28,7 +28,7 @@ def success_order(request, order_id):
         if payment_response is None:
             return HttpResponseNotFound()
 
-        confirmation_url = payment_response.json()['confirmation']['confirmation_url']
+        confirmation_url = payment_response['confirmation']['confirmation_url']
 
         return JsonResponse({
             'redirect_url': confirmation_url
@@ -85,26 +85,24 @@ def order(request):
                     order_obj, total_price, return_url
                 )
 
+                print(payment_response)
+
                 if payment_response is None:
                     return redirect('orders:order')
                 
-                confirmation_url = payment_response.json()['confirmation']['confirmation_url']
+                confirmation_url = payment_response['confirmation']['confirmation_url']
 
                 PaymentTransaction.objects.create(
                     order=order_obj,
-                    payment_id=payment_response.id,
+                    payment_id=payment_response["id"],
                     status='pending',
                     amount=total_price
                 )
 
                 return redirect(confirmation_url)
 
-            except ValueError as ve:
-                messages.warning(request, f"Ошибка при оформлении заказа: {ve}")
-                return redirect('orders:order')
-
             except Exception as e:
-                messages.warning(request, f"Ошибка при оформлении заказа: {e}")
+                print(request, f"Ошибка при оформлении заказа: {e}")
                 return redirect('orders:order')
             
     else:
