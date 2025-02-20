@@ -13,7 +13,13 @@
         {% for cart in carts %}
           <div id="modal-cart-item-{{ cart.id }}" class="d-flex justify-content-between cart_menu_item">
             <div class="cart_menu_item_img">
-              <a href="{% url "goods:product" cart.product.slug %}"><img class="w-100" src="{{ cart.product.images.all.0.image.url }}" alt={{ cart.product.name }}></a>
+              <a href="{% url "goods:product" cart.product.slug %}">
+                {% if cart.product.images.all.0.image.url %}
+                  <img class="w-100" src="{{ cart.product.images.all.0.image }}" alt={{ cart.product.name }}>
+                {% else %}
+                  <img class="w-100" src="{% static "images/no-product-image.jpg" %}" alt="No Product Image">
+                {% endif %}
+              </a>
             </div>
 
             <div class="cart_menu_item_content">

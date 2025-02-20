@@ -13,7 +13,11 @@
                 <div class="row justify-content-between align-items-lg-center cart_product_block" id="cart-item-{{ cart.id }}">
                     <div class="cart_product_image_block">
                         <a href="{% url "goods:product" cart.product.slug %}">
-                            <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
+                            {% if cart.product.images.all.0.image %}
+                                <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
+                            {% else %}
+                                <img src="{% static "images/no-product-image.jpg" %}" class="d-block w-100" alt="No Product Image">
+                            {% endif %}
                         </a>
                     </div>
 
