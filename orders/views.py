@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseNotFound
-from django.contrib import messages
 
 from random import shuffle
 
@@ -9,7 +8,7 @@ from .forms import CreateOrderForm
 from .models import Order
 from payments.models import PaymentTransaction
 from payments.services.create_payment import create_payment
-from orders.services.order_service import create_order_from_cart
+from orders.services.order_service import create_order_from_cart, EmptyCartError
 
 
 def success_order(request, order_id):
@@ -100,6 +99,9 @@ def order(request):
                 )
 
                 return redirect(confirmation_url)
+            
+            except EmptyCartError:
+                return redirect('orders:order')
 
             except Exception as e:
                 print(request, f"Ошибка при оформлении заказа: {e}")
