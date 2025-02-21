@@ -63,6 +63,7 @@ def success_order(request, order_id):
 def order(request):
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
+
         if form.is_valid():
             try:
                 session_key = request.session.session_key
@@ -84,8 +85,6 @@ def order(request):
                     order_obj, total_price, return_url
                 )
 
-                print(payment_response)
-
                 if payment_response is None:
                     return redirect('orders:order')
                 
@@ -106,7 +105,14 @@ def order(request):
             except Exception as e:
                 print(request, f"Ошибка при оформлении заказа: {e}")
                 return redirect('orders:order')
-            
+        else:
+            context = {
+            'title': 'Оформление заказа',
+            'form': form,
+            }
+        
+            return render(request, 'orders/order.html', context=context)
+
     else:
         form = CreateOrderForm()
 

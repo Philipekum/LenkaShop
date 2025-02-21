@@ -690,8 +690,8 @@ a, a:hover, a:active, a:focus{
 }/*768*/
 @media (min-width: 992px) {
 	body{
-		font-size: 1.75rem;
-		line-height: 2.125rem;
+		font-size: 1rem;
+		line-height: 1.5rem;
 	}
 	.navbar {--bs-navbar-padding-y: 0.5rem;}
 	.nav-link {
