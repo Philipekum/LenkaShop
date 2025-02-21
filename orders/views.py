@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponseNotFound
+from django.contrib import messages
 
 from random import shuffle
 
@@ -106,6 +107,10 @@ def order(request):
                 print(request, f"Ошибка при оформлении заказа: {e}")
                 return redirect('orders:order')
         else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{error}")
+
             context = {
             'title': 'Оформление заказа',
             'form': form,

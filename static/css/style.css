@@ -682,6 +682,17 @@ a, a:hover, a:active, a:focus{
 	object-fit: contain;
   }
 
+  .fixed-alert {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    width: 90%;
+    max-width: 600px;
+}
+
+
 @media (min-width: 576px) {
 	
 }/*678*/

@@ -90,6 +90,17 @@
 
     <div class="row align-items-lg-start justify-content-between">
         <div class="col-12 col-lg-6 checkout_form_block order-2 order-lg-1">
+            {% if messages %}
+                <div class="fixed-alert">
+                    {% for message in messages %}
+                        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                            <span class="me-auto">{{ message }}</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             <form action="{% url "orders:order" %}" method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
                 
