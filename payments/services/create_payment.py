@@ -31,7 +31,8 @@ def create_payment(order, total_price, return_url):
         "Content-Type": "application/json"
     }
 
-    payment = payment_session.post(PAYMENT_URL, headers=headers, json=payment_data)
+    payment = payment_session.post(PAYMENT_URL, headers=headers, json=payment_data, timeout=5)
+
 
     if payment.status_code == 200:
         return payment.json()
