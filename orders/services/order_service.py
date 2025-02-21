@@ -3,6 +3,10 @@ from carts.models import Cart
 from orders.models import Order, OrderItem
 
 
+class EmptyCartError(Exception):
+    pass
+
+
 def create_order_from_cart(
     session_key: str,
     first_name: str,
@@ -10,10 +14,12 @@ def create_order_from_cart(
     phone_number: str,
     email: str,
     delivery_address: str
-):
+) -> tuple[Order, float]:
+    
     cart_items = Cart.objects.filter(session_key=session_key)
+
     if not cart_items.exists():
-        raise ValueError("Корзина пуста")
+        raise EmptyCartError
 
     with transaction.atomic():
         order = Order.objects.create(
@@ -26,6 +32,7 @@ def create_order_from_cart(
         )
 
         total_price = 0
+
         for cart_item in cart_items:
             product = cart_item.product
             name = product.name

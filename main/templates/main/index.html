@@ -17,7 +17,7 @@
       <div class="row flex-column flex-lg-row justify-content-lg-between">
         <div class="col-12 col-lg-8 mb-4 mb-lg-0 collection_slider_block">
 
-          <div id="carousel{{ block.id }}" class="carousel slide">
+          <div id="carousel{{ block.id }}" class="carousel slide" data-bs-interval="5000" data-bs-touch="true" data-bs-ride="carousel">
 
             <div class="carousel-indicators">
               {% for image in block.filtered_images %}

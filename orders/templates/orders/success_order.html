@@ -5,6 +5,16 @@
 
 {% block content %}
 <div class="mx-2">
+  {% if messages %}
+    <div class="fixed-alert">
+        {% for message in messages %}
+            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                <span class="me-auto">{{ message }}</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+  {% endif %}
   <div class="row">
     <div class="col-12">
         <h1 class="mb-5 text-center text-lg-left">

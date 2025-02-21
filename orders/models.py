@@ -34,7 +34,7 @@ class Order(models.Model):
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания заказа")
     first_name = models.CharField(max_length=50, verbose_name='Имя')
     last_name = models.CharField(max_length=50, verbose_name='Фамилия')
-    email = models.CharField(max_length=50, verbose_name='e-mail')
+    email = models.EmailField(verbose_name='e-mail')
     phone_number = models.CharField(max_length=20, verbose_name="Номер телефона")
     delivery_address = models.TextField(null=True, blank=True, verbose_name="Адрес доставки")
     is_paid = models.BooleanField(default=False, verbose_name="Оплачено")

@@ -13,7 +13,11 @@
                 <div class="row justify-content-between align-items-lg-center cart_product_block" id="cart-item-{{ cart.id }}">
                     <div class="cart_product_image_block">
                         <a href="{% url "goods:product" cart.product.slug %}">
-                            <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
+                            {% if cart.product.images.all.0.image %}
+                                <img src="{{ cart.product.images.all.0.image.url }}" class="d-block w-100" alt="{{ cart.product.name }}">
+                            {% else %}
+                                <img src="{% static "images/no-product-image.jpg" %}" class="d-block w-100" alt="No Product Image">
+                            {% endif %}
                         </a>
                     </div>
 
@@ -86,33 +90,54 @@
 
     <div class="row align-items-lg-start justify-content-between">
         <div class="col-12 col-lg-6 checkout_form_block order-2 order-lg-1">
-            <form action="{% url "orders:order" %}" method="post">
-                {% csrf_token %}
-                <input class="checkout_input" type="text" name="first_name" value="" placeholder="Имя">
-                <input class="checkout_input" type="text" name="last_name" value="" placeholder="Фамилия">
-                <input class="checkout_input" type="text" name="phone_number" value="" placeholder="Номер телефона">
-                <input class="checkout_input" type="text" name="email" value="" placeholder="EMAIL">
-                <input class="checkout_input" type="text" name="delivery_address" value="" placeholder="Адресс доставки">
-
-
-
-
-
-                {% comment %} <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 1:">
-                <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 2:">
-                <input class="checkout_input" type="text" name="" value="" placeholder="EMAIL:">
-                <input class="checkout_input" type="text" name="" value="" placeholder="ТЕЛЕФОН:">
-                <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 3:">
-                <input class="checkout_input" type="text" name="" value="" placeholder="ПОЛЕ 4:"> {% endcomment %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                    <label class="form-check-label" for="flexCheckDefault">
-                        Я ПРИНИМАЮ <a href="">ПОЛИТИКУ КОНФИДЕНЦИАЛЬНОСТИ</a>, <a href="">ПУБЛИЧНУЮ ОФЕРТУ</a> И <a href="">СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ</a>
-                    </label>
+            {% if messages %}
+                <div class="fixed-alert">
+                    {% for message in messages %}
+                        <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                            <span class="me-auto">{{ message }}</span>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
                 </div>
-                <button class="btd chekout_btn" type="submit">Оформить покупку</button>
+            {% endif %}
+
+            <form action="{% url "orders:order" %}" method="post" class="needs-validation" novalidate>
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <input class="form-control checkout_input" type="text" name="first_name" placeholder="Имя" value="{{ form.first_name.value|default:"" }}" required>
+                    <div class="invalid-feedback">Пожалуйста, введите ваше имя.</div>
+                </div>
+                
+                <div class="form-group">
+                    <input class="form-control checkout_input" type="text" name="last_name" placeholder="Фамилия" value="{{ form.last_name.value|default:"" }}" required>
+                    <div class="invalid-feedback">Пожалуйста, введите вашу Фамилию.</div>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control checkout_input" type="tel" name="phone_number" placeholder="Номер телефона" value="{{ form.phone_number.value|default:"" }}" required>
+                    <div class="invalid-feedback">Пожалуйста, введите ваш номер телефона.</div>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control checkout_input" type="email" name="email" placeholder="EMAIL" value="{{ form.email.value|default:"" }}" required>
+                    <div class="invalid-feedback">Пожалуйста, введите ваш email.</div>
+                </div>
+
+                <div class="form-group">
+                    <input class="form-control checkout_input" type="text" name="delivery_address" placeholder="Адрес доставки" value="{{ form.delivery_address.value|default:"" }}" required>
+                    <div class="invalid-feedback">Пожалуйста, введите ваш адрес доставки.</div>
+                </div>
+
+                <button class="btd chekout_btn mt-5" type="submit">Оформить покупку</button>
+
+                <div class="mt-4 text-center">
+                    <p>Оформляя покупку, вы даете согласие на обработку персональных данных и соглашаетесь c <a href="#"><u>политикой конфиденциальности</u></a></p>
+                </div>
+
             </form>
         </div>
+
         <div class="col-12 col-lg-5 ps-lg-4 pt-lg-3 checkout_text order-1 order-lg-2 mb-2 mb-lg-0">
             <h2 class="h3">Lorem ipsum </h2>
             <p>Dolor sit amet, consectetur adipiscing elit. Pellentesque imperdiet pellentesque lectus, et imperdiet nisi sodales vel. Integer viverra volutpat urna ac laoreet. Etiam vitae lacus ac erat consectetur porttitor et sit amet ipsum. </p>
@@ -120,6 +145,7 @@
             <h2 class="h3">Maecenas </h2>
             <p>Porta gravida lobortis. In vestibulum vestibulum lectus, non luctus sem semper nec. Duis nec est sodales turpis iaculis faucibus. Cras suscipit varius eros auctor gravida. Sed eget felis sit amet nisl rhoncus convallis a in orci. Curabitur tempor, eros in volutpat finibus, orci odio aliquam turpis, quis blandit.</p>
         </div>
+
     </div>
 
     {% else %}

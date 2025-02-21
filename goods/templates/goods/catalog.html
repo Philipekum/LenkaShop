@@ -6,6 +6,7 @@
 
 <nav aria-label="Категории">
     <ul class="category-buttons">
+        <li><a href="{% url "goods:index" %}" class="category-button {% if not request.GET.category %}active{% endif %}">Все товары</a></li>
         {% for category in categories %}
             <li><a href="?category={{ category.slug }}" 
                    class="category-button {% if request.GET.category == category.slug %}active{% endif %}">

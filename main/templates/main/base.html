@@ -1,6 +1,7 @@
 {% load static %}
 {% load carts_tags %}
 {% load menu_tags %}
+{% load format_phone_tags %}
 {% user_carts request as carts %}
 
 <!DOCTYPE html>
@@ -74,13 +75,20 @@
       <div class="container">
         <div class="row flex-column flex-lg-row justify-content-lg-between">
           <div class="col-12 col-lg-4 order-2 order-lg-1 text-center text-lg-start pt-2 mb-4 mb-lg-0">
-            <div class="mb_2_3 mb-lg-4">
-              <a href="#"><img class="footer_icon" src= {% static "icon/whatsapp-icon.png" %} alt=""> +7 999 999 99 99 </a>
-            </div>
-
-            <div class="">
-              <a href="#"><img class="footer_icon" src= {% static "icon/mail-icon.png" %} alt=""> example@example.ru </a>
-            </div>
+            {% get_contact_info as contact %}
+            {% if contact %}
+              {% if contact.phone %}
+                <div class="mb_2_3 mb-lg-4">
+                  <a href="https://wa.me/{{ contact.phone }}"><img class="footer_icon" src={% static "icon/whatsapp-icon.png" %} alt="Chat on WhatsApp">{{ contact.phone|format_phone }}</a>
+                </div>             
+              {% endif %}
+              
+              {% if contact.email %}
+                <div class="">
+                  <a href="mailto:{{ contact.email }}"><img class="footer_icon" src={% static "icon/mail-icon.png" %} alt="contact email">{{ contact.email }}</a>
+                </div>           
+              {% endif %}
+            {% endif %}
 
           </div>
 

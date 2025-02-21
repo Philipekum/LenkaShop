@@ -9,33 +9,38 @@ from .forms import CreateOrderForm
 from .models import Order
 from payments.models import PaymentTransaction
 from payments.services.create_payment import create_payment
-from orders.services.order_service import create_order_from_cart
+from orders.services.order_service import create_order_from_cart, EmptyCartError
 
 
 def success_order(request, order_id):
+    order = get_object_or_404(Order, order_id=order_id)
+
     if request.method == 'POST':
-        order = get_object_or_404(Order, order_id=order_id)
-        total_price = order.orderitem_set.total_price()
+        try:
+            total_price = order.orderitem_set.total_price()
 
-        return_url = request.build_absolute_uri(
-            reverse('orders:success_order', args=[order.order_id])
-        )
+            return_url = request.build_absolute_uri(
+                reverse('orders:success_order', args=[order.order_id])
+            )
 
-        payment_response = create_payment(
-            order, total_price, return_url
-        )
+            payment_response = create_payment(
+                order, total_price, return_url
+            )
 
-        if payment_response is None:
-            return HttpResponseNotFound()
+            if payment_response is None:
+                raise ConnectionError
 
-        confirmation_url = payment_response['confirmation']['confirmation_url']
+            confirmation_url = payment_response['confirmation']['confirmation_url']
 
-        return JsonResponse({
-            'redirect_url': confirmation_url
-        })
+            return JsonResponse({
+                'redirect_url': confirmation_url
+            })
+        
+        except Exception as e:
+            messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
+            return redirect(reverse('orders:success_order', args=[order.order_id]))
 
     else:
-        order = get_object_or_404(Order, order_id=order_id)
         order_items = order.orderitem_set.all()
 
         total_price = order.orderitem_set.total_price()
@@ -48,6 +53,7 @@ def success_order(request, order_id):
                     similar_products.append(prod)
         
         shuffle(similar_products)
+
         title = 'Спасибо за покупку!' if order.is_paid else 'Заказ ждет оплаты'
             
         context = {
@@ -64,6 +70,7 @@ def success_order(request, order_id):
 def order(request):
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
+
         if form.is_valid():
             try:
                 session_key = request.session.session_key
@@ -85,10 +92,11 @@ def order(request):
                     order_obj, total_price, return_url
                 )
 
-                print(payment_response)
-
                 if payment_response is None:
-                    return redirect('orders:order')
+                    messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
+
+                    return render(request, 'orders/order.html', {'title': 'Оформление заказа', 'form': form})
+
                 
                 confirmation_url = payment_response['confirmation']['confirmation_url']
 
@@ -100,17 +108,24 @@ def order(request):
                 )
 
                 return redirect(confirmation_url)
+            
+            except EmptyCartError:
+                messages.error(request, 'Корзина пустая')
 
             except Exception as e:
-                print(request, f"Ошибка при оформлении заказа: {e}")
-                return redirect('orders:order')
+                messages.error(request, 'Произошла ошибка при оформлении заказа. Попробуйте снова!')
             
+        else:
+            for _, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{error}")
+
     else:
         form = CreateOrderForm()
 
-        context = {
-            'title': 'Оформление заказа',
-            'form': form,
-        }
+    context = {
+        'title': 'Оформление заказа',
+        'form': form,
+    }
         
-        return render(request, 'orders/order.html', context=context)
+    return render(request, 'orders/order.html', context=context)
