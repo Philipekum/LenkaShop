@@ -178,8 +178,8 @@ TINYMCE_DEFAULT_CONFIG = {
     "width": "70%",
     "selector": "textarea",
     "plugins": "advlist autolink lists link image charmap preview anchor fullscreen insertdatetime media table code help wordcount autoresize",
-    "toolbar": "undo redo | styleselect | bold italic underline strikethrough | fontselect fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
-    "content_css": "/static/css/styles.css",
+    "toolbar": "undo redo | styleselect | bold italic underline strikethrough | fontselect fontsize | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
+    "content_css": "css/style.css",
     "style_formats": [
         {"title": "Paragraph", "block": "p"},
         {"title": "Heading 2", "block": "h2", "classes": "h2"},

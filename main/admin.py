@@ -8,6 +8,7 @@ class InfoPageAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('title',)}
     search_fields = ('title',)
     list_editable = ('position',)
+    form = InfoPageForm
 
 
 class MainPageTextBoxInline(admin.TabularInline):
