@@ -178,8 +178,19 @@ TINYMCE_DEFAULT_CONFIG = {
     "width": "70%",
     "selector": "textarea",
     "plugins": "advlist autolink lists link image charmap preview anchor fullscreen insertdatetime media table code help wordcount autoresize",
-    "toolbar": "undo redo | bold italic underline strikethrough | fontsize | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
-    "font_size_formats": "12pt 24pt 36pt",
+    "toolbar": "undo redo | styleselect | bold italic underline strikethrough | fontselect fontsizeselect | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
+    "content_css": "/static/css/styles.css",
+    "style_formats": [
+        {"title": "Paragraph", "block": "p"},
+        {"title": "Heading 2", "block": "h2", "classes": "h2"},
+        {"title": "Heading 3", "block": "h3", "classes": "h3"},
+        {"title": "Heading 4", "block": "h4", "classes": "h4"}
+    ],
+    "font_size_formats": "12px 14px 16px 18px 20px 24px 28px 32px",
+    "font_family_formats": "Inter=Inter, Arial=arial,helvetica,sans-serif",
+    "content_style": "body {font-family: Inter, Arial, sans-serif; font-size: 16px;}",
+    "forced_root_block": "p",
+    "branding": False
 }
 
 LOGGING = {

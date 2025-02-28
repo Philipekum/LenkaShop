@@ -6,14 +6,14 @@
 
 {% for block, block_type in blocks %}
   {% if block_type == 'text' %}
-    <div class="mb_3_8 mb-lg_6">
+    <div class="editor-content mb_3_8 mb-lg_6">
       <h1>{{ block.title|safe }}</h1>
       <p>{{ block.text|safe }}</p>
     </div>
 
   {% elif block_type == 'content' %}
     <div class="product_{{ block.alignment }} mb_2_8 mb-lg_5">
-      <div class="collection_name mb-4">{{ block.title|safe }}</div>
+      <div class="editor-content collection_name mb-4">{{ block.title|safe }}</div>
       <div class="row flex-column flex-lg-row justify-content-lg-between">
         <div class="col-12 col-lg-8 mb-4 mb-lg-0 collection_slider_block">
 
