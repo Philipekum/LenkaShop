@@ -111,7 +111,7 @@ class InfoPage(models.Model):
 
     title = models.CharField(max_length=150, verbose_name='Название страницы')
     slug = models.SlugField(unique=True, verbose_name='URL')
-    content = tinymce.models.HTMLField(verbose_name='Контент страницы')
+    content = models.TextField(verbose_name='Контент страницы')
     position = models.PositiveSmallIntegerField(choices=POSITION_CHOICES, blank=True, null=True, verbose_name='Позиция для отображения')
 
     class Meta:

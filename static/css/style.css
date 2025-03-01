@@ -1,16 +1,22 @@
 html{
 	height:100%;
-	font-size:16px;
+}
+:root {
+	--base-font: 'Inter', Arial, sans-serif;
+	--base-font-size: 16px;
+	--line-height: 1.5;
 }
 body{
 	height:100%;
 	background: var(--bs-white);
 	color:var(--bs-black);
-	font-family: 'Inter', var(--bs-font-sans-serif);
-	font-style: normal;
-	font-weight: 400;
-	font-size: 1rem;
-	line-height: 1.1875rem;	
+
+	font-family: var(--base-font);
+	font-size: var(--base-font-size);
+	line-height: var(--line-height);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
 	display:flex;
 	flex-direction:column;
 	justify-content:space-between;
@@ -19,15 +25,36 @@ a, a:hover, a:active, a:focus{
 	color:var(--bs-black);
 	text-decoration:none;
 }
-.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
-	margin-bottom: .0rem;
+h1, .h1 { font-size: 2rem; }
+h2, .h2 { font-size: 1.75rem; }
+h3, .h3 { font-size: 1.5rem; }
+h4, .h4 { font-size: 1.25rem; }
+h5, .h5 { font-size: 1.125rem; }
+h6, .h6 { font-size: 1rem; }
+
+h1, h2, h3, h4, h5, h6 {
+	margin: 1.5rem 0 1rem;
 	font-weight: 700;
+	line-height: 1.2;
 }
-.h1, h1 {font-size: 1rem;}
-.h2, h2{
+
+p {
+	margin: 0 0 1rem;
+}
+.editor-content {
+	font-family: var(--base-font);
 	font-size: 1rem;
-	line-height: 1.8125rem;	
+	line-height: var(--line-height);
+  }
+  
+.editor-content * {
+	margin: 1rem 0;
 }
+  
+.editor-content h2 { font-size: 1.75rem; }
+.editor-content h3 { font-size: 1.5rem; }
+.editor-content img { max-width: 100%; height: auto; }
+
 .row,
 .container, .container-fluid, 
 .container-lg, .container-md, 
