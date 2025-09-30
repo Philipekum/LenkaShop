@@ -1,15 +1,21 @@
-html{
-	height:100%;
-}
+@import "./fonts/tektur/stylesheet.css";
+@import "./flex.css";
+@import "./btn.css";
+@import "./nav.css";
+
 :root {
 	--base-font: 'Inter', Arial, sans-serif;
 	--base-font-size: 16px;
 	--line-height: 1.5;
+
+	--bg-light: #FCFBFA;
+	--main-text: #39392F;
+	--main-btn: #E6E7FB;
 }
+
 body{
-	height:100%;
-	background: var(--bs-white);
-	color:var(--bs-black);
+	background: var(--bg-light);
+	color:var(--main-text);
 
 	font-family: var(--base-font);
 	font-size: var(--base-font-size);
@@ -17,15 +23,15 @@ body{
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	display:flex;
+	/* display:flex;
 	flex-direction:column;
-	justify-content:space-between;
+	justify-content:space-between; */
 }
 a, a:hover, a:active, a:focus{
-	color:var(--bs-black);
+	color:var(--main-text);
 	text-decoration:none;
 }
-h1, .h1 { font-size: 2rem; }
+/* h1, .h1 { font-size: 2rem; }
 h2, .h2 { font-size: 1.75rem; }
 h3, .h3 { font-size: 1.5rem; }
 h4, .h4 { font-size: 1.25rem; }
@@ -62,7 +68,7 @@ p {
 .container-xxl {
 	--bs-gutter-x: 1.25rem;
 }
-.header {background: var(--bs-white);}
+
 .navbar-nav{padding: 0 .7rem;}
 .nav-link{
 	color: var(--bs-black);
@@ -152,7 +158,7 @@ p {
 	visibility: hidden; 
 	padding-top: 8px;
 }
-.header .cart_block.open .cart_menu {
+.cart_block.open .cart_menu {
 	display: block;
 	visibility: visible;
 	-webkit-animation-name: cart-menu__hidden-toggle;
@@ -275,12 +281,12 @@ p {
 .first_img {
 	opacity: 1;
 	z-index: 2;
-	position: relative;
+	position: relative; */
 /* 	-webkit-transition: all 0.5s ease-out 0s;
 	-moz-transition: all 0.5s ease-out 0s;
 	-o-transition: all 0.5s ease-out 0s;
 	transition: all 0.5s ease-out 0s;	 */
-	width:100%;
+	/* width:100%;
 	max-height:100%;
 }
 .second_img {
@@ -522,9 +528,9 @@ p {
 	margin-bottom: 1.5rem;
 	padding-left: 15px;
 	padding-right: 25px;
-}
+} */
 /*.checkout_form_block {}*/
-.checkout_input {
+/* .checkout_input {
 	height: 45px;
 	font-family: 'Inter';
 	font-style: normal;
@@ -629,83 +635,83 @@ p {
 	width: 100%; 
 	height: 100%;
 	object-fit: cover;
-}
+} */
 
 /* Обёртка карусели на всю ширину (или ширину контейнера) */
-.fullwidth-carousel-wrapper {
+/* .fullwidth-carousel-wrapper { */
 	/* Если действительно нужен на всю ширину браузера (за пределы .container),
 	   можно обнулить отступы или использовать .container-fluid */
-	width: 100%;
-	margin: 0 auto; /* на всякий случай, если хотим центрировать */
-  }
+	/* width: 100%; */
+	/* margin: 0 auto; на всякий случай, если хотим центрировать */
+  /* } */
   
   /* Сам карусельный блок, который поддерживает соотношение 16:9 */
-  .my-fullwidth-carousel {
+  /* .my-fullwidth-carousel {
 	position: relative;
 	width: 100%;
-	aspect-ratio: 16/9;  /* фиксируем 16:9 */
+	aspect-ratio: 16/9;  фиксируем 16:9 */
 	/* Если вам нужны фиксированная высота, 
 	   можно использовать: height: 500px; 
 	   или любую другую, вместо aspect-ratio. */
-  }
+  /* } */
   
   /* Важно тянуть .carousel-inner и .carousel-item 
 	 во всю доступную ширину/высоту родителя */
-  .my-fullwidth-carousel .carousel-inner,
+  /* .my-fullwidth-carousel .carousel-inner,
   .my-fullwidth-carousel .carousel-item {
 	width: 100%;
 	height: 100%;
 	position: relative; 
-	overflow: hidden; /* чтобы «обрезались» края */
-  }
+	overflow: hidden; чтобы «обрезались» края */
+  /* } */
   
   /* Изображение растягиваем и обрезаем лишнее */
-  .my-fullwidth-carousel .carousel-item img {
+  /* .my-fullwidth-carousel .carousel-item img {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;      /* «обрезаем» лишнее по краям */
-	object-position: center;/* центрируем по умолчанию */
-	display: block;
-  }
-  
+	object-fit: cover;      «обрезаем» лишнее по краям */
+	/* object-position: center;центрируем по умолчанию */
+	/* display: block; */
+  /* } */
+  /*  */
   /* Управляем позиционированием кнопок переключения */
-  .my-fullwidth-carousel .carousel-control-prev,
-  .my-fullwidth-carousel .carousel-control-next {
-	width: auto;       /* убираем слишком широкий «клик-зону» по умолчанию */
+  /* .my-fullwidth-carousel .carousel-control-prev,
+  .my-fullwidth-carousel .carousel-control-next { */
+	/* width: auto;       убираем слишком широкий «клик-зону» по умолчанию
 	top: 50%;          
-	transform: translateY(-50%); 
+	transform: translateY(-50%);  */
 	/* Можете дополнительно задать left/right, 
 	   если надо придвинуть ближе или дальше к краям */
-  }
+  /* } */
   
-  .my-fullwidth-carousel .carousel-control-prev {
-	left: 1rem;  /* или другое значение, насколько хотите сдвинуть */
-  }
+  /* .my-fullwidth-carousel .carousel-control-prev { */
+	/* left: 1rem;  или другое значение, насколько хотите сдвинуть */
+  /* } */
   
-  .my-fullwidth-carousel .carousel-control-next {
-	right: 1rem; /* то же самое для правой кнопки */
-  }
+  /* .my-fullwidth-carousel .carousel-control-next { */
+	/* right: 1rem; то же самое для правой кнопки */
+  /* } */
 
   /* Кнопка прокрутки наверх */
 .scroll-to-top {
-	position: fixed;
-	bottom: 20px; /* Отступ от низа */
-	right: 20px; /* Отступ от правого края */
-	width: 100px; /* Размер кнопки */
-	height: 100px;
-	display: none; /* Скрываем по умолчанию */
-	cursor: pointer;
-	z-index: 1000; /* Чтобы всегда быть выше остальных элементов */
-	background-color: rgba(255, 255, 255, 1); /* Фон для большей читаемости */
-	border-radius: 50%; 
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
-	justify-content: center;
-	align-items: center;
-  }
+	/* position: fixed; */
+	/* bottom: 20px; Отступ от низа */
+	/* right: 20px; Отступ от правого края */
+	/* width: 100px; Размер кнопки */
+	/* height: 100px; */
+	/* display: none; Скрываем по умолчанию */
+	/* cursor: pointer; */
+	/* z-index: 1000; Чтобы всегда быть выше остальных элементов */
+	/* background-color: rgba(255, 255, 255, 1); Фон для большей читаемости */
+	/* border-radius: 50%;  */
+	/* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); Тень */
+	/* justify-content: center; */
+	/* align-items: center; */
+  /* } */
   
-  .scroll-to-top img {
-	width: 70%; /* Размер изображения относительно кнопки */
-	height: auto;
+  /* .scroll-to-top img { */
+	/* width: 70%; Размер изображения относительно кнопки */
+	/* height: auto;
 	object-fit: contain;
   }
 
@@ -722,13 +728,13 @@ p {
 
 @media (min-width: 576px) {
 	
-}/*678*/
-@media (min-width: 768px) {
+}678 */
+/* @media (min-width: 768px) { */
 	
 }/*768*/
-@media (min-width: 992px) {
-	body{
-		font-size: 1rem;
+/* @media (min-width: 992px) { */
+	/* body{ */
+		/* font-size: 1rem;
 		line-height: 1.5rem;
 	}
 	.navbar {--bs-navbar-padding-y: 0.5rem;}
@@ -966,9 +972,9 @@ p {
 		padding-top: 3rem;
 		padding-bottom: 3rem;
 		margin-bottom: 4rem;
-	}
+	} */
 /*	.checkout_form_block {} */
-	.checkout_input {
+	/* .checkout_input {
 		height: 55px;
 		font-size: 1.25rem;
 		line-height: 1.5rem;
@@ -990,20 +996,20 @@ p {
 	}
 	.checkout_form_block .form-check-label a{text-decoration:underlined;}
 	.chekout_btn{height: 75px;}
+ */
 
-
-}/*992*/
-@media (min-width: 1200px) {
+/* }992 */
+/* @media (min-width: 1200px) {
 	.product_list {
 		gap: 2rem 1.5rem;
 		margin-bottom: 5.1rem;
 	}
-	.header {padding: .5rem 0;}
-	.content_section {margin-top: 130px;margin-bottom: 100px;}
-	.product_content_block {top: 130px;}
-}/*1200*/
 
-@media (min-width: 1440px) {
+	.content_section {margin-top: 130px;margin-bottom: 100px;}
+	.product_content_block {top: 130px;} */
+/* }1200 */
+
+/* @media (min-width: 1440px) {
 	.container{
 		--bs-gutter-x: 244px;
 	}
@@ -1012,9 +1018,9 @@ p {
 		margin-bottom: 7.1rem;
 	}
 	.product_image_block .d-lg-flex.carousel-inner {gap: 1.2rem;}
-	.header {padding: 2.3rem 0;}
+	
 	.navbar-brand img {width: 100px;}
 	.content_section {margin-top: 205px;margin-bottom: 120px;}
-	.product_content_block {top: 200px;	}
+	.product_content_block {top: 200px;	} */
 
-}/*1440*/
+/* }1440 */

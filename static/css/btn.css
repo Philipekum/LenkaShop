@@ -1,0 +1,16 @@
+.btn{
+    background-color: var(--main-btn);
+    text-transform: uppercase;
+    border-radius: 5px;
+    padding: 30px 50px;
+    
+    font-size: 1.5rem; 
+    font-family: var(--base-font); 
+    font-weight: 300; 
+    text-transform: uppercase; 
+    white-space: pre-wrap;
+}
+
+.icon-btn{
+    cursor: pointer;
+}

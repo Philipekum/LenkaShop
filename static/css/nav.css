@@ -1,0 +1,15 @@
+nav ul li .nav-link{
+    font-size: 1.5rem; 
+    font-family: var(--base-font); 
+    font-weight: 300; 
+    text-transform: uppercase; 
+}
+
+.navbar {
+    padding: 40px 0;
+}
+
+nav ul li:not(:last-child){
+    padding-right: 95px;
+}
+
