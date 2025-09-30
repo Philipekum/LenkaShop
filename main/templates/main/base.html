@@ -110,9 +110,39 @@
       </div>
     </section>
 
-    <footer class="footer">
-      <div class="container">
-        <div class="row flex-column flex-lg-row justify-content-lg-between">
+    <footer class="footer my-5">
+      <div class="container flex jc-sb">
+        <div>
+          <p class="footer-title mb-3">Контакты</p>
+          {% get_contact_info as contact %}
+          {% if contact %}
+            {% if contact.phone %}
+              <div class="flex ai-center mb-1">
+                <img class="me-3 footer-icon" src={% static "images/whatsapp.svg" %} alt="whatsapp">
+                <a href="https://wa.me/{{ contact.phone }}">{{ contact.phone|format_phone }}</a>
+              </div>
+            {% endif %}
+
+            {% if contact.email %}
+              <div class="flex ai-center mb-2">
+                <img class="me-3 footer-icon" src={% static "images/mail.svg" %} alt="mail">
+                <a href="mailto:{{ contact.email }}">{{  contact.email  }}</a>
+              </div>
+            {% endif %}
+
+            {% if contact.telegram %}
+              <div class="flex ai-center mb-2">
+                <img class="me-3" src={% static "images/telegram.svg" %} alt="telegram">
+                <a href="https://web.telegram.org/{{ contact.telegram }}">{{  contact.telegram  }}</a>
+              </div>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <a href="{% url "main:index" %}">
+          <img src={% static "images/Logo.svg" %} alt="Lenka">
+        </a>
+        <!-- <div class="row flex-column flex-lg-row justify-content-lg-between">
           <div class="col-12 col-lg-4 order-2 order-lg-1 text-center text-lg-start pt-2 mb-4 mb-lg-0">
             {% get_contact_info as contact %}
             {% if contact %}
@@ -151,13 +181,13 @@
             </a>
           </div>
 
-        </div>
+        </div> -->
       </div>
   
     </footer>
 
     <div id="scroll-to-top" class="scroll-to-top" onclick="scrollToTop()">
-      <img src="{% static 'icon/up_arrow.png' %}" alt="Наверх">
+      <img src="{% static 'images/arrow-up.svg' %}" alt="Наверх">
     </div>
 
     <script src={% static "js/bootstrap.bundle.min.js" %}></script>

@@ -1,0 +1,12 @@
+.footer-title{
+    font-size: 1.5rem; 
+    font-family: var(--base-font); 
+    font-weight: 300; 
+    text-transform: uppercase; 
+    margin: 0;
+}
+
+.footer-icon{
+    width: 35px;
+    height: 35px;
+}
