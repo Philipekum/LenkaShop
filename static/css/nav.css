@@ -9,7 +9,37 @@ nav ul li .nav-link{
     padding: 40px 0;
 }
 
+.nav-logo{
+    width: 100px;
+    height: auto;
+}
+
+.nav-icon{
+    width: 40px;
+    height: auto;
+}
+
 nav ul li:not(:last-child){
     padding-right: 95px;
+}
+
+@media (max-width: 768px) {
+    nav ul li .nav-link{
+        font-size: 1rem; 
+    }
+
+    .navbar {
+        padding: 20px 0;
+    }
+
+    .nav-logo{
+        width: 60px;
+        height: auto;
+    }
+
+    .nav-icon{
+        width: 30px;
+        height: auto;
+    }
 }
 

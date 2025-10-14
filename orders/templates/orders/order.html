@@ -3,10 +3,75 @@
 {% load format_tags %}
 
 {% block content %}
-    <h1 class="page_title">Корзина</h1>
+    <h1>ваш заказ:</h1>
     
     {% if carts %}
-    <div class="cart_list_block">
+    <div>
+        <hr/>
+        {% for cart in carts %}
+        <div id="cart-item-{{ cart.id }}">
+            <div class="flex ai-center order-cart-body">
+                <div class="flex ai-center order-content"> 
+                    <a href="{% url "goods:product" cart.product.slug %}" class="order-card-img">
+                        {% if cart.product.images.all.0.image %}
+                            <img class="order-img" src="{{ cart.product.images.all.0.image.url }}" alt="{{ cart.product.name }}">
+                        {% else %}
+                            <img class="order-img" src="{% static "images/No_Image.png" %}" alt="No Product Image">
+                        {% endif %}
+                    </a>
+
+                    <div class="order-ditale">
+                        <div class="oreder-cart-title">{{ cart.product.name }}</div>
+
+                        <!--Это что еще такое - разные варианты товара...???-->
+                        <!-- {% if product.options and product.options.all.exists %} 
+                            <div class="d-block d-lg-inline">option 1</div>
+                        {% endif %} -->
+
+                        <div>
+                            {% if cart.product.discount_price %}
+                                <div class = "old_price me-2">{{ cart.product.price|format_price }}</div>
+                                <div class = "discount_price">{{ cart.product.sell_price|format_price }} </div>
+                            {% else %}
+                                {{ cart.product.sell_price|format_price }}
+                            {% endif %}
+                        </div>
+                    
+                        <div class="input-group">
+                            <button type="button" class="q_btn decrement increment-btn" 
+                                    data-cart-id="{{ cart.id }}" 
+                                    data-cart-change-url="{% url "carts:cart_change" %}">
+                                    {% csrf_token %}-</button>
+
+                            <input id="goods-in-cart-count" type="text" name="q_item" 
+                                class="order-cout-value number" value="{{ cart.quantity }}" readonly/>
+                            
+                                <button type="button" class="q_btn increment increment-btn" 
+                                        data-cart-id="{{ cart.id }}" 
+                                        data-cart-change-url="{% url "carts:cart_change" %}">
+                                        {% csrf_token %}+</button>   
+                        </div>
+
+                    </div>
+                </div> 
+
+                    <div class="flex order-total-price">
+                        <p class="mb-0"> {{ cart.total_price }}</p>
+                        
+                        <a href="{% url "carts:cart_remove" %}" class="remove-from-cart" data-cart-id="{{ cart.id }}">
+                            {% csrf_token %}
+                            <button class="btn-close"></button>
+                        </a>
+                    </div>
+                    
+                
+            </div>
+            <hr/>
+        </div>
+        {% endfor %}
+        
+    </div>
+    <!-- <div class="cart_list_block">
         <div class="cart-container" id="cart-items-container">
             {% for cart in carts %}
             
@@ -146,7 +211,7 @@
             <p>Porta gravida lobortis. In vestibulum vestibulum lectus, non luctus sem semper nec. Duis nec est sodales turpis iaculis faucibus. Cras suscipit varius eros auctor gravida. Sed eget felis sit amet nisl rhoncus convallis a in orci. Curabitur tempor, eros in volutpat finibus, orci odio aliquam turpis, quis blandit.</p>
         </div>
 
-    </div>
+    </div> -->
 
     {% else %}
 

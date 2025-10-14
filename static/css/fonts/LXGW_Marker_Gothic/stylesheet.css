@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'LXGW Marker Gothic';
+    src: url('LXGWMarkerGothic-Regular.eot');
+    src: local('LXGW Marker Gothic Regular'), local('LXGWMarkerGothic-Regular'),
+        url('LXGWMarkerGothic-Regular.eot?#iefix') format('embedded-opentype'),
+        url('LXGWMarkerGothic-Regular.woff2') format('woff2'),
+        url('LXGWMarkerGothic-Regular.woff') format('woff'),
+        url('LXGWMarkerGothic-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

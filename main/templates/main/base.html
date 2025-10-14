@@ -29,7 +29,7 @@
           </button>
 
           <a href="{% url "main:index" %}">
-            <img src={% static "images/Logo.svg" %} alt="Lenka">
+            <img src={% static "images/Logo.svg" %} alt="Lenka" class="nav-logo">
           </a>
 
           <div class="collapse navbar-collapse jc-center order-4 order-lg-2" id="navbarSupportedContent">
@@ -46,71 +46,42 @@
             </ul>
           </div>
 
+          <!-- Сразу переход на страницу -->
           <div class="order-2 order-lg-3">
+            <div class="icon-btn">
+              <a href="{% url "orders:order" %}" >
+                <img class ="nav-icon" src="{% static "images/cart.svg" %}" viewBox="0 0 37 37" fill="none" ></img>
+                <span id="goods-in-cart-count" class="prod_in_cart">{{ carts.total_quantity }}</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Иконка с модальным окном -->
+          <!-- <div class="order-2 order-lg-3">
             <div class="icon-btn" data-bs-toggle="modal" data-bs-target="#cart-items-container">
               <img src="{% static "images/cart.svg" %}" width="37" height="37" viewBox="0 0 37 37" fill="none" ></img>
               <span id="goods-in-cart-count" class="prod_in_cart">{{ carts.total_quantity }}</span>
             </div>
 
-            <div class="modal fade" id="cart-items-container" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                  {% include "carts/cart_modal.html" %}
-                </div>
+            <div class="modal fade" id="cart-items-container" data-bs-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                {% include "carts/cart_modal.html" %}
+              </div>
             </div>
-
-          </div>
+          </div> -->
 
         </div>
       </nav>
-        
-        <!-- <nav class="navbar navbar-expand-lg">
-          <div class="container-fluid px-0">
-            <a class="navbar-brand" href="{% url "main:index" %}">
-              <img src={% static "images/Logo.svg" %} alt="Lenka">
-            </a>
-
-            <div class="cart_block ms-lg-0 order-lg-3">
-              <a class="cart_lnk" href="#">
-                <img src="{% static "icon/cart.svg" %}" width="37" height="37" viewBox="0 0 37 37" fill="none" ></img>
-                <span id="goods-in-cart-count" class="prod_in_cart">{{ carts.total_quantity }}</span>
-              </a>
-
-              <div class="container" id="cart-items-container">
-                {% include "carts/cart_modal.html" %}
-              </div>
-
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ms-lg-auto me-16 mb-2 mb-lg-0 col-lg-7 justify-content-lg-between ">
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url "goods:index" %}">Каталог</a>
-                </li>             
-                {% header_links as header_links %}
-                {% for link in header_links %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ link.get_absolute_url }}">{{ link.title }}</a>
-                  </li>
-                {% endfor %}
-
-              </ul>
-            </div>
-  
-          </div>
-        </nav> -->
     </header>
 
-    <section class="content_section"> 
+    <section> 
       <div class="container">
         {% block content %}
         {% endblock %}
       </div>
     </section>
 
-    <footer class="footer my-5">
+    <footer class="footer">
       <div class="container flex jc-sb">
         <div>
           <p class="footer-title mb-3">Контакты</p>
@@ -140,48 +111,8 @@
         </div>
 
         <a href="{% url "main:index" %}">
-          <img src={% static "images/Logo.svg" %} alt="Lenka">
+          <img src={% static "images/Logo.svg" %} alt="Lenka" class="nav-logo">
         </a>
-        <!-- <div class="row flex-column flex-lg-row justify-content-lg-between">
-          <div class="col-12 col-lg-4 order-2 order-lg-1 text-center text-lg-start pt-2 mb-4 mb-lg-0">
-            {% get_contact_info as contact %}
-            {% if contact %}
-              {% if contact.phone %}
-                <div class="mb_2_3 mb-lg-4">
-                  <a href="https://wa.me/{{ contact.phone }}"><img class="footer_icon" src={% static "icon/whatsapp-icon.png" %} alt="Chat on WhatsApp">{{ contact.phone|format_phone }}</a>
-                </div>             
-              {% endif %}
-              
-              {% if contact.email %}
-                <div class="">
-                  <a href="mailto:{{ contact.email }}"><img class="footer_icon" src={% static "icon/mail-icon.png" %} alt="contact email">{{ contact.email }}</a>
-                </div>           
-              {% endif %}
-            {% endif %}
-
-          </div>
-
-          <div class="col-12 col-lg-6 order-3 order-lg-2 pt-1 pt-lg-0">
-            <nav class="navbar pt-0">
-              <ul class="navbar-nav flex-lg-row flex-lg-wrap align-items-lg-stretch col">
-                {% footer_links as footer_links %}
-                {% for link in footer_links %}
-                  <li class="nav-item col-lg-6">
-                    <a class="nav-link mb-4 mb-lg-3 text-center text-lg-start" href="{{ link.get_absolute_url }}">{{ link.title }}</a>
-                  </li>
-                {% endfor %}            
-
-              </ul>
-            </nav>
-          </div>
-
-          <div class="col-12 col-lg-auto text-center order-1 order-lg-3 pt-1 mb-4 mb-lg-0">
-            <a href="{% url "main:index" %}">
-              <img class="footer_logo" src= {% static "images/logo.png" %} alt="" width="100" height="100">
-            </a>
-          </div>
-
-        </div> -->
       </div>
   
     </footer>

@@ -1,0 +1,23 @@
+input[type="text"].order-cout-value{
+    background-color: inherit;
+    border: none;
+    text-align: center;
+    width: 20%;
+}
+
+input[type="text"].order-cout-value:focus{
+    background-color: inherit;
+    border: none;
+}
+
+.input-group{
+    justify-content: flex-end;
+    width: fit-content;
+    /* width: auto; */
+}
+
+@media (max-width: 768px){
+    .input-group{
+        justify-content: flex-start;
+    }
+}

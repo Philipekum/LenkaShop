@@ -1,17 +1,27 @@
 @import "./fonts/tektur/stylesheet.css";
+@import "./fonts/LXGW_Marker_Gothic/stylesheet.css";
 @import "./flex.css";
 @import "./btn.css";
+@import "./input.css";
 @import "./nav.css";
 @import "./footer.css";
+@import "./cart-modal.css";
+@import "./order.css";
+@import "./media.css";
 
 :root {
 	--base-font: 'Inter', Arial, sans-serif;
-	--base-font-size: 16px;
+	--h1-font: 'LXGW Marker Gothic';
+	--base-font-size: 14px;
 	--line-height: 1.5;
 
 	--bg-light: #FCFBFA;
 	--main-text: #39392F;
+	--light-text: #B9AB9E;
+	--discount_price-text: #47853b;
 	--main-btn: #E6E7FB;
+
+	--send-btn: #EFE7DB;
 }
 
 body{
@@ -31,6 +41,12 @@ body{
 a, a:hover, a:active, a:focus{
 	color:var(--main-text);
 	text-decoration:none;
+}
+
+h1{
+	font-family: var(--h1-font);
+	font-size: 2.5rem;
+	text-transform: uppercase;
 }
 
 .scroll-to-top {
@@ -54,6 +70,28 @@ a, a:hover, a:active, a:focus{
 	width: 70%;
 	height: auto;
 	object-fit: contain;
+}
+
+.old_price{
+	font-size: 0.8rem;
+	color: var(--light-text);
+	text-decoration: line-through;
+}
+.discount_price{
+	font-weight: 600;
+	color: var(--discount_price-text);
+}
+
+@media (max-width: 768px) {
+	h1{
+		font-size: 1.5rem;
+	}
+}
+
+@media(min-width: 768px){
+	:root{
+		font-size: 16px;
+	}
 }
 
 
