@@ -7,7 +7,7 @@
 @import "./footer.css";
 @import "./cart-modal.css";
 @import "./order.css";
-@import "./media.css";
+@import "./catalog.css";
 
 :root {
 	--base-font: 'Inter', Arial, sans-serif;
@@ -22,6 +22,12 @@
 	--main-btn: #E6E7FB;
 
 	--send-btn: #EFE7DB;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --base-font-size: 16px;
+  }
 }
 
 body{
@@ -41,6 +47,10 @@ body{
 a, a:hover, a:active, a:focus{
 	color:var(--main-text);
 	text-decoration:none;
+}
+
+ul {
+	list-style: none
 }
 
 h1{
@@ -85,12 +95,6 @@ h1{
 @media (max-width: 768px) {
 	h1{
 		font-size: 1.5rem;
-	}
-}
-
-@media(min-width: 768px){
-	:root{
-		font-size: 16px;
 	}
 }
 

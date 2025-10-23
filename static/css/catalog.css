@@ -1,0 +1,30 @@
+.catalog-body{
+    flex-direction: row;
+}
+
+.catalog-nav{
+    width: 356px;
+}
+
+.catalog-nav ul > *:not(:last-child){
+    margin-bottom: 1.8rem;
+}
+
+.catalog-img{
+    width: 344px;
+    height: auto;
+}
+
+@media (max-width: 768px){
+    .catalog-body{
+        flex-direction: column;
+    }
+
+    .catalog-nav{
+        width: auto;
+    }
+
+    .catalog-nav ul > *:not(:last-child){
+        margin-bottom: 0;
+    }
+}

@@ -4,24 +4,26 @@
 
 {% block content %}
 
-<nav aria-label="Категории">
-    <ul class="category-buttons">
-        <li><a href="{% url "goods:index" %}" class="category-button {% if not request.GET.category %}active{% endif %}">Все товары</a></li>
-        {% for category in categories %}
-            <li><a href="?category={{ category.slug }}" 
-                   class="category-button {% if request.GET.category == category.slug %}active{% endif %}">
-                   {{ category.name }}</a></li>
+<div class = "flex catalog-body">
 
-        {% endfor %}
-    </ul>
-</nav>
+    <nav aria-label="Категории" class="catalog-nav">
+        <ul >
+            <li class="nav-item"><a href="{% url "goods:index" %}" class="category-button {% if not request.GET.category %}active{% endif %} nav-link">Все товары</a></li>
+            {% for category in categories %}
+                <li class="nav-item"><a href="?category={{ category.slug }}" 
+                    class="category-button {% if request.GET.category == category.slug %}active{% endif %} nav-link">
+                    {{ category.name }}</a></li>
+
+            {% endfor %}
+        </ul>
+    </nav>
 
 
-<div class="row flex-wrap product_list">
+<div class="">
     {% for product in products %}
     
-    <div class="product_item col-6 col-lg-4 mb-lg-2">
-        <div class="product_item_img">
+    <div class="">
+        <div class="">
             <a href="{% url "goods:product" product.slug %}">
                 {% with main_image=product.images.all.0 image_alt=product.images.all.1 %}
                     {% if main_image %}
@@ -73,6 +75,9 @@
                 {% endfor %}
             </ul>
         </nav>
-    {% endif %} {% endcomment %}
+    {% endif %} 
+    </div>
+    
+    {% endcomment %}
 
 {% endblock %}
