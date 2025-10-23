@@ -1,0 +1,41 @@
+<form
+    method="post"
+    hx-post="{% url 'orders:order' %}"
+    hx-target="#order-status"
+    hx-swap="outerHTML"
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    
+    {{ form.non_field_errors }}
+
+    <div>
+        <label for="{{ form.full_name.id_for_label }}">ФИО:</label>
+        {{ form.full_name }}
+        {{ form.full_name.errors }}
+    </div>
+
+    <div>
+        <label for="{{ form.phone_number.id_for_label }}">Телефон:</label>
+        {{ form.phone_number }}
+        {{ form.phone_number.errors }}
+    </div>
+
+    <div>
+        <label for="{{ form.email.id_for_label }}">E-mail:</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+    </div>
+
+    <div>
+        <label for="{{ form.delivery_service.id_for_label }}">Выберите способ доставки:</label>
+        {{ form.delivery_service }}
+        {{ form.delivery_service.errors }}
+    </div>
+
+    <div>
+        <label for="{{ form.delivery_address.id_for_label }}">Адрес доставки:</label>
+        {{ form.delivery_address }}
+        {{ form.delivery_address.errors }}
+    </div>
+
+    <button type="submit">Оформить заказ</button>
+</form>

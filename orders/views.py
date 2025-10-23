@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import JsonResponse, HttpResponseNotFound
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib import messages
+from django.views import View
 
 from random import shuffle
 
@@ -12,35 +13,10 @@ from payments.services.create_payment import create_payment
 from orders.services.order_service import create_order_from_cart, EmptyCartError
 
 
-def success_order(request, order_id):
-    order = get_object_or_404(Order, order_id=order_id)
+class SuccessOrderView(View):
+    def get(self, request, order_id):
+        order = get_object_or_404(Order, order_id=order_id)
 
-    if request.method == 'POST':
-        try:
-            total_price = order.orderitem_set.total_price()
-
-            return_url = request.build_absolute_uri(
-                reverse('orders:success_order', args=[order.order_id])
-            )
-
-            payment_response = create_payment(
-                order, total_price, return_url
-            )
-
-            if payment_response is None:
-                raise ConnectionError
-
-            confirmation_url = payment_response['confirmation']['confirmation_url']
-
-            return JsonResponse({
-                'redirect_url': confirmation_url
-            })
-        
-        except Exception as e:
-            messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
-            return redirect(reverse('orders:success_order', args=[order.order_id]))
-
-    else:
         order_items = order.orderitem_set.all()
 
         total_price = order.orderitem_set.total_price()
@@ -66,66 +42,90 @@ def success_order(request, order_id):
 
         return render(request, 'orders/success_order.html', context=context)
 
+    def post(self, request, order_id):
+        try:
+            order = get_object_or_404(Order, order_id=order_id)
 
-def order(request):
-    if request.method == 'POST':
-        form = CreateOrderForm(data=request.POST)
+            total_price = order.orderitem_set.total_price()
 
-        if form.is_valid():
-            try:
-                session_key = request.session.session_key
+            return_url = request.build_absolute_uri(
+                reverse('orders:success_order', args=[order.order_id])
+            )
 
-                order_obj, total_price = create_order_from_cart(
-                    session_key=session_key,
-                    first_name=form.cleaned_data['first_name'],
-                    last_name=form.cleaned_data['last_name'],
-                    phone_number=form.cleaned_data['phone_number'],
-                    email=form.cleaned_data['email'],
-                    delivery_address=form.cleaned_data['delivery_address'],
-                )
+            payment_response = create_payment(
+                order, total_price, return_url
+            )
 
-                return_url = request.build_absolute_uri(
-                    reverse('orders:success_order', args=[order_obj.order_id])
-                )
+            if payment_response is None:
+                raise ConnectionError
 
-                payment_response = create_payment(
-                    order_obj, total_price, return_url
-                )
+            confirmation_url = payment_response['confirmation']['confirmation_url']
 
-                if payment_response is None:
-                    messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
-
-                    return render(request, 'orders/order.html', {'title': 'Оформление заказа', 'form': form})
-
-                
-                confirmation_url = payment_response['confirmation']['confirmation_url']
-
-                PaymentTransaction.objects.create(
-                    order=order_obj,
-                    payment_id=payment_response["id"],
-                    status='pending',
-                    amount=total_price
-                )
-
-                return redirect(confirmation_url)
+            return JsonResponse({
+                'redirect_url': confirmation_url
+            })
             
-            except EmptyCartError:
-                messages.error(request, 'Корзина пустая')
+        except Exception as e:
+            messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
+            return redirect(reverse('orders:success_order', args=[order.order_id]))
 
-            except Exception as e:
-                messages.error(request, 'Произошла ошибка при оформлении заказа. Попробуйте снова!')
-            
-        else:
-            for _, errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, f"{error}")
 
-    else:
+class OrderView(View):
+    def get(self, request):
         form = CreateOrderForm()
 
-    context = {
+        context = {
         'title': 'Оформление заказа',
         'form': form,
-    }
+        }
         
-    return render(request, 'orders/order.html', context=context)
+        return render(request, 'orders/order.html', context=context)
+
+    def post(self, request):
+        form = CreateOrderForm(data=request.POST)
+
+        if not form.is_valid():
+            return render(request, 'orders/order_form.html', {"form": form})
+
+        try:
+            session_key = request.session.session_key
+
+            if not session_key:
+                request.session.create()
+                session_key = request.session.session_key
+            
+            order_obj, total_price = create_order_from_cart(
+                session_key=session_key,
+                full_name=form.cleaned_data["full_name"],
+                phone_number=form.cleaned_data["phone_number"],
+                email=form.cleaned_data["email"],
+                delivery_address=form.cleaned_data["delivery_address"],
+            )
+
+            success_url = reverse('orders:success_order', args=[order_obj.order_id])
+
+            # payment_response = create_payment(order_obj, total_price, return_url)
+
+            # PaymentTransaction.objects.create(
+            #     order=order_obj,
+            #     payment_id=payment_response["id"],
+            #     status='pending',
+            #     amount=total_price
+            # )
+
+            # confirmation_url = payment_response["confirmation"]["confirmation_url"]
+
+            if request.headers.get("HX-Request") == "true":
+                response = HttpResponse()
+                response["HX-Redirect"] = success_url
+                return response
+            
+            return HttpResponseRedirect(success_url)
+            
+        except EmptyCartError:
+            return HttpResponse("<p>Корзина пустая</p>")
+
+        except Exception as e:
+            form.add_error(None, f"Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой. {e}")
+            return render(request, 'orders/order_form.html', {"form": form})
+            

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from orders.models import Order, OrderItem
+from orders.models import Order, OrderItem, DeliveryService
 
 
 class OrderItemTabulareAdmin(admin.TabularInline):
@@ -44,8 +44,8 @@ class OrderTabulareAdmin(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         "order_id",
-        "first_name",
-        "last_name",
+        "full_name",
+        'delivery_service',
         "status",
         "is_paid",
         "created_timestamp",
@@ -60,6 +60,13 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = (
         "status",
         "is_paid",
+        'delivery_service',
     )
     
     inlines = (OrderItemTabulareAdmin,)
+
+
+@admin.register(DeliveryService)
+class DeliveryServiceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'base_price', 'is_active')
+    list_editable = ('is_active',)

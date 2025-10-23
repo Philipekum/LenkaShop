@@ -11,6 +11,21 @@ def generate_unique_order_id():
             return order_id 
 
 
+class DeliveryService(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название службы")
+    base_price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="Базовая стоимость доставки")
+    is_active = models.BooleanField(default=True, verbose_name="Активна")
+
+    class Meta:
+        db_table = 'delivery_service'
+        verbose_name = 'Служба доставки'
+        verbose_name_plural = 'Службы доставки'
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
+    
+
 class OrderitemQueryset(models.QuerySet):
     def total_price(self):
         return sum(cart.products_price() for cart in self)
@@ -32,11 +47,14 @@ class Order(models.Model):
     session_key = models.CharField(max_length=32, null=True, blank=True, verbose_name='Сессия')
     order_id = models.BigIntegerField(unique=True, editable=False, default=generate_unique_order_id)
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания заказа")
-    first_name = models.CharField(max_length=50, verbose_name='Имя')
-    last_name = models.CharField(max_length=50, verbose_name='Фамилия')
+
+    full_name = models.CharField(max_length=50, default='—', verbose_name='ФИО')
     email = models.EmailField(verbose_name='e-mail')
     phone_number = models.CharField(max_length=20, verbose_name="Номер телефона")
+
+    delivery_service = models.ForeignKey(to=DeliveryService, on_delete=models.PROTECT, null=True, blank=True, verbose_name="Служба доставки")
     delivery_address = models.TextField(null=True, blank=True, verbose_name="Адрес доставки")
+
     is_paid = models.BooleanField(default=False, verbose_name="Оплачено")
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending', verbose_name="Статус заказа")
 
@@ -47,7 +65,7 @@ class Order(models.Model):
         ordering = ('id',)
     
     def __str__(self):
-        return f'Заказ № {self.order_id}, Покупатель {self.first_name} {self.last_name}'
+        return f'Заказ № {self.order_id}, Покупатель {self.full_name}'
 
 
 class OrderItem(models.Model):

@@ -132,7 +132,6 @@
         </div>
     </div>
 
-    <!--
     <div class="row align-items-lg-start justify-content-between">
         <div class="col-12 col-lg-6 checkout_form_block order-2 order-lg-1">
             {% if messages %}
@@ -191,6 +190,10 @@
             <p>Porta gravida lobortis. In vestibulum vestibulum lectus, non luctus sem semper nec. Duis nec est sodales turpis iaculis faucibus. Cras suscipit varius eros auctor gravida. Sed eget felis sit amet nisl rhoncus convallis a in orci. Curabitur tempor, eros in volutpat finibus, orci odio aliquam turpis, quis blandit.</p>
         </div> -->
 
+        <div id="order-status">
+        {% include 'orders/order_form.html' %}
+        </div>
+
     </div>
 
     {% else %}
@@ -198,7 +201,5 @@
     <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
 
     {% endif %}
-        
-
     
 {% endblock %}
