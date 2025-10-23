@@ -8,10 +8,10 @@
 
     <nav aria-label="Категории" class="catalog-nav">
         <ul >
-            <li class="nav-item"><a href="{% url "goods:index" %}" class="category-button {% if not request.GET.category %}active{% endif %} nav-link">Все товары</a></li>
+            <li class="nav-item"><a href="{% url "goods:index" %}" class="category-button nav-link {% if not request.GET.category %}active{% endif %} ">Все товары</a></li>
             {% for category in categories %}
                 <li class="nav-item"><a href="?category={{ category.slug }}" 
-                    class="category-button {% if request.GET.category == category.slug %}active{% endif %} nav-link">
+                    class="category-button nav-link {% if request.GET.category == category.slug %}active{% endif %}">
                     {{ category.name }}</a></li>
 
             {% endfor %}
@@ -19,65 +19,60 @@
     </nav>
 
 
-<div class="">
-    {% for product in products %}
-    
-    <div class="">
-        <div class="">
-            <a href="{% url "goods:product" product.slug %}">
-                {% with main_image=product.images.all.0 image_alt=product.images.all.1 %}
-                    {% if main_image %}
-                        <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                    {% else %}
-                        <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                    {% endif %}
-                    
-                    {% if image_alt %}
-                        <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                    {% elif not main_image %}
-                        <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                    {% else %}
-                        <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                    {% endif %}
-                {% endwith %}
-            </a>
+    <div class="flex fw-wrap catalog-main">
+        {% for product in products %}
+        
+        <div>
+            <div class="mb-2">
+                <a href="{% url "goods:product" product.slug %}">
+                    {% with main_image=product.images.all.0 image_alt=product.images.all.1 %}
+                        {% if main_image %}
+                            <img class="catalog-img" src="{{ main_image.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <img class="catalog-img" src="{% static 'images/No_Image.png' %}"  alt="No Product Image">
+                        {% endif %}
+                    {% endwith %}
+                </a>
+            </div>
+
+            <div class="catalog-cart-info">
+                <a class="py-2 py-lg-4" href="{% url "goods:product" product.slug %}">
+                    <div class="product_item_name">{{ product.name }}</div>
+
+                        {% if product.discount_price %}
+                            <div class="product_item_price">
+                                <div class="old_price">{{ product.price|format_price }}</div>
+                                <div class="discount_price">{{ product.sell_price|format_price }}</div>
+                            </div>
+
+                        {% else %}
+                            <div class="product_item_price">{{ product.price|format_price }}</div>
+                        
+                        {% endif %}
+                </a>
+            </div>
         </div>
 
-        <div class="product_item_info">
-            <a class="py-2 py-lg-4" href="{% url "goods:product" product.slug %}">
-                <div class="product_item_name">{{ product.name }}</div>
+        {% endfor %}
 
-                    {% if product.discount_price %}
-                        <div class="product_item_price">
-                            <div class="price_old">{{ product.price|format_price }}</div>
-                            <div>{{ product.sell_price|format_price }}</div>
-                        </div>
-
-                    {% else %}
-                        <div class="product_item_price">{{ product.price|format_price }}</div>
-                    
-                    {% endif %}
-            </a>
-        </div>
-    </div>
-
-    {% endfor %}
-
-    {% comment %} {% if products.has_other_pages %}
-        <nav>
-            <ul class="pagination justify-content-center">
-                {% for page in products.paginator.page_range %}
-                    {% if page >= products.number|add:-2 and page <= products.number|add:2 %}
-                        <li class="page-item {% if products.number == page %}active{% endif %}" aria-current="page">
-                            <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-                        </li>           
-                    {% endif %}
-                {% endfor %}
-            </ul>
-        </nav>
-    {% endif %} 
-    </div>
+        {% comment %} 
+            {% if products.has_other_pages %}
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        {% for page in products.paginator.page_range %}
+                            {% if page >= products.number|add:-2 and page <= products.number|add:2 %}
+                                <li class="page-item {% if products.number == page %}active{% endif %}" aria-current="page">
+                                    <a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                                </li>           
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </nav>
+            {% endif %} 
+   
     
-    {% endcomment %}
+        {% endcomment %}
+    </div>
+</div>
 
 {% endblock %}

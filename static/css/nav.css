@@ -1,8 +1,12 @@
 nav ul li .nav-link{
-    font-size: 1.5rem; 
+    font-size: 1.1rem; 
     font-family: var(--base-font); 
     font-weight: 300; 
     text-transform: uppercase; 
+}
+
+.nav-link.active{
+    font-weight: 400 !important;
 }
 
 .navbar {
