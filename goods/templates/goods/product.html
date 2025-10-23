@@ -105,11 +105,19 @@
 
 
 						<div class="add2cart_block order-2">
-                            <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}">
-                                <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button>
-                            </a>
+                            <!-- <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}"> -->
+                                <!-- <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button> -->
+                                    <button hx-post="{% url 'carts:cart_add' %}"
+                                            hx-vals='{"product_id": "{{ product.id }}"}'
+                                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                            hx-swap="none"
+                                            class="btn add2cart_btn primary-btn">
+                                        Добавить в корзину
+                                    </button>
+                            <!-- </a> -->
                         </div>
 					</div>
+
 
 					<div class="product_description">
 						<h3 class="product_description_title">Описание</h3>

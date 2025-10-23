@@ -6,7 +6,7 @@
     <h1>ваш заказ:</h1>
     
     {% if carts %}
-    <div>
+    <div id="order-cart">
         <hr/>
         {% for cart in carts %}
         <div id="cart-item-{{ cart.id }}">
@@ -36,32 +36,49 @@
                                 {{ cart.product.sell_price|format_price }}
                             {% endif %}
                         </div>
-                    
+
                         <div class="input-group">
-                            <button type="button" class="q_btn decrement increment-btn" 
-                                    data-cart-id="{{ cart.id }}" 
-                                    data-cart-change-url="{% url "carts:cart_change" %}">
-                                    {% csrf_token %}-</button>
+                            <button type="button" 
+                                    hx-post="{% url 'carts:cart_change' %}"
+                                    hx-vals='{"cart_id": "{{ cart.id }}", "action": "decrement"}'
+                                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                    hx-swap="none">
+                                -
+                            </button>
 
-                            <input id="goods-in-cart-count" type="text" name="q_item" 
-                                class="order-cout-value number" value="{{ cart.quantity }}" readonly/>
+                            <input id="cart-item-{{ cart.id }}-quantity" 
+                                type="text" 
+                                name="q_item" 
+                                class="order-cout-value number" 
+                                value="{{ cart.quantity }}" 
+                                readonly/>
                             
-                                <button type="button" class="q_btn increment increment-btn" 
-                                        data-cart-id="{{ cart.id }}" 
-                                        data-cart-change-url="{% url "carts:cart_change" %}">
-                                        {% csrf_token %}+</button>   
+                            <button type="button" 
+                                    hx-post="{% url 'carts:cart_change' %}"
+                                    hx-vals='{"cart_id": "{{ cart.id }}", "action": "increment"}'
+                                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                    hx-swap="none">
+                                +
+                            </button>   
                         </div>
-
                     </div>
+
                 </div> 
 
                     <div class="flex order-total-price">
-                        <p class="mb-0"> {{ cart.products_price|format_price }}</p>
-                        
-                        <a href="{% url "carts:cart_remove" %}" class="remove-from-cart" data-cart-id="{{ cart.id }}">
-                            {% csrf_token %}
-                            <button class="btn-close"></button>
-                        </a>
+                        <p class="mb-0">
+                            <span id="cart-item-{{ cart.id }}-price">
+                                {{ cart.products_price|format_price }}
+                            </span>
+                        </p>
+
+                            <button hx-post="{% url 'carts:cart_remove' %}"
+                                    hx-vals='{"cart_id": "{{ cart.id }}"}'
+                                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                                    hx-target="#cart-item-{{ cart.id }}"
+                                    hx-swap="outerHTML"
+                                    class="btn-close">
+                            </button>
                     </div>
                     
                 
@@ -75,7 +92,11 @@
     <div class="order-final-price">
         <div class="flex jc-sb">
             <div>Стоимость покупки: </div>
-            <div>{{ carts.total_price|format_price }}</div>
+            <div>
+                <span id="cart-total-price">
+                    {{ carts.total_price|format_price }}
+                </span>
+            </div>
         </div>
         <div class="flex jc-sb">
             <div>Стоимость доставки: </div>
@@ -95,7 +116,11 @@
     <div class="cart_total_block">
         <div class="row align-items-center justify-content-between justify-content-lg-start mb-3 mb-lg-4">
             <div class="col-8 col-lg-10 me-2">Общая стоимость покупки:</div>
-            <div class="col-auto">{{ carts.total_price|format_price }}</div>
+            <div class="col-auto">
+                <span id="cart-total-price">
+                    {{ carts.total_price|format_price }}
+                </span>
+            </div>
         </div>
         <div class="row align-items-center justify-content-between justify-content-lg-start mb_2_3 mb-lg_4">
             <div class="col-8 col-lg-10 me-2">Стоимость доставки:</div>
@@ -107,6 +132,7 @@
         </div>
     </div>
 
+    <!--
     <div class="row align-items-lg-start justify-content-between">
         <div class="col-12 col-lg-6 checkout_form_block order-2 order-lg-1">
             {% if messages %}
@@ -163,9 +189,9 @@
 
             <h2 class="h3">Maecenas </h2>
             <p>Porta gravida lobortis. In vestibulum vestibulum lectus, non luctus sem semper nec. Duis nec est sodales turpis iaculis faucibus. Cras suscipit varius eros auctor gravida. Sed eget felis sit amet nisl rhoncus convallis a in orci. Curabitur tempor, eros in volutpat finibus, orci odio aliquam turpis, quis blandit.</p>
-        </div>
+        </div> -->
 
-    </div> -->
+    </div>
 
     {% else %}
 
