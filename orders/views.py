@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.utils.html import escape
 from django.contrib import messages
 from django.views import View
 
@@ -129,3 +130,58 @@ class OrderView(View):
             form.add_error(None, f"Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой. {e}")
             return render(request, 'orders/order_form.html', {"form": form})
             
+
+class DeliveryDetails(View):
+    CITIES = [
+        {"id": 1, "name": "Москва", "region": "Центральный округ", "country": "Россия", "population": 12000000, "price": 300},
+        {"id": 2, "name": "Санкт-Петербург", "region": "Северо-Западный округ", "country": "Россия", "population": 5000000, "price": 350},
+        {"id": 3, "name": "Казань", "region": "Приволжский округ", "country": "Россия", "population": 1300000, "price": 400},
+        {"id": 4, "name": "Минск", "region": "", "country": "Беларусь", "population": 2000000, "price": 600},
+        {"id": 5, "name": "Хельсинки", "region": "", "country": "Финляндия", "population": 650000, "price": 800},
+    ]
+
+    def get(self, request):
+        """Возвращает HTML список подсказок по городам"""
+        q = (request.GET.get("city-search") or "").strip().lower()
+
+        # Если пусто — показываем все города (до 8)
+        if q:
+            results = [
+                c for c in sorted(self.CITIES, key=lambda x: -x["population"])
+                if q in c["name"].lower()
+            ][:8]
+        else:
+            results = sorted(self.CITIES, key=lambda x: -x["population"])[:8]
+
+        if not results:
+            return HttpResponse("<p>Ничего не найдено</p>")
+
+        html = "<ul class='city-suggestions'>"
+        for c in results:
+            label = f"{escape(c['country']+', ' if c['country']!='Россия' else '')}{escape(c['region'])}, {escape(c['name'])}"
+            html += f"""
+                <li>
+                    <button 
+                        type='button'
+                        hx-post='/new-site/order/delivery/'
+                        hx-vals='{{"city_id": "{c["id"]}"}}'
+                        hx-target='#delivery-price'
+                        hx-swap='innerHTML'
+                    >{label}</button>
+                </li>
+            """
+        html += "</ul>"
+        return HttpResponse(html)
+
+
+    def post(self, request):
+        """Возвращает цену доставки по выбранному городу"""
+        city_id = request.POST.get("city_id")
+        try:
+            city = next(c for c in self.CITIES if str(c["id"]) == city_id)
+        except StopIteration:
+            return HttpResponse("<p>Ошибка: город не найден</p>")
+
+        html = f"<p>Стоимость доставки в {escape(city['name'])}: <b>{city['price']} ₽</b></p>"
+        return HttpResponse(html)
+    

@@ -3,8 +3,8 @@
     hx-post="{% url 'orders:order' %}"
     hx-target="#order-status"
     hx-swap="outerHTML"
-    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    
+    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+>
     {{ form.non_field_errors }}
 
     <div>
@@ -26,7 +26,21 @@
     </div>
 
     <div>
-        <label for="{{ form.delivery_service.id_for_label }}">Выберите способ доставки:</label>
+  <label>Город:</label>
+        <input 
+            type="text" 
+            name="city-search"
+            hx-get="/new-site/order/delivery/"
+            hx-trigger="keyup changed delay:300ms, focus"
+            hx-target="#city-suggestions"
+            hx-swap="innerHTML"
+            autocomplete="off"
+        >
+        <div id="city-suggestions"></div>
+        <div id="delivery-price"></div>
+    </div>
+    <div>
+        <label for="{{ form.delivery_service.id_for_label }}">Служба доставки:</label>
         {{ form.delivery_service }}
         {{ form.delivery_service.errors }}
     </div>
