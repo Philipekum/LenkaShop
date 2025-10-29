@@ -61,17 +61,17 @@ const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstra
 
 
 // // Функция прокрутки наверх
-// function scrollToTop() {
-//     window.scrollTo({ top: 0, behavior: 'smooth' });
-//   }
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
 // // Показываем/скрываем кнопку в зависимости от прокрутки
-// window.addEventListener('scroll', function () {
-//     const scrollToTopButton = document.getElementById('scroll-to-top');
-//     if (window.scrollY > 300) {
-//       scrollToTopButton.style.display = 'flex'; // Показываем кнопку
-//     } else {
-//       scrollToTopButton.style.display = 'none'; // Скрываем кнопку
-//     }
-//   });
+window.addEventListener('scroll', function () {
+    const scrollToTopButton = document.getElementById('scroll-to-top');
+    if (window.scrollY > 300) {
+      scrollToTopButton.style.display = 'flex'; // Показываем кнопку
+    } else {
+      scrollToTopButton.style.display = 'none'; // Скрываем кнопку
+    }
+  });
 
