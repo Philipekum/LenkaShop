@@ -21,7 +21,7 @@
                     </a>
 
                     <div class="order-ditale">
-                        <div class="oreder-cart-title">{{ cart.product.name }}</div>
+                        <a href="{% url "goods:product" cart.product.slug %}" class="oreder-cart-title">{{ cart.product.name }}</a>
 
                         <!--Это что еще такое - разные варианты товара...???-->
                         <!-- {% if product.options and product.options.all.exists %} 
