@@ -49,14 +49,17 @@ class Products(models.Model):
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     compound = models.TextField(blank=True, null=True, verbose_name='Состав')
+
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
+
     quantity = models.IntegerField(default=0, verbose_name='Количество')
+
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
     collections = models.ManyToManyField(Collections, blank=True, related_name='products', verbose_name='Коллекции')
+    
     laundry_features = models.ManyToManyField(LaundryFeature, blank=True)
     similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
-    options = models.ManyToManyField('self', blank=True, symmetrical=True, verbose_name='Товары-варианты')
     
     def sell_price(self):
         if self.discount_price > 0:

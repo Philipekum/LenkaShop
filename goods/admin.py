@@ -27,7 +27,6 @@ class ProductsAdmin(admin.ModelAdmin):
     }
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline]
-    filter_horizontal = ['options']
 
 
 @admin.register(Collections)
