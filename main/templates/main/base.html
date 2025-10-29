@@ -38,12 +38,14 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{% url "goods:index" %}">Каталог</a>
                 </li>             
-                {% header_links as header_links %}
-                {% for link in header_links %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ link.get_absolute_url }}">{{ link.title }}</a>
-                  </li>
-                {% endfor %}
+
+                <li class="nav-item">
+                  <a class="nav-link" href="#">ССЫЛКА 1</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="#">ССЫЛКА 2</a>
+                </li>
             </ul>
           </div>
 
