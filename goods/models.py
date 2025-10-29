@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Categories(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
@@ -8,6 +9,23 @@ class Categories(models.Model):
         db_table = 'category'
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+
+    def __str__(self):
+        return self.name
+
+
+class Collections(models.Model):
+    name = models.CharField(max_length=150, unique=True, verbose_name='Название')
+    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
+    description = models.TextField(blank=True, null=True, verbose_name='Описание коллекции')
+    is_active = models.BooleanField(default=True, verbose_name='Активная коллекция')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    
+    class Meta:
+        db_table = 'collection'
+        verbose_name = 'Коллекция'
+        verbose_name_plural = 'Коллекции'
+        ordering = ['-created_at']
 
     def __str__(self):
         return self.name
@@ -35,6 +53,7 @@ class Products(models.Model):
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
     quantity = models.IntegerField(default=0, verbose_name='Количество')
     category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
+    collections = models.ManyToManyField(Collections, blank=True, related_name='products', verbose_name='Коллекции')
     laundry_features = models.ManyToManyField(LaundryFeature, blank=True)
     similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
     options = models.ManyToManyField('self', blank=True, symmetrical=True, verbose_name='Товары-варианты')
