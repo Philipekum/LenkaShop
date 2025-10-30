@@ -4,7 +4,13 @@
 
 {% block content %}
 
-{% for block, block_type in blocks %}
+<div>
+  <div class="home-title-block">
+    <h1 class="home-h1">Лёнка</h1>
+  </div>
+</div>
+
+<!-- {% for block, block_type in blocks %}
   {% if block_type == 'text' %}
     <div class="editor-content mb_3_8 mb-lg_6">
       <h1>{{ block.title|safe }}</h1>
@@ -132,10 +138,7 @@
   
   {% elif block_type == 'carousel' %}
 
-    <!-- Если хотите, чтобы карусель действительно 
-         растягивалась на всю ширину браузера,
-         стоит вынести её за пределы .container 
-         или использовать container-fluid -->
+
     <div class="fullwidth-carousel-wrapper">
       
       <div class="carousel slide my-fullwidth-carousel" id="carousel{{ block.id }}">
@@ -172,11 +175,11 @@
           <span class="visually-hidden">Следующий</span>
         </button>
   
-      </div> <!-- /carousel -->
-    </div> <!-- /fullwidth-carousel-wrapper -->
+      </div>--> <!-- /carousel -->
+    <!--</div>
   
   {% endif %}
   
-{% endfor %}
+{% endfor %} -->
 
 {% endblock  %}

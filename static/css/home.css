@@ -1,0 +1,11 @@
+.home-h1{
+    font-family: var(--home-h1-font);
+    color: var(--bg-light);
+}
+
+.home-title-block{
+    background-image: url("../images/home-logo-bg.jpg");
+    width: 100vw;
+    height: 50vh;
+    margin-left: calc(-50vw + 50%);
+}

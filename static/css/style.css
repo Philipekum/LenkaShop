@@ -8,10 +8,12 @@
 @import "./cart-modal.css";
 @import "./order.css";
 @import "./catalog.css";
+@import "./home.css";
 
 :root {
 	--base-font: 'Inter', Arial, sans-serif;
 	--h1-font: 'LXGW Marker Gothic';
+	--home-h1-font: 'Tektur SemiCondensed';
 	--base-font-size: 14px;
 	--line-height: 1.5;
 
