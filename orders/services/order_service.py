@@ -9,8 +9,7 @@ class EmptyCartError(Exception):
 
 def create_order_from_cart(
     session_key: str,
-    first_name: str,
-    last_name: str,
+    full_name: str,
     phone_number: str,
     email: str,
     delivery_address: str
@@ -24,8 +23,7 @@ def create_order_from_cart(
     with transaction.atomic():
         order = Order.objects.create(
             session_key=session_key,
-            first_name=first_name,
-            last_name=last_name,
+            full_name=full_name,
             phone_number=phone_number,
             email=email,
             delivery_address=delivery_address,

@@ -22,7 +22,7 @@ class CartAddView(CartMixin, View):
         total_quantity = Cart.objects.filter(session_key=request.session.session_key).total_quantity()
 
         return HttpResponse(f"""
-                                <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
+                                <span id="goods-in-cart-count" hx-swap-oob="true">{format_price(total_quantity)}</span>
                             """)
 
 
@@ -49,7 +49,7 @@ class CartRemoveView(CartMixin, View):
             total_price: float = session_cart.total_price()
             return HttpResponse(f"""
                 <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
-                <span id="cart-total-price" hx-swap-oob="true">{total_price}</span>
+                <span id="cart-total-price" hx-swap-oob="true">{format_price(total_price)}</span>
                 <div id="cart-item-{cart_id}" hx-swap-oob="true"></div>
             """)
         
@@ -78,8 +78,8 @@ class CartChangeView(CartMixin, View):
         
         return HttpResponse(f"""
             <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
-            <span id="cart-total-price" hx-swap-oob="true">{total_price}</span>
-            <span id="cart-item-{cart.id}-price" hx-swap-oob="true">{item_total_price}</span>
+            <span id="cart-total-price" hx-swap-oob="true">{format_price(total_price)}</span>
+            <span id="cart-item-{cart.id}-price" hx-swap-oob="true">{format_price(item_total_price)}</span>
             <input id="cart-item-{cart.id}-quantity" hx-swap-oob="true" value="{cart.quantity}" readonly/>
         """)
     
