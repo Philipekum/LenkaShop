@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import CheckboxSelectMultiple
 from django.db import models
 
-from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections
+from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags
 
 
 @admin.register(Categories)
@@ -34,3 +34,7 @@ class CollectionsAdmin(admin.ModelAdmin):
     list_display = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     
+
+@admin.register(Flags)
+class FlagsAdmin(admin.ModelAdmin):
+    list_display = ('title', 'group', 'is_active')

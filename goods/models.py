@@ -44,11 +44,32 @@ class LaundryFeature(models.Model):
         return self.name
 
 
+class Flags(models.Model):
+    GROUPS_CHOICES = [
+        ('compound-flag', 'Флаг состава'),
+        ('product-flag', 'Флаг товара'),
+    ]
+
+    title = models.CharField(max_length=150, unique=True, blank=False, verbose_name='Название')
+    group = models.CharField(max_length=150, choices=GROUPS_CHOICES, blank=False, verbose_name='Группа')
+    is_active = models.BooleanField(default=False, verbose_name='Активен')
+
+    class Meta:
+        db_table = 'flags'
+        verbose_name = 'Флаг продукта'
+        verbose_name_plural = 'Флаги продукта'
+    
+    def __str__(self):
+        return self.title
+    
+
 class Products(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
     slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
+
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     compound = models.TextField(blank=True, null=True, verbose_name='Состав')
+    flags = models.ManyToManyField(Flags, blank=True, verbose_name='Флаги')
 
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
