@@ -17,7 +17,7 @@ class LaundryFeatureAdmin(admin.ModelAdmin):
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
     extra = 1
-    fields = ('image', 'layout', 'order')
+    fields = ('image', 'order')
 
 
 @admin.register(Products)

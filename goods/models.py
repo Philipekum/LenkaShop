@@ -102,14 +102,8 @@ class Products(models.Model):
 
 
 class ProductImage(models.Model):
-    LAYOUT_CHOICES = [
-        ('large', 'Большая'),
-        ('small', 'Маленькая'),
-    ]
-
     product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images', verbose_name='Продукт')
     image = models.ImageField(upload_to='goods_images', verbose_name='Фото')
-    layout = models.CharField(max_length=10, choices=LAYOUT_CHOICES, blank=True, null=True, verbose_name='Размер')
     order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
 
     class Meta:
