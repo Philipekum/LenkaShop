@@ -54,7 +54,9 @@ def catalog_load_more(request):
         products_qs = products_qs.filter(category__slug=category_slug)
 
     products = products_qs[offset:offset + BLOCK_LIMIT]
-    has_more = products_qs.count() > offset + BLOCK_LIMIT
+
+    total_count = products_qs.count()
+    has_more = total_count > offset + BLOCK_LIMIT
 
     html_products = render_to_string('goods/catalog_items.html', {'products': products})
     html_button = ''
@@ -64,5 +66,8 @@ def catalog_load_more(request):
             'offset': offset + BLOCK_LIMIT,
             'category_slug': category_slug
         })
+
+    else:
+        html_button = '<div id="load-more-button" hx-swap-oob="true"></div>'
 
     return HttpResponse(html_products + html_button)
