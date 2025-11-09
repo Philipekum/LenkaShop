@@ -14,7 +14,7 @@ class LaundryFeatureAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
-class ProductImageInline(admin.TabularInline):
+class ProductImageInline(admin.StackedInline):
     model = ProductImage
     extra = 1
     fields = ('image', 'order')
