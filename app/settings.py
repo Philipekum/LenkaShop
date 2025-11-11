@@ -39,12 +39,16 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'adminsortable2',
 
     'main',
     'goods',
@@ -187,4 +191,83 @@ LOGGING = {
             'propagate': False,
         },
     },
+}
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Админ-панель",
+    "site_header": "Администрация",
+    "site_brand": "Магазин",
+    "welcome_sign": "Добро пожаловать в админ-панель",
+    "copyright": "Магазин",
+    
+    # Современный вид
+    "theme": "flatly",
+    
+    # Иконки
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "products.products": "fas fa-cube",
+        "products.productimage": "fas fa-image",
+        "products.categories": "fas fa-folder",
+    },
+    
+    # Меню
+    "order_with_respect_to": ["products", "products.products", "products.categories"],
+    
+    # Кастомизация
+    "show_ui_builder": True,  # включить UI builder для дополнительной кастомизации
+
+        "topmenu_links": [
+        {"name": "Главная", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "products.products"},
+    ],
+    
+    # Кастомизация бокового меню
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    
+    # Скрыть приложения/модели
+    "hide_apps": [],
+    "hide_models": [],
+    
+    # Логотип
+    "site_logo": "images/logo.png",
+    
+    # Логин страница
+    "login_logo": "images/logo.png",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
 }

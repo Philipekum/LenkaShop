@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.forms import CheckboxSelectMultiple
 from django.db import models
+from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
+from django.utils.html import format_html
 
 from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags
 
@@ -14,19 +16,58 @@ class LaundryFeatureAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
 
-class ProductImageInline(admin.StackedInline):
+class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
     model = ProductImage
     extra = 1
-    fields = ('image', 'order')
+    fields = ('image', 'image_preview', 'order')
+    readonly_fields = ('image_preview',)
+    
+    def image_preview(self, obj):
+        if obj.image and hasattr(obj.image, 'url'):
+            return format_html(
+                '<img src="{}" style="max-height: 200px; max-width: 200px;" />', 
+                obj.image.url
+            )
+        return "Нет изображения"
+    
+    image_preview.short_description = "Предпросмотр"
 
 
 @admin.register(Products)
-class ProductsAdmin(admin.ModelAdmin):
+class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
     formfield_overrides = {
         models.ManyToManyField: {'widget': CheckboxSelectMultiple}
     }
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline]
+    
+    list_display = ('name', 'category', 'price', 'discount_price', 'quantity', 'image_preview')
+    list_filter = ('category', 'collections', 'flags')
+    search_fields = ('name', 'description')
+    
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('name', 'slug', 'category', 'description', 'compound')
+        }),
+        ('Цены и количество', {
+            'fields': ('price', 'discount_price', 'quantity')
+        }),
+        ('Связи', {
+            'fields': ('flags', 'collections', 'laundry_features', 'similar_products')
+        }),
+    )
+    
+    def image_preview(self, obj):
+        if obj and obj.pk and obj.images.exists():
+            first_image = obj.images.first()
+            if first_image and hasattr(first_image.image, 'url'):
+                return format_html(
+                    '<img src="{}" style="max-height: 50px; max-width: 50px; border-radius: 3px;" />', 
+                    first_image.image.url
+                )
+        return "—"
+    
+    image_preview.short_description = "Фото"
 
 
 @admin.register(Collections)
