@@ -197,7 +197,7 @@ LOGGING = {
 JAZZMIN_SETTINGS = {
     "site_title": "Админ-панель",
     "site_header": "Администрация",
-    "site_brand": "Магазин",
+    "site_brand": "Lenka",
     "welcome_sign": "Добро пожаловать в админ-панель",
     "copyright": "Магазин",
     
@@ -232,12 +232,11 @@ JAZZMIN_SETTINGS = {
     # Скрыть приложения/модели
     "hide_apps": [],
     "hide_models": [],
-    
-    # Логотип
-    "site_logo": "images/logo.png",
-    
+
     # Логин страница
-    "login_logo": "images/logo.png",
+    "login_logo": None,
+    
+    "site_logo": None,
 }
 
 JAZZMIN_UI_TWEAKS = {
