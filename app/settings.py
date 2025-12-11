@@ -175,6 +175,14 @@ INTERNAL_IPS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+YOOKASSA_SHOP_ID = os.getenv('YOOKASSA_SHOP_ID')
+YOOKASSA_SECRET_KEY = os.getenv('YOOKASSA_SECRET_KEY')
+YOOKASSA_TEST_SHOP_ID = os.getenv('YOOKASSA_TEST_SHOP_ID') 
+YOOKASSA_TEST_SECRET_KEY = os.getenv('YOOKASSA_TEST_SECRET_KEY')
+YOOKASSA_ALLOWED_IPS = os.getenv('YOOKASSA_ALLOWED_IPS', '').split(',')
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

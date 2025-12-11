@@ -1,3 +1,5 @@
+from random import shuffle
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
@@ -5,13 +7,13 @@ from django.utils.html import escape
 from django.contrib import messages
 from django.views import View
 
-from random import shuffle
-
-from .forms import CreateOrderForm
-from .models import Order
-from payments.models import PaymentTransaction
-from payments.services.create_payment import create_payment
+from orders.forms import CreateOrderForm
+from orders.models import Order
 from orders.services.order_service import create_order_from_cart, EmptyCartError
+
+from payments.models import PaymentTransaction
+from payments.services.payment_service import YooKassaPaymentService
+from payments.models import PaymentTransaction
 
 
 class SuccessOrderView(View):
@@ -46,27 +48,25 @@ class SuccessOrderView(View):
     def post(self, request, order_id):
         try:
             order = get_object_or_404(Order, order_id=order_id)
-
             total_price = order.orderitem_set.total_price()
 
-            return_url = request.build_absolute_uri(
-                reverse('orders:success_order', args=[order.order_id])
+            payment_data = YooKassaPaymentService.create_payment(
+                order, total_price, request
             )
 
-            payment_response = create_payment(
-                order, total_price, return_url
+            PaymentTransaction.objects.create(
+                order=order,
+                payment_id=payment_data['id'],
+                status=payment_data['status'],
+                amount=total_price
             )
-
-            if payment_response is None:
-                raise ConnectionError
-
-            confirmation_url = payment_response['confirmation']['confirmation_url']
 
             return JsonResponse({
-                'redirect_url': confirmation_url
+                'redirect_url': payment_data['confirmation_url']
             })
             
         except Exception as e:
+            # logger.error(f"Payment creation error: {str(e)}")
             messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
             return redirect(reverse('orders:success_order', args=[order.order_id]))
 
@@ -90,7 +90,6 @@ class OrderView(View):
 
         try:
             session_key = request.session.session_key
-
             if not session_key:
                 request.session.create()
                 session_key = request.session.session_key
@@ -105,29 +104,18 @@ class OrderView(View):
 
             success_url = reverse('orders:success_order', args=[order_obj.order_id])
 
-            # payment_response = create_payment(order_obj, total_price, return_url)
-
-            # PaymentTransaction.objects.create(
-            #     order=order_obj,
-            #     payment_id=payment_response["id"],
-            #     status='pending',
-            #     amount=total_price
-            # )
-
-            # confirmation_url = payment_response["confirmation"]["confirmation_url"]
-
             if request.headers.get("HX-Request") == "true":
                 response = HttpResponse()
                 response["HX-Redirect"] = success_url
                 return response
-            
+
             return HttpResponseRedirect(success_url)
             
         except EmptyCartError:
             return HttpResponse("<p>Корзина пустая</p>")
-
+        
         except Exception as e:
-            form.add_error(None, f"Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой. {e}")
+            form.add_error(None, f"Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой.")
             return render(request, 'orders/order_form.html', {"form": form})
             
 
