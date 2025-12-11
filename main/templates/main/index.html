@@ -10,7 +10,7 @@
   </div>
 </div>
 {% for collection in collections %}
-  {% if {{ collection.is_active }} %}
+  {% if collection.is_active %}
     <a href="?collection={{ collection.slug }}">
       <h1>{{ collection.name }}</h1>
       <p>{{ collection.description }}</p>
