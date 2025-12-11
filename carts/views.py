@@ -22,7 +22,7 @@ class CartAddView(CartMixin, View):
         total_quantity = Cart.objects.filter(session_key=request.session.session_key).total_quantity()
 
         return HttpResponse(f"""
-                                <span id="goods-in-cart-count" hx-swap-oob="true">{format_price(total_quantity)}</span>
+                                <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
                             """)
 
 
