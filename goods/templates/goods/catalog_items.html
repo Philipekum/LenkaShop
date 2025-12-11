@@ -25,6 +25,10 @@
             {% else %}
                 <div class="product_item_price">{{ product.price|format_price }}</div>
             {% endif %}
+
+            {% if product.flag and product.flag.is_active %}
+                <p class="{{ product.flag.group }}">{{ product.flag.title }}</p>
+            {% endif %}
         </a>
     </div>
 </div>

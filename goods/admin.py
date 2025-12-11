@@ -42,7 +42,7 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [ProductImageInline]
     
     list_display = ('name', 'category', 'price', 'discount_price', 'quantity', 'image_preview')
-    list_filter = ('category', 'collections', 'flags')
+    list_filter = ('category', 'collections', 'flag')
     search_fields = ('name', 'description')
     
     fieldsets = (
@@ -53,7 +53,7 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
             'fields': ('price', 'discount_price', 'quantity')
         }),
         ('Связи', {
-            'fields': ('flags', 'collections', 'laundry_features', 'similar_products')
+            'fields': ('flag', 'collections', 'laundry_features', 'similar_products')
         }),
     )
     

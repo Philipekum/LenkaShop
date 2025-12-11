@@ -69,7 +69,7 @@ class Products(models.Model):
 
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     compound = models.TextField(blank=True, null=True, verbose_name='Состав')
-    flags = models.ManyToManyField(Flags, blank=True, verbose_name='Флаги')
+    flag = models.ForeignKey(Flags, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Флаг')
 
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
