@@ -7,7 +7,7 @@
     <nav aria-label="Категории" class="catalog-nav">
         <ul>
             <li class="nav-item">
-                <a href="{% url "goods:index" %}" class="category-button nav-link {% if not request.GET.category %}active{% endif %}">Все товары</a>
+                <a href="{% url 'goods:index' %}" class="category-button nav-link {% if not request.GET.category %}active{% endif %}">Все товары</a>
             </li>
             {% for category in categories %}
                 <li class="nav-item">
@@ -20,13 +20,13 @@
     </nav>
 
     <div class="flex fw-wrap catalog-main" id="catalog-main">
-        {% include "goods/catalog_items.html" %}
+        {% include "goods/includes/catalog_items.html" %}
     </div>
 </div>
 
 <div class="text-center mt-3" id="load-more-container">
     {% if products|length >= limit %}
-        {% include "goods/load_more_button.html" %}
+        {% include "goods/includes/load_more_button.html" %}
     {% endif %}
 </div>
 

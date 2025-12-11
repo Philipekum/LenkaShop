@@ -1,7 +1,6 @@
 {% load static %}
 {% load format_tags %}
 
-{% for product in products %}
 <div>
     <div class="mb-2">
         <a href="{% url 'goods:product' product.slug %}">
@@ -32,4 +31,3 @@
         </a>
     </div>
 </div>
-{% endfor %}

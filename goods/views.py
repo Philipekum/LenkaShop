@@ -58,11 +58,11 @@ def catalog_load_more(request):
     total_count = products_qs.count()
     has_more = total_count > offset + BLOCK_LIMIT
 
-    html_products = render_to_string('goods/catalog_items.html', {'products': products})
+    html_products = render_to_string('goods/includes/catalog_items.html', {'products': products})
     html_button = ''
 
     if has_more:
-        html_button = render_to_string('goods/load_more_button.html', {
+        html_button = render_to_string('goods/includes/load_more_button.html', {
             'offset': offset + BLOCK_LIMIT,
             'category_slug': category_slug
         })

@@ -83,43 +83,14 @@
   {% endif %}
 </div>
 
-  {% if similar_products and order.is_paid%}      
+  {% if similar_products and order.is_paid %}      
   <h2 class="text-center related_title pt-5 mt-5 mb-4">Смотрите также</h2>
 
   <div class="row flex-wrap product_list">
       {% for similar_product in similar_products %}
-      
-          <div class="product_item col-6 col-lg-4 mb-lg-2">
-              
-              <div class="product_item_img">
-                {% with product_image=similar_product.images.all.0 %}
-                    {% if product_image %}
-                    <img class="catalog-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ product.name }}"
-                        loading="lazy">
-                    {% else %}
-                    <img class="catalog-img" src="{% static 'images/No_Image.png' %}" alt="{{ product.name }}"
-                        loading="lazy">
-                    {% endif %}
-                {% endwith %}
-              </div>
-
-              <div class="product_item_info">
-                  <a class="py-2 py-lg-4" href="{% url "goods:product" similar_product.slug %}">
-                      <div class="product_item_name">{{ similar_product.name }}</div>                            
-                          {% if similar_product.discount_price %}
-                              <div class="product_item_price">
-                                  <div class="price_old">{{ similar_product.price|format_price }}</div>
-                                  <div>{{ similar_product.sell_price|format_price }}</div>
-                              </div>
-
-                          {% else %} 
-                              <div class="product_item_price">{{ similar_product.price|format_price }}</div>
-
-                          {% endif %}
-                  </a>
-              </div>
+          <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+              {% include "goods/includes/product_card.html" with product=similar_product %}
           </div>
-
       {% endfor %}
   </div>
 

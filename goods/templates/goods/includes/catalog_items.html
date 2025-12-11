@@ -1,0 +1,6 @@
+{% load static %}
+{% load format_tags %}
+
+{% for product in products %}
+    {% include "goods/includes/product_card.html" with product=product %}
+{% endfor %}
