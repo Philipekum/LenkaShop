@@ -13,20 +13,17 @@
             <div class="flex ai-center order-cart-body">
                 <div class="flex ai-center order-content"> 
                     <a href="{% url "goods:product" cart.product.slug %}" class="order-card-img">
-                        {% if cart.product.images.all.0.image %}
-                            <img class="order-img" src="{{ cart.product.images.all.0.image.url }}" alt="{{ cart.product.name }}">
-                        {% else %}
-                            <img class="order-img" src="{% static "images/No_Image.png" %}" alt="No Product Image">
-                        {% endif %}
+                        {% with product_image=cart.product.images.all.0 %}
+                            {% if product_image %}
+                                <img class="order-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ cart.product.name }}" loading="lazy">
+                            {% else %}
+                                <img class="order-img" src="{% static 'images/No_Image.png' %}" alt="{{ cart.product.name }}" loading="lazy">
+                            {% endif %}
+                        {% endwith %}
                     </a>
 
                     <div class="order-ditale">
                         <a href="{% url "goods:product" cart.product.slug %}" class="oreder-cart-title">{{ cart.product.name }}</a>
-
-                        <!--Это что еще такое - разные варианты товара...???-->
-                        <!-- {% if product.options and product.options.all.exists %} 
-                            <div class="d-block d-lg-inline">option 1</div>
-                        {% endif %} -->
 
                         <div class="order-cart-price">
                             {% if cart.product.discount_price %}

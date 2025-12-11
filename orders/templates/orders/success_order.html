@@ -92,23 +92,15 @@
           <div class="product_item col-6 col-lg-4 mb-lg-2">
               
               <div class="product_item_img">
-                  {% with main_image=similar_product.images.all.0 image_alt=similar_product.images.all.1 %}
-                      <a href="{% url "goods:product" similar_product.slug %}">
-                          {% if main_image %}
-                              <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                          {% else %}
-                              <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                          {% endif %}
-                          
-                          {% if image_alt %}
-                              <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                          {% elif not main_image %}
-                              <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                          {% else %}
-                              <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">                                        
-                          {% endif %}
-                      </a>
-                  {% endwith %}
+                {% with product_image=similar_product.images.all.0 %}
+                    {% if product_image %}
+                    <img class="catalog-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ product.name }}"
+                        loading="lazy">
+                    {% else %}
+                    <img class="catalog-img" src="{% static 'images/No_Image.png' %}" alt="{{ product.name }}"
+                        loading="lazy">
+                    {% endif %}
+                {% endwith %}
               </div>
 
               <div class="product_item_info">

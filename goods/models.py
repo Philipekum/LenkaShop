@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.files.storage import default_storage
+from django.templatetags.static import static
 
 
 class Categories(models.Model):
@@ -111,4 +113,13 @@ class ProductImage(models.Model):
         verbose_name = 'Фото продукта'
         verbose_name_plural = 'Фото продуктов'
         ordering = ['order']
-        
+    
+    def image_exists(self):
+        if self.image:
+            return default_storage.exists(self.image.name)
+        return False
+    
+    def get_image_url_or_default(self, default_path='images/No_Image.png'):
+        if self.image_exists():
+            return self.image.url
+        return static(default_path)

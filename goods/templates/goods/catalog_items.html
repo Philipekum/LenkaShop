@@ -5,11 +5,11 @@
 <div>
     <div class="mb-2">
         <a href="{% url 'goods:product' product.slug %}">
-            {% with main_image=product.images.all.0 %}
-                {% if main_image %}
-                    <img class="catalog-img" src="{{ main_image.image.url }}" alt="{{ product.name }}" loading="lazy">
+            {% with product_image=product.images.all.0 %}
+                {% if product_image %}
+                    <img class="catalog-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ product.name }}" loading="lazy">
                 {% else %}
-                    <img class="catalog-img" src="{% static 'images/No_Image.png' %}" alt="No Product Image" loading="lazy">
+                    <img class="catalog-img" src="{% static 'images/No_Image.png' %}" alt="{{ product.name }}" loading="lazy">
                 {% endif %}
             {% endwith %}
         </a>

@@ -3,194 +3,178 @@
 {% load format_tags %}
 
 {% block content %}
-			<div class="row justify-content-between align-items-lg-start mb-5 mb-lg_8">   
-                <div class="col-12 col-lg-7 product_image_block">
-                    <div class="collection_slider_block">
-                        
-                        <!-- Мобильная версия с каруселью -->
-                        <div id="productCarousel" class="carousel slide d-lg-none" data-bs-interval="5000" data-bs-touch="true" data-bs-ride="carousel">
-                            
-                            <!-- Индикаторы карусели -->
-                            <div class="carousel-indicators">
-                                {% for image in product.images.all %}
-                                    <button type="button" data-bs-target="#productCarousel" 
-                                            data-bs-slide-to="{{ forloop.counter0 }}" 
-                                            class="{% if forloop.first %}active{% endif %}" 
-                                            aria-current="{% if forloop.first %}true{% endif %}" 
-                                            aria-label="Slide {{ forloop.counter }}">
-                                    </button>
-                                {% endfor %}
-                            </div>
-                    
-                            <!-- Слайды карусели -->
-                            <div class="carousel-inner">
-                                {% for image in product.images.all %}
-                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                        <img src="{{ image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                                    </div>
-                                {% empty %}
-                                    <div class="carousel-item active">
-                                        <img src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                                    </div>
-                                {% endfor %}
-                            </div>
-                    
-                            <!-- Кнопки управления каруселью -->
-                            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Предыдущий</span>
-                            </button>
-                    
-                            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="visually-hidden">Следующий</span>
-                            </button>
-                        </div>
-                    
-                    </div>
-                    
-                        <!-- Десктопная версия с сеткой изображений -->
-                        <div class="d-none d-lg-block">
-                            <div class="row">
-                                {% for image in product.images.all %}
-                                    <!-- <div class="{% if image.layout == 'large' %}col-lg-12{% else %}col-lg-6{% endif %} mb-3"> -->
-                                    <div class="col-lg-12 mb-3">
-                                        <img src="{{ image.image.url }}" class="img-fluid" alt="{{ product.name }}">
-                                    </div>
-                                {% empty %}
-                                    <div class="col-lg-12">
-                                        <img src="{% static 'images/no-product-image.jpg' %}" class="img-fluid" alt="No Product Image">
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                </div>
-                
+<div class="row justify-content-between align-items-lg-start mb-5 mb-lg_8">
+    <div class="col-12 col-lg-7 product_image_block">
+        <div class="collection_slider_block">
 
+            <!-- Мобильная версия с каруселью -->
+            <div id="productCarousel" class="carousel slide d-lg-none" data-bs-interval="5000" data-bs-touch="true"
+                data-bs-ride="carousel">
 
-				<div class="col-12 col-lg-5 product_content_block">
-					<h1 class="product_name">{{ product.name }}</h1>
-					<div class="d-flex flex-wrap align-items-stretch d-lg-block">
-
-                            {% if product.discount_price %}
-                                <div class="d-flex flex-column d-lg-block justify-content-center product_price">
-                                    <span class="d-block d-lg-inline price_old">{{ product.price|format_price }}</span>
-                                {{ product.sell_price|format_price }}
-                                </div>
-                            
-                            {% else %}
-                                <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price|format_price }}</div>
-
-                            {% endif %}
-
-                        {% if product.options.exists %}
-                            <div class="col product_option_block order-3 mt-4 mt-lg-0">
-                                <div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
-                                <div class="product_option">
-                                    <input class="select_input" type="hidden" name="product_option" value="{{ product.options.first.id }}">
-                                    
-                                    <div class="select_head">
-                                        {{ product.options.first.name }}
-                                    </div>
-                                    
-                                    <ul class="select_list">
-                                        {% for option in product.options.all %}
-                                            <a href="{% url 'goods:product' option.slug %}">
-                                                <li class="select_item">{{ option.name }}</li>
-                                            </a>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-                        {% endif %}
-
-
-						<div class="add2cart_block order-2">
-                            <!-- <a href="{% url "carts:cart_add" %}" class="add-to-cart" data-product-id="{{ product.id }}"> -->
-                                <!-- <button class="btn add2cart_btn primary-btn" type="button">{% csrf_token %}Добавить в корзину</button> -->
-                                    <button hx-post="{% url 'carts:cart_add' %}"
-                                            hx-vals='{"product_id": "{{ product.id }}"}'
-                                            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-                                            hx-swap="none"
-                                            class="btn add2cart_btn primary-btn">
-                                        Добавить в корзину
-                                    </button>
-                            <!-- </a> -->
-                        </div>
-					</div>
-
-
-					<div class="product_description">
-						<h3 class="product_description_title">Описание</h3>
-						<div class="product_description_text mb-4 mb-lg-5">
-							{{ product.description }}
-						</div>
-						<h3 class="product_description_title">Состав</h3>
-						<div class="product_description_text mb_2_8">
-							{{ product.compound }} 
-						</div>
-
-
-						<div class="product_description_icon">
-                            {% for laundary in product.laundry_features.all %}
-                                {% if laundary.icon %}
-							        <img class="product_icon" src={{ laundary.icon.url }} alt="{{ laundary.name }}" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="{{ laundary.name }}">
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-					</div>
-				</div>
-			</div>
-
-            {% if product.similar_products.all.exists %} 
-            
-                <h2 class="text-center related_title mb-4">Похожие товары</h2>
-
-                <div class="row flex-wrap product_list">
-                    {% for similar_product in product.similar_products.all %}
-                    
-                        <div class="product_item col-6 col-lg-4 mb-lg-2">
-                            
-                            <div class="product_item_img">
-                                {% with main_image=similar_product.images.all.0 image_alt=similar_product.images.all.1 %}
-                                    <a href="{% url "goods:product" similar_product.slug %}">
-                                        {% if main_image %}
-                                            <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                                        {% else %}
-                                            <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                                        {% endif %}
-                                        
-                                        {% if image_alt %}
-                                            <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                                        {% elif not main_image %}
-                                            <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                                        {% else %}
-                                            <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">                                        
-                                        {% endif %}
-                                    </a>
-                                {% endwith %}
-                            </div>
-
-                            <div class="product_item_info">
-                                <a class="py-2 py-lg-4" href="{% url "goods:product" similar_product.slug %}">
-                                    <div class="product_item_name">{{ similar_product.name }}</div>                            
-                                        {% if similar_product.discount_price %}
-                                            <div class="product_item_price">
-                                                <div class="price_old">{{ similar_product.price|format_price }}</div>
-                                                <div>{{ similar_product.sell_price|format_price }}</div>
-                                            </div>
-
-                                        {% else %} 
-                                            <div class="product_item_price">{{ similar_product.price|format_price }}</div>
-
-                                        {% endif %}
-                                </a>
-                            </div>
-                        </div>
-
+                <!-- Индикаторы карусели -->
+                <div class="carousel-indicators">
+                    {% for image in product.images.all %}
+                    <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                        class="{% if forloop.first %}active{% endif %}"
+                        aria-current="{% if forloop.first %}true{% endif %}" aria-label="Slide {{ forloop.counter }}">
+                    </button>
                     {% endfor %}
                 </div>
 
+                <!-- Слайды карусели -->
+                <div class="carousel-inner">
+                    {% for image in product.images.all %}
+                    {% if image.image_exists %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ image.get_image_url_or_default }}" class="d-block w-100" alt="{{ product.name }}">
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                <!-- Кнопки управления каруселью -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Предыдущий</span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#productCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Следующий</span>
+                </button>
+            </div>
+
+        </div>
+
+        <!-- Десктопная версия с сеткой изображений -->
+        <div class="d-none d-lg-block">
+            <div class="row">
+                {% for image in product.images.all %}
+                <!-- <div class="{% if image.layout == 'large' %}col-lg-12{% else %}col-lg-6{% endif %} mb-3"> -->
+                <div class="col-lg-12 mb-3">
+                    <img src="{{ image.get_image_url_or_default }}" class="img-fluid" alt="{{ product.name }}">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="col-12 col-lg-5 product_content_block">
+        <h1 class="product_name">{{ product.name }}</h1>
+        <div class="d-flex flex-wrap align-items-stretch d-lg-block">
+
+            {% if product.discount_price %}
+                <div class="d-flex flex-column d-lg-block justify-content-center product_price">
+                    <span class="d-block d-lg-inline price_old">{{ product.price|format_price }}</span>
+                    {{ product.sell_price|format_price }}
+                </div>
+
+            {% else %}
+            <div class="d-flex flex-column d-lg-block justify-content-center product_price">{{ product.price|format_price }}</div>
+
             {% endif %}
+
+            {% if product.options.exists %}
+            <div class="col product_option_block order-3 mt-4 mt-lg-0">
+                <div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
+                <div class="product_option">
+                    <input class="select_input" type="hidden" name="product_option"
+                        value="{{ product.options.first.id }}">
+
+                    <div class="select_head">
+                        {{ product.options.first.name }}
+                    </div>
+
+                    <ul class="select_list">
+                        {% for option in product.options.all %}
+                        <a href="{% url 'goods:product' option.slug %}">
+                            <li class="select_item">{{ option.name }}</li>
+                        </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div class="add2cart_block order-2">
+                <button hx-post="{% url 'carts:cart_add' %}" hx-vals='{"product_id": "{{ product.id }}"}'
+                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-swap="none"
+                    class="btn add2cart_btn primary-btn">
+                    Добавить в корзину
+                </button>
+            </div>
+        </div>
+
+
+        <div class="product_description">
+            <h3 class="product_description_title">Описание</h3>
+            <div class="product_description_text mb-4 mb-lg-5">
+                {{ product.description }}
+            </div>
+            <h3 class="product_description_title">Состав</h3>
+            <div class="product_description_text mb_2_8">
+                {{ product.compound }}
+            </div>
+
+
+            <div class="product_description_icon">
+                {% for laundary in product.laundry_features.all %}
+                {% if laundary.icon %}
+                <img class="product_icon" src={{ laundary.icon.url }} alt="{{ laundary.name }}" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" data-bs-title="{{ laundary.name }}">
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if product.similar_products.all.exists %}
+
+<h2 class="text-center related_title mb-4">Похожие товары</h2>
+
+<div class="row flex-wrap product_list">
+    {% for similar_product in product.similar_products.all %}
+
+    <div class="product_item col-6 col-lg-4 mb-lg-2">
+
+        <div class="product_item_img">
+            <a href="{% url 'goods:product' similar_product.slug %}">
+                {% with product_image=similar_product.images.all.0 %}
+                    {% if product_image %}
+                    <img class="catalog-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ product.name }}"
+                        loading="lazy">
+                    {% else %}
+                    <img class="catalog-img" src="{% static 'images/No_Image.png' %}" alt="{{ product.name }}"
+                        loading="lazy">
+                    {% endif %}
+                {% endwith %}
+            </a>
+        </div>
+
+        <div class="product_item_info">
+            <a class="py-2 py-lg-4" href="{% url 'goods:product' similar_product.slug %}">
+                <div class="product_item_name">{{ similar_product.name }}</div>
+                {% if similar_product.discount_price %}
+                    <div class="product_item_price">
+                        <div class="price_old">{{ similar_product.price|format_price }}</div>
+                        <div>{{ similar_product.sell_price|format_price }}</div>
+                    </div>
+                {% else %}
+                    <div class="product_item_price">{{ similar_product.price|format_price }}</div>
+                {% endif %}
+            </a>
+        </div>
+    </div>
+
+    {% endfor %}
+</div>
+
+{% endif %}
 
 {% endblock %}
