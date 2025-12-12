@@ -1,10 +1,11 @@
 from django.template.loader import render_to_string
-from .utils import get_user_carts
-from .models import Cart
+from typing import Optional
+from carts.utils import get_user_carts
+from carts.models import Cart
 
 
 class CartMixin:
-    def get_cart(self, request, product=None, cart_id=None) -> Cart | None:
+    def get_cart(self, request, product=None, cart_id=None) -> Optional[Cart]:
         if not request.session.session_key:
             request.session.create()
 
