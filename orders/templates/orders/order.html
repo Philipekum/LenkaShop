@@ -3,6 +3,8 @@
 {% load format_tags %}
 
 {% block content %}
+<div id="order-container">
+
     <h1>ваш заказ:</h1>
     
     {% if carts %}
@@ -198,5 +200,7 @@
     <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
 
     {% endif %}
+
+</div>
     
 {% endblock %}
