@@ -10,13 +10,13 @@ BLOCK_LIMIT = 6
 
 def catalog(request):
     category_slug = request.GET.get('category')
-    products = Products.objects.all()
     
     if category_slug:
         category = get_object_or_404(Categories, slug=category_slug)
-        products = products.filter(category=category)
+        products = Products.objects.filter(category=category).select_related('flag').prefetch_related('images')
     else:
         category = None
+        products = Products.objects.select_related('flag').prefetch_related('images').all()
 
     categories = Categories.objects.all()
     offset = 0
@@ -26,7 +26,7 @@ def catalog(request):
         'products': products[:BLOCK_LIMIT],
         'categories': categories,
         'selected_category': category,
-        'has_more': products.count() > BLOCK_LIMIT,
+        'has_more': len(products) > BLOCK_LIMIT,
         'limit': BLOCK_LIMIT,
         'offset': offset + BLOCK_LIMIT, 
     }
@@ -49,9 +49,13 @@ def catalog_load_more(request):
     category_slug = request.GET.get('category')
     offset = int(request.GET.get('offset', 0))
 
-    products_qs = Products.objects.all()
+
     if category_slug:
-        products_qs = products_qs.filter(category__slug=category_slug)
+        category = get_object_or_404(Categories, slug=category_slug)
+        products_qs = Products.objects.filter(category=category).select_related('flag').prefetch_related('images')
+
+    else:
+        products_qs = Products.objects.select_related('flag').prefetch_related('images').all()
 
     products = products_qs[offset:offset + BLOCK_LIMIT]
 
