@@ -1,7 +1,7 @@
+from django.shortcuts import render
 from django.views import View
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from goods.models import Products
-from goods.templatetags.format_tags import format_price
 from .models import Cart
 from .mixins import CartMixin
 
@@ -15,15 +15,17 @@ class CartAddView(CartMixin, View):
         if cart:
             cart.quantity += 1
             cart.save()
-        
         else:
-            Cart.objects.create(session_key=request.session.session_key, product=product, quantity=1)
+            Cart.objects.create(session_key=request.session.session_key, 
+                              product=product, quantity=1)
 
-        total_quantity = Cart.objects.filter(session_key=request.session.session_key).total_quantity()
+        total_quantity = Cart.objects.filter(
+            session_key=request.session.session_key
+        ).total_quantity()
 
-        return HttpResponse(f"""
-                                <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
-                            """)
+        return render(request, 'carts/htmx/cart_add.html', {
+            'total_quantity': total_quantity
+        })
 
 
 class CartRemoveView(CartMixin, View):
@@ -31,27 +33,27 @@ class CartRemoveView(CartMixin, View):
         cart_id = request.POST.get("cart_id")
 
         try:
-            cart = Cart.objects.get(id=cart_id, session_key=request.session.session_key)
+            cart = Cart.objects.get(id=cart_id, 
+                                  session_key=request.session.session_key)
             cart.delete()
             
-            session_cart = Cart.objects.filter(session_key=request.session.session_key)  
-            total_quantity: int = session_cart.total_quantity() 
+            session_cart = Cart.objects.filter(
+                session_key=request.session.session_key
+            )  
+            total_quantity = session_cart.total_quantity() 
             
             if total_quantity == 0:
-                return HttpResponse(f"""
-                    <span id="goods-in-cart-count" hx-swap-oob="true">0</span>
-                    <span id="cart-total-price" hx-swap-oob="true">0</span>
-                    <div id="order-cart" hx-swap-oob="true">
-                        <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
-                    </div>
-                """)
+                return render(request, 'carts/htmx/cart_remove.html', {
+                    'empty': True
+                })
             
-            total_price: float = session_cart.total_price()
-            return HttpResponse(f"""
-                <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
-                <span id="cart-total-price" hx-swap-oob="true">{format_price(total_price)}</span>
-                <div id="cart-item-{cart_id}" hx-swap-oob="true"></div>
-            """)
+            total_price = session_cart.total_price()
+            return render(request, 'carts/htmx/cart_remove.html', {
+                'empty': False,
+                'cart_id': cart_id,
+                'total_quantity': total_quantity,
+                'total_price': total_price
+            })
         
         except Cart.DoesNotExist:
             return JsonResponse({"error": "Корзина не найдена."}, status=404)
@@ -71,15 +73,16 @@ class CartChangeView(CartMixin, View):
         
         cart.save()
         
-        session_cart = Cart.objects.filter(session_key=request.session.session_key)
+        session_cart = Cart.objects.filter(
+            session_key=request.session.session_key
+        )
         total_quantity = session_cart.total_quantity()
         total_price = session_cart.total_price()
         item_total_price = cart.products_price()
         
-        return HttpResponse(f"""
-            <span id="goods-in-cart-count" hx-swap-oob="true">{total_quantity}</span>
-            <span id="cart-total-price" hx-swap-oob="true">{format_price(total_price)}</span>
-            <span id="cart-item-{cart.id}-price" hx-swap-oob="true">{format_price(item_total_price)}</span>
-            <input id="cart-item-{cart.id}-quantity" hx-swap-oob="true" value="{cart.quantity}" readonly/>
-        """)
-    
+        return render(request, 'carts/htmx/cart_change.html', {
+            'cart': cart,
+            'total_quantity': total_quantity,
+            'total_price': total_price,
+            'item_total_price': item_total_price
+        })

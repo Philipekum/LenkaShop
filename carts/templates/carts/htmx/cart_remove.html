@@ -1,0 +1,13 @@
+{% load format_tags %}
+
+{% if empty %}
+    <span id="goods-in-cart-count" hx-swap-oob="true">0</span>
+    <span id="cart-total-price" hx-swap-oob="true">0</span>
+    <div id="order-cart" hx-swap-oob="true">
+        <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
+    </div>
+{% else %}
+    <span id="goods-in-cart-count" hx-swap-oob="true">{{ total_quantity }}</span>
+    <span id="cart-total-price" hx-swap-oob="true">{{ total_price|format_price }}</span>
+    <div id="cart-item-{{ cart_id }}" hx-swap-oob="true"></div>
+{% endif %}
