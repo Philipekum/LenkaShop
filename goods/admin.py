@@ -4,7 +4,7 @@ from django.db import models
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 from django.utils.html import format_html
 
-from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags
+from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags, Sizes
 
 
 @admin.register(Categories)
@@ -15,6 +15,9 @@ class CategoriesAdmin(admin.ModelAdmin):
 class LaundryFeatureAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
+@admin.register(Sizes)
+class SizesAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
 class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
     model = ProductImage
@@ -53,7 +56,7 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
             'fields': ('price', 'discount_price', 'quantity')
         }),
         ('Связи', {
-            'fields': ('flag', 'collections', 'laundry_features', 'similar_products')
+            'fields': ('flag', 'sizes', 'collections', 'laundry_features', 'similar_products')
         }),
     )
     

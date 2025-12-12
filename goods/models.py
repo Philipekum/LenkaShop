@@ -63,7 +63,27 @@ class Flags(models.Model):
     
     def __str__(self):
         return self.title
+
+
+class Sizes(models.Model):
+    SIZE_CHOICES = [
+        ('XS', 'XS - Extra Small'),
+        ('S', 'S - Small'),
+        ('M', 'M - Medium'),
+        ('L', 'L - Large'),
+        ('XL', 'XL - Extra Large'),
+    ]
+
+    name = models.CharField(max_length=10, choices=SIZE_CHOICES, unique=True,verbose_name='Размер')
+
+    class Meta:
+        db_table = 'sizes'
+        verbose_name = 'Размер'
+        verbose_name_plural = 'Размеры'
     
+    def __str__(self):
+        return self.name
+
 
 class Products(models.Model):
     name = models.CharField(max_length=150, unique=True, verbose_name='Название')
@@ -72,6 +92,7 @@ class Products(models.Model):
     description = models.TextField(blank=True, null=True, verbose_name='Описание')
     compound = models.TextField(blank=True, null=True, verbose_name='Состав')
     flag = models.ForeignKey(Flags, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Флаг')
+    sizes = models.ManyToManyField(Sizes, blank=True, verbose_name='Размеры')
 
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
     discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')

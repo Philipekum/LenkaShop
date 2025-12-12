@@ -78,26 +78,13 @@
 
             {% endif %}
 
-            {% if product.options.exists %}
-            <div class="col product_option_block order-3 mt-4 mt-lg-0">
-                <div class="product_option_name mb-3 mb-lg-2">Варианты:</div>
-                <div class="product_option">
-                    <input class="select_input" type="hidden" name="product_option"
-                        value="{{ product.options.first.id }}">
-
-                    <div class="select_head">
-                        {{ product.options.first.name }}
-                    </div>
-
-                    <ul class="select_list">
-                        {% for option in product.options.all %}
-                        <a href="{% url 'goods:product' option.slug %}">
-                            <li class="select_item">{{ option.name }}</li>
-                        </a>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
+            {% if product.sizes.exists %}
+                <h1>Размеры:</h1>
+                <ul>
+                    {% for size in product.sizes.all %}
+                        <li class="select_item">{{ size.get_name_display }}</li>
+                    {% endfor %}
+                </ul>
             {% endif %}
 
 
