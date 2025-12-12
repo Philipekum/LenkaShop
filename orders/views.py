@@ -1,4 +1,4 @@
-from random import shuffle
+import random
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
@@ -7,41 +7,57 @@ from django.utils.html import escape
 from django.contrib import messages
 from django.views import View
 
+from goods.models import Products
 from orders.forms import CreateOrderForm
-from orders.models import Order
+from orders.models import Order, OrderItem
 from orders.services.order_service import create_order_from_cart, EmptyCartError
-
 from payments.models import PaymentTransaction
 from payments.services.payment_service import YooKassaPaymentService
 
 
 class SuccessOrderView(View):
     def get(self, request, order_id):
-        order = get_object_or_404(Order, order_id=order_id)
-
-        order_items = order.orderitem_set.all()
-
-        total_price = order.orderitem_set.total_price()
+        order = get_object_or_404(
+            Order.objects.select_related('delivery_service'),
+            order_id=order_id
+        )
         
-        similar_products = []
-
-        for item in order_items:
-            for prod in item.product.similar_products.all():
-                if prod not in similar_products:
-                    similar_products.append(prod)
+        order_items = OrderItem.objects.filter(order=order)\
+            .select_related('product')\
+            .only('product', 'quantity')
         
-        shuffle(similar_products)
-
-        title = 'Спасибо за покупку!' if order.is_paid else 'Заказ ждет оплаты'
+        product_ids = [item.product.id for item in order_items if item.product]
+        similar_products_qs = Products.objects.filter(
+            similar_to_this__id__in=product_ids
+        ).distinct()\
+        .select_related('flag')\
+        .prefetch_related('images')
+        
+        similar_products = list(similar_products_qs)
+        
+        if len(similar_products) < 5:
+            needed = 5 - len(similar_products)
+            exclude_ids = [p.id for p in similar_products] + product_ids
             
+            random_products = Products.objects\
+                .exclude(id__in=exclude_ids)\
+                .select_related('flag')\
+                .prefetch_related('images')\
+                .order_by('?')[:needed * 2] 
+            
+            similar_products.extend(random_products)
+    
+        similar_products = similar_products[:5]
+        random.shuffle(similar_products)
+        
         context = {
-            'title': title,
+            'title': order.get_status_display(),
             'order': order,
             'order_items': order_items,
-            'similar_products': similar_products[:3],
-            'total_price': total_price,
+            'similar_products': similar_products,
+            'total_price': order.orderitem_set.total_price(),
         }
-
+        
         return render(request, 'orders/success_order.html', context=context)
 
     def post(self, request, order_id):
