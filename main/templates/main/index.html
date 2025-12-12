@@ -11,10 +11,18 @@
 </div>
 {% for collection in collections %}
   {% if collection.is_active %}
-    <a href="?collection={{ collection.slug }}">
+    <a href="{% url 'goods:collection' collection.slug %}">
       <h1>{{ collection.name }}</h1>
       <p>{{ collection.description }}</p>
     </a>
+
+    <div class="flex fw-wrap">
+      {% for product in collection.products.all %}
+        {% include "goods/includes/product_card.html" with product=product %}
+                
+      {% endfor %}
+    </div>
+
   {% endif %}
 {% endfor %}
 

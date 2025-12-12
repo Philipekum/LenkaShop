@@ -7,7 +7,7 @@ def handle_page_not_found(request, exception):
 
 
 def index(request):
-    collections = Collections.objects.all()
+    collections = Collections.objects.prefetch_related('products').all()
 
     context = {
         'title': 'Главная страница',
