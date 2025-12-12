@@ -4,7 +4,7 @@ from django.db import models
 from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 from django.utils.html import format_html
 
-from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags, Sizes
+from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags, Sizes, CollectionImage
 
 
 @admin.register(Categories)
@@ -73,8 +73,26 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
     image_preview.short_description = "Фото"
 
 
+class CollectionImageInline(SortableInlineAdminMixin, admin.StackedInline):
+    model = CollectionImage
+    extra = 1
+    fields = ('image', 'image_preview', 'order')
+    readonly_fields = ('image_preview',)
+    
+    def image_preview(self, obj):
+        if obj.image and hasattr(obj.image, 'url'):
+            return format_html(
+                '<img src="{}" style="max-height: 200px; max-width: 200px;" />', 
+                obj.image.url
+            )
+        return "Нет изображения"
+    
+    image_preview.short_description = "Предпросмотр"
+
+
 @admin.register(Collections)
-class CollectionsAdmin(admin.ModelAdmin):
+class CollectionsAdmin(SortableAdminBase, admin.ModelAdmin):
+    inlines = [CollectionImageInline]
     list_display = ('name',)
     prepopulated_fields = {'slug': ('name',)}
     

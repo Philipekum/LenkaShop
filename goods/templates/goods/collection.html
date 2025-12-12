@@ -1,0 +1,62 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <h1>{{ collection.name }} {% if not collection.is_active %}(Закончилась){% endif %}</h1>
+    <p>{{ collection.description }}</p>
+
+    {% if collection.images %}        
+        <div class="collection_slider_block">
+
+                <!-- Карусель -->
+                <div id="collectionCarousel" class="carousel slide" data-bs-interval="5000" data-bs-touch="true"
+                    data-bs-ride="carousel">
+
+                    <!-- Индикаторы карусели -->
+                    <div class="carousel-indicators">
+                        {% for image in collection.images.all %}
+                        <button type="button" data-bs-target="#collectionCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+                            class="{% if forloop.first %}active{% endif %}"
+                            aria-current="{% if forloop.first %}true{% endif %}" aria-label="Slide {{ forloop.counter }}">
+                        </button>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Слайды карусели -->
+                    <div class="carousel-inner">
+                        {% for image in collection.images.all %}
+                        {% if image.image_exists %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ image.get_image_url_or_default }}" class="d-block w-100" alt="{{ collection.name }}">
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                    <!-- Кнопки управления каруселью -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#collectionCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Предыдущий</span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-bs-target="#collectionCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Следующий</span>
+                    </button>
+                </div>
+
+        </div>
+    {% endif %}
+        
+        <div class="flex fw-wrap">
+            {% for product in collection_products %}
+    
+                {% include "goods/includes/product_card.html" with product=product %}
+                
+            {% endfor %}
+        </div>
+
+{% endblock %}

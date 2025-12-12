@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 
-from goods.models import Products, Categories
+from goods.models import Products, Categories, Collections
 
 
 BLOCK_LIMIT = 6
@@ -43,6 +43,18 @@ def product(request, product_slug):
     }
 
     return render(request, 'goods/product.html', context)
+
+
+def collection(request, collection_slug):
+    collection = get_object_or_404(Collections, slug=collection_slug)
+    collection_products = collection.products.select_related('flag').prefetch_related('images').all()
+    context = {
+        'title': collection.name,
+        'collection': collection,
+        'collection_products': collection_products,
+    }
+
+    return render(request, 'goods/collection.html', context)
 
 
 def catalog_load_more(request):

@@ -33,6 +33,28 @@ class Collections(models.Model):
         return self.name
 
 
+class CollectionImage(models.Model):
+    collection = models.ForeignKey(Collections, on_delete=models.CASCADE, related_name='images', verbose_name='Картинка')
+    image = models.ImageField(upload_to='collection_images', verbose_name='Фото')
+    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+
+    class Meta:
+        db_table = 'collection_image'
+        verbose_name = 'Фото коллекции'
+        verbose_name_plural = 'Фото коллекции'
+        ordering = ['order']
+    
+    def image_exists(self):
+        if self.image:
+            return default_storage.exists(self.image.name)
+        return False
+    
+    def get_image_url_or_default(self, default_path='images/No_Image.png'):
+        if self.image_exists():
+            return self.image.url
+        return static(default_path)
+
+
 class LaundryFeature(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name='Способ стирки')
     icon = models.ImageField(upload_to='laundry_icons')
