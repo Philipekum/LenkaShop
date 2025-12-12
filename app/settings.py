@@ -58,6 +58,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'app.middlewares.TemporaryRedirectMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,9 +68,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-if os.getenv('MY_REDIRECT', 'False') == 'True':
-    MIDDLEWARE.append('app.middlewares.TemporaryRedirectMiddleware')
 
 ROOT_URLCONF = 'app.urls'
 

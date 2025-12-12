@@ -13,7 +13,6 @@ from orders.services.order_service import create_order_from_cart, EmptyCartError
 
 from payments.models import PaymentTransaction
 from payments.services.payment_service import YooKassaPaymentService
-from payments.models import PaymentTransaction
 
 
 class SuccessOrderView(View):
@@ -65,7 +64,7 @@ class SuccessOrderView(View):
                 'redirect_url': payment_data['confirmation_url']
             })
             
-        except Exception as e:
+        except Exception:
             # logger.error(f"Payment creation error: {str(e)}")
             messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
             return redirect(reverse('orders:success_order', args=[order.order_id]))
@@ -114,8 +113,8 @@ class OrderView(View):
         except EmptyCartError:
             return HttpResponse("<p>Корзина пустая</p>")
         
-        except Exception as e:
-            form.add_error(None, f"Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой.")
+        except Exception:
+            form.add_error(None, "Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой.")
             return render(request, 'orders/order_form.html', {"form": form})
             
 
