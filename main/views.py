@@ -15,4 +15,17 @@ def index(request):
     }
 
     return render(request, 'main/index.html', context)
-    
+
+
+def delivery_info(request):
+    context = {
+        'title': 'Доставка и оплата',
+    }
+    return render(request, 'main/delivery.html', context)
+
+
+def about_info(request):
+    context = {
+        'title': 'О бренде',
+    }
+    return render(request, 'main/about.html', context)
