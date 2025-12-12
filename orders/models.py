@@ -71,8 +71,6 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE, verbose_name="Заказ")
     product = models.ForeignKey(to=Products, on_delete=models.SET_DEFAULT, null=True, verbose_name="Продукт", default=None)
-    name = models.CharField(max_length=150, verbose_name="Название")
-    price = models.DecimalField(max_digits=7, decimal_places=2, verbose_name="Цена")
     quantity = models.PositiveIntegerField(default=0, verbose_name="Количество")
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата продажи")
 
@@ -84,8 +82,22 @@ class OrderItem(models.Model):
 
     objects = OrderitemQueryset.as_manager()
 
+    @property
+    def name(self):
+        if self.product:
+            return self.product.name
+        return 'Товар удален'
+    
+    @property
+    def price(self):
+        if self.product:
+            return self.product.sell_price()
+        return 0
+
     def products_price(self):
-        return self.product.sell_price() * self.quantity
+        if self.product:
+            return self.product.sell_price() * self.quantity
+        return 0
 
     def __str__(self):
         return f"Товар {self.name} | Заказ № {self.order.order_id}"
