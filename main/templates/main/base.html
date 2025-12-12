@@ -11,12 +11,12 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport">
   <title>{{ title }}</title>
-  <link rel="shortcut icon" href="{% static "icon/favicon.png" %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'icon/favicon.png' %}" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type='text/css' href={% static "css/bootstrap.min.css" %}>
-  <link rel="stylesheet" type='text/css' href="{% static "css/style.css" %}?v=1.0">
+  <link rel="stylesheet" type='text/css' href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type='text/css' href="{% static 'css/style.css' %}?v=1.0">
   <script src="{% static 'js/htmx.min.js' %}"></script>
 
 </head>
@@ -29,14 +29,14 @@
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <a href="{% url "main:index" %}">
-            <img src={% static "images/Logo.svg" %} alt="Lenka" class="nav-logo">
+          <a href="{% url 'main:index' %}">
+            <img src="{% static 'images/Logo.svg' %}" alt="Lenka" class="nav-logo">
           </a>
 
           <div class="collapse navbar-collapse jc-center order-4 order-lg-2" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="{% url "goods:index" %}">Каталог</a>
+                  <a class="nav-link" href="{% url 'goods:index' %}">Каталог</a>
                 </li>             
 
                 <li class="nav-item">
@@ -52,8 +52,8 @@
           <!-- Сразу переход на страницу -->
           <div class="order-2 order-lg-3">
             <div class="icon-btn">
-              <a href="{% url "orders:order" %}" >
-                <img class ="nav-icon" src="{% static "images/cart.svg" %}" viewBox="0 0 37 37" fill="none" ></img>
+              <a href="{% url 'orders:order' %}" >
+                <img class ="nav-icon" src="{% static 'images/cart.svg' %}" viewBox="0 0 37 37" fill="none" ></img>
                 <span id="goods-in-cart-count" class="prod_in_cart">{{ carts.total_quantity }}</span>
               </a>
             </div>
@@ -92,29 +92,29 @@
           {% if contact %}
             {% if contact.phone %}
               <div class="flex ai-center mb-1">
-                <img class="me-3 footer-icon" src={% static "images/whatsapp.svg" %} alt="whatsapp">
+                <img class="me-3 footer-icon" src="{% static 'images/whatsapp.svg' %}" alt="whatsapp">
                 <a href="https://wa.me/{{ contact.phone }}">{{ contact.phone|format_phone }}</a>
               </div>
             {% endif %}
 
             {% if contact.email %}
               <div class="flex ai-center mb-2">
-                <img class="me-3 footer-icon" src={% static "images/mail.svg" %} alt="mail">
+                <img class="me-3 footer-icon" src="{% static 'images/mail.svg' %}" alt="mail">
                 <a href="mailto:{{ contact.email }}">{{  contact.email  }}</a>
               </div>
             {% endif %}
 
             {% if contact.telegram %}
               <div class="flex ai-center mb-2">
-                <img class="me-3" src={% static "images/telegram.svg" %} alt="telegram">
-                <a href="https://web.telegram.org/{{ contact.telegram }}">{{  contact.telegram  }}</a>
+                <img class="me-3" src="{% static 'images/telegram.svg' %}" alt="telegram">
+                <a href="https://t.me/{{ contact.telegram }}">{{  contact.telegram  }}</a>
               </div>
             {% endif %}
           {% endif %}
         </div>
 
-        <a href="{% url "main:index" %}">
-          <img src={% static "images/Logo.svg" %} alt="Lenka" class="nav-logo">
+        <a href="{% url 'main:index' %}">
+          <img src="{% static 'images/Logo.svg' %}" alt="Lenka" class="nav-logo">
         </a>
       </div>
   
@@ -124,9 +124,9 @@
       <img src="{% static 'images/arrow-up.svg' %}" alt="Наверх">
     </div>
 
-    <script src={% static "js/bootstrap.bundle.min.js" %}></script>
-    <script src={% static "js/jquery-3.7.0.min.js" %}></script>
-    <script src="{% static "js/script.js" %}?v=1.0"></script>	
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.7.0.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}?v=1.0"></script>	
 </body>
 
 </html>

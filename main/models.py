@@ -2,8 +2,9 @@ from django.db import models
 
 
 class ContactInfo(models.Model):
-    phone = models.CharField(max_length=20, verbose_name="Телефон")
-    email = models.EmailField(verbose_name="Email")
+    phone = models.CharField(max_length=20, null=True, verbose_name="Телефон Whatsapp")
+    telegram = models.CharField(max_length=50, null=True, verbose_name="Telegram")
+    email = models.EmailField(null=True, verbose_name="Email")
 
     class Meta:
         db_table = 'contact_info'
