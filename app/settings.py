@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'payments',
+    'delivery',
 ]
 
 MIDDLEWARE = [
@@ -207,10 +208,10 @@ JAZZMIN_SETTINGS = {
     "site_brand": "Lenka",
     "welcome_sign": "Добро пожаловать в админ-панель",
     "copyright": "Магазин",
-    
+
     # Современный вид
     "theme": "flatly",
-    
+
     # Иконки
     "icons": {
         "auth": "fas fa-users-cog",
@@ -220,29 +221,28 @@ JAZZMIN_SETTINGS = {
         "products.productimage": "fas fa-image",
         "products.categories": "fas fa-folder",
     },
-    
+
     # Меню
     "order_with_respect_to": ["products", "products.products", "products.categories"],
-    
+
     # Кастомизация
     "show_ui_builder": True,  # включить UI builder для дополнительной кастомизации
-
-        "topmenu_links": [
+    "topmenu_links": [
         {"name": "Главная", "url": "admin:index", "permissions": ["auth.view_user"]},
         {"model": "products.products"},
     ],
-    
+
     # Кастомизация бокового меню
     "show_sidebar": True,
     "navigation_expanded": True,
-    
+
     # Скрыть приложения/модели
     "hide_apps": [],
     "hide_models": [],
 
     # Логин страница
     "login_logo": None,
-    
+
     "site_logo": None,
 }
 
