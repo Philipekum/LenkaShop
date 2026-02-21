@@ -21,33 +21,33 @@ def payment_webhook(request):
             return HttpResponse("Unauthorized IP", status=401)
 
     try:
-        notification = PaymentHandlerService.parse_webhook_notification(request.body)
-        
+        notification = PaymentHandlerService.parse_webhook_notification(
+            request.body)
+
         if notification.event == 'payment.succeeded':
             payment_id = notification.object.id
             PaymentHandlerService.handle_payment_succeeded(
-                payment_id, 
+                payment_id,
                 payment_data=notification.object
             )
-            
+
         elif notification.event == 'payment.canceled':
             payment_id = notification.object.id
             PaymentHandlerService.handle_payment_canceled(
                 payment_id,
                 payment_data=notification.object
             )
-        
+
         else:
             logger.info(f'Unhandled event type: {notification.event}')
-            return HttpResponse("Event not handled", status=200)  
+            return HttpResponse("Event not handled", status=200)
 
         return HttpResponse("Success", status=200)
-    
+
     except HandlingOrderNotFoundError as e:
         logger.error(f'Order not found: {e}')
         return HttpResponse("Order not found", status=404)
-        
+
     except Exception as e:
         logger.error(f'Webhook processing error: {e}')
         return HttpResponse("Server error", status=500)
-    

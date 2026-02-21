@@ -1,5 +1,7 @@
-from django import forms
 import re
+
+from django import forms
+
 from orders.models import DeliveryService
 
 
@@ -21,4 +23,3 @@ class CreateOrderForm(forms.Form):
         if not re.match(r"^\+?\d{10,15}$", phone):
             raise forms.ValidationError("Введите корректный номер телефона.")
         return phone
-    

@@ -1,30 +1,34 @@
+from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 from django.contrib import admin
 from django.forms import CheckboxSelectMultiple
 from django.db import models
-from adminsortable2.admin import SortableInlineAdminMixin, SortableAdminBase
 from django.utils.html import format_html
 
-from goods.models import Categories, LaundryFeature, ProductImage, Products, Collections, Flags, Sizes, CollectionImage
+from goods.models import (Categories, LaundryFeature, ProductImage, Products,
+                          Collections, Flags, Sizes, CollectionImage)
 
 
 @admin.register(Categories)
 class CategoriesAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
+
 @admin.register(LaundryFeature)
 class LaundryFeatureAdmin(admin.ModelAdmin):
     list_display = ('name',)
 
+
 @admin.register(Sizes)
 class SizesAdmin(admin.ModelAdmin):
     list_display = ('name',)
+
 
 class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
     model = ProductImage
     extra = 1
     fields = ('image', 'image_preview', 'order')
     readonly_fields = ('image_preview',)
-    
+
     def image_preview(self, obj):
         if obj.image and hasattr(obj.image, 'url'):
             return format_html(
@@ -32,7 +36,7 @@ class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
                 obj.image.url
             )
         return "Нет изображения"
-    
+
     image_preview.short_description = "Предпросмотр"
 
 
@@ -43,11 +47,11 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
     }
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline]
-    
+
     list_display = ('name', 'category', 'price', 'discount_price', 'quantity', 'image_preview')
     list_filter = ('category', 'collections', 'flag')
     search_fields = ('name', 'description')
-    
+
     fieldsets = (
         ('Основная информация', {
             'fields': ('name', 'slug', 'category', 'description', 'compound')
@@ -59,7 +63,7 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
             'fields': ('flag', 'sizes', 'collections', 'laundry_features', 'similar_products')
         }),
     )
-    
+
     def image_preview(self, obj):
         if obj and obj.pk and obj.images.exists():
             first_image = obj.images.first()
@@ -69,7 +73,7 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
                     first_image.image.url
                 )
         return "—"
-    
+
     image_preview.short_description = "Фото"
 
 
@@ -78,7 +82,7 @@ class CollectionImageInline(SortableInlineAdminMixin, admin.StackedInline):
     extra = 1
     fields = ('image', 'image_preview', 'order')
     readonly_fields = ('image_preview',)
-    
+
     def image_preview(self, obj):
         if obj.image and hasattr(obj.image, 'url'):
             return format_html(
@@ -86,7 +90,7 @@ class CollectionImageInline(SortableInlineAdminMixin, admin.StackedInline):
                 obj.image.url
             )
         return "Нет изображения"
-    
+
     image_preview.short_description = "Предпросмотр"
 
 
@@ -95,7 +99,7 @@ class CollectionsAdmin(SortableAdminBase, admin.ModelAdmin):
     inlines = [CollectionImageInline]
     list_display = ('name',)
     prepopulated_fields = {'slug': ('name',)}
-    
+
 
 @admin.register(Flags)
 class FlagsAdmin(admin.ModelAdmin):

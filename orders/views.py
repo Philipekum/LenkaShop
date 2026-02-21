@@ -10,7 +10,8 @@ from django.views import View
 from goods.models import Products
 from orders.forms import CreateOrderForm
 from orders.models import Order, OrderItem
-from orders.services.order_service import create_order_from_cart, EmptyCartError
+from orders.services.order_service import (create_order_from_cart,
+                                           EmptyCartError)
 from payments.models import PaymentTransaction
 from payments.services.payment_service import YooKassaPaymentService
 
@@ -21,35 +22,35 @@ class SuccessOrderView(View):
             Order.objects.select_related('delivery_service'),
             order_id=order_id
         )
-        
+
         order_items = OrderItem.objects.filter(order=order)\
             .select_related('product')\
             .only('product', 'quantity')
-        
+
         product_ids = [item.product.id for item in order_items if item.product]
-        similar_products_qs = Products.objects.filter(
+        similar_products_qs = (Products.objects.filter(
             similar_to_this__id__in=product_ids
-        ).distinct()\
-        .select_related('flag')\
-        .prefetch_related('images')
-        
+        ).distinct()
+         .select_related('flag')
+         .prefetch_related('images'))
+
         similar_products = list(similar_products_qs)
-        
+
         if len(similar_products) < 5:
             needed = 5 - len(similar_products)
             exclude_ids = [p.id for p in similar_products] + product_ids
-            
-            random_products = Products.objects\
-                .exclude(id__in=exclude_ids)\
-                .select_related('flag')\
-                .prefetch_related('images')\
-                .order_by('?')[:needed * 2] 
-            
+
+            random_products = (Products.objects
+                               .exclude(id__in=exclude_ids)
+                               .select_related('flag')
+                               .prefetch_related('images')
+                               .order_by('?')[:needed * 2])
+
             similar_products.extend(random_products)
-    
+
         similar_products = similar_products[:5]
         random.shuffle(similar_products)
-        
+
         context = {
             'title': order.get_status_display(),
             'order': order,
@@ -57,7 +58,7 @@ class SuccessOrderView(View):
             'similar_products': similar_products,
             'total_price': order.orderitem_set.total_price(),
         }
-        
+
         return render(request, 'orders/success_order.html', context=context)
 
     def post(self, request, order_id):
@@ -79,11 +80,13 @@ class SuccessOrderView(View):
             return JsonResponse({
                 'redirect_url': payment_data['confirmation_url']
             })
-            
+
         except Exception:
             # logger.error(f"Payment creation error: {str(e)}")
-            messages.error(request, 'Ошибка при создании платежа. Попробуйте еще раз!')
-            return redirect(reverse('orders:success_order', args=[order.order_id]))
+            messages.error(request,
+                           'Ошибка при создании платежа. Попробуйте еще раз!')
+            return redirect(reverse('orders:success_order',
+                                    args=[order.order_id]))
 
 
 class OrderView(View):
@@ -91,10 +94,10 @@ class OrderView(View):
         form = CreateOrderForm()
 
         context = {
-        'title': 'Оформление заказа',
-        'form': form,
+            'title': 'Оформление заказа',
+            'form': form,
         }
-        
+
         return render(request, 'orders/order.html', context=context)
 
     def post(self, request):
@@ -108,7 +111,7 @@ class OrderView(View):
             if not session_key:
                 request.session.create()
                 session_key = request.session.session_key
-            
+
             order_obj, total_price = create_order_from_cart(
                 session_key=session_key,
                 full_name=form.cleaned_data["full_name"],
@@ -117,7 +120,8 @@ class OrderView(View):
                 delivery_address=form.cleaned_data["delivery_address"],
             )
 
-            success_url = reverse('orders:success_order', args=[order_obj.order_id])
+            success_url = reverse('orders:success_order',
+                                  args=[order_obj.order_id])
 
             if request.headers.get("HX-Request") == "true":
                 response = HttpResponse()
@@ -125,14 +129,16 @@ class OrderView(View):
                 return response
 
             return HttpResponseRedirect(success_url)
-            
+
         except EmptyCartError:
             return HttpResponse("<p>Корзина пустая</p>")
-        
+
         except Exception:
-            form.add_error(None, "Произошла внутренняя ошибка. Попробуйте ещё раз или свяжитесь с поддержкой.")
+            form.add_error(None,
+                           ("Произошла внутренняя ошибка. "
+                            "Попробуйте ещё раз или свяжитесь с поддержкой."))
             return render(request, 'orders/order_form.html', {"form": form})
-            
+
 
 class DeliveryDetails(View):
     CITIES = [
@@ -188,7 +194,6 @@ class DeliveryDetails(View):
         {"id": 50, "name": "Копенгаген", "region": "", "country": "Дания", "population": 610000, "price": 800},
     ]
 
-
     def get(self, request):
         """Возвращает HTML список подсказок по городам"""
         q = (request.GET.get("city-search") or "").strip().lower()
@@ -209,7 +214,7 @@ class DeliveryDetails(View):
             label = f"{escape(c['country']+', ' if c['country']!='Россия' else '')}{escape(c['region'])}, {escape(c['name'])}"
             html += f"""
                 <li>
-                    <button 
+                    <button
                         type='button'
                         hx-post='/new-site/order/delivery/'
                         hx-vals='{{"city_id": "{c["id"]}"}}'
@@ -221,7 +226,6 @@ class DeliveryDetails(View):
         html += "</ul>"
         return HttpResponse(html)
 
-
     def post(self, request):
         """Возвращает цену доставки по выбранному городу"""
         city_id = request.POST.get("city_id")
@@ -232,4 +236,3 @@ class DeliveryDetails(View):
 
         html = f"<p>Стоимость доставки в {escape(city['name'])}: <b>{city['price']} ₽</b></p>"
         return HttpResponse(html)
-    

@@ -1,4 +1,5 @@
 from django.urls import path
+
 from main.views import index, delivery_info, about_info
 
 

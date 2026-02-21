@@ -14,7 +14,7 @@ class CartAddView(CartMixin, View):
             cart.save()
         else:
             Cart.objects.create(
-                session_key=request.session.session_key, 
+                session_key=request.session.session_key,
                 product=product, 
                 quantity=1
             )
@@ -27,14 +27,16 @@ class CartAddView(CartMixin, View):
 
 class CartRemoveView(CartMixin, View):
     def post(self, request):
-        cart = self.get_validated_cart(request, cart_id=request.POST.get("cart_id"))
+        cart = self.get_validated_cart(request,
+                                       cart_id=request.POST.get("cart_id"))
         cart.delete()
-        
+
         cart_data = self.get_session_cart_data(request)
-        
+
         if cart_data['total_quantity'] == 0:
-            return render(request, 'carts/htmx/cart_remove.html', {'empty': True})
-        
+            return render(request, 'carts/htmx/cart_remove.html',
+                          {'empty': True})
+
         return render(request, 'carts/htmx/cart_remove.html', {
             'empty': False,
             'cart_id': cart.id,
@@ -45,16 +47,17 @@ class CartRemoveView(CartMixin, View):
 
 class CartChangeView(CartMixin, View):
     def post(self, request):
-        cart = self.get_validated_cart(request, cart_id=request.POST.get('cart_id'))
+        cart = self.get_validated_cart(request,
+                                       cart_id=request.POST.get('cart_id'))
         action = request.POST.get('action')
-        
+
         if action == 'increment':
             cart.quantity = min(cart.quantity + 1, 99)
         elif action == 'decrement' and cart.quantity > 1:
             cart.quantity -= 1
-        
+
         cart.save()
-        
+
         cart_data = self.get_session_cart_data(request)
         return render(request, 'carts/htmx/cart_change.html', {
             'cart': cart,
