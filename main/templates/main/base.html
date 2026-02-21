@@ -93,21 +93,27 @@
             {% if contact.phone %}
               <div class="flex ai-center mb-1">
                 <img class="me-3 footer-icon" src="{% static 'images/whatsapp.svg' %}" alt="whatsapp">
-                <a href="https://wa.me/{{ contact.phone }}">{{ contact.phone|format_phone }}</a>
+                <a href="https://wa.me/{{ contact.phone }}"                    
+                  target="_blank" 
+                  rel="noopener noreferrer">{{ contact.phone|format_phone }}</a>
               </div>
             {% endif %}
 
             {% if contact.email %}
               <div class="flex ai-center mb-2">
                 <img class="me-3 footer-icon" src="{% static 'images/mail.svg' %}" alt="mail">
-                <a href="mailto:{{ contact.email }}">{{  contact.email  }}</a>
+                <a href="mailto:{{ contact.email }}"                     
+                  target="_blank" 
+                  rel="noopener noreferrer">{{  contact.email  }}</a>
               </div>
             {% endif %}
 
             {% if contact.telegram %}
               <div class="flex ai-center mb-2">
                 <img class="me-3" src="{% static 'images/telegram.svg' %}" alt="telegram">
-                <a href="https://t.me/{{ contact.telegram }}">{{  contact.telegram  }}</a>
+                <a href="https://t.me/{{ contact.telegram }}"
+                    target="_blank" 
+                    rel="noopener noreferrer">{{  contact.telegram  }}</a>
               </div>
             {% endif %}
           {% endif %}
