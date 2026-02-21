@@ -1,7 +1,7 @@
 from django.urls import path
 from django.shortcuts import redirect
 
-from orders.views import OrderView, SuccessOrderView, DeliveryDetails
+from orders.views import OrderView, SuccessOrderView
 
 
 app_name = 'orders'
@@ -23,5 +23,4 @@ urlpatterns = [
          name='success_order_test_1'),
     path('success_order/unpaid', test_unpaid_success_order,
          name='success_order_test_2'),
-    path("delivery/", DeliveryDetails.as_view(), name="delivery_details"),
 ]

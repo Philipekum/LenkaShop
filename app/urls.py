@@ -1,19 +1,3 @@
-"""
-URL configuration for app project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
@@ -21,13 +5,19 @@ from django.conf.urls.static import static
 from app import settings
 
 
+URL_PREFIX = 'new-site'
+
+
 urlpatterns = [
-    path('new-site/admin/', admin.site.urls),
-    path('new-site/', include('main.urls', namespace='main')),
-    path('new-site/catalog/', include('goods.urls', namespace='goods')),
-    path('new-site/cart/', include('carts.urls', namespace='cart')),
-    path('new-site/order/', include('orders.urls', namespace='orders')),
-    path('new-site/payments/', include('payments.urls', namespace='payments')),
+    path(f'{URL_PREFIX}/admin/', admin.site.urls),
+    path(f'{URL_PREFIX}/', include('main.urls', namespace='main')),
+    path(f'{URL_PREFIX}/catalog/', include('goods.urls', namespace='goods')),
+    path(f'{URL_PREFIX}/cart/', include('carts.urls', namespace='cart')),
+    path(f'{URL_PREFIX}/order/', include('orders.urls', namespace='orders')),
+    path(f'{URL_PREFIX}/payments/',
+         include('payments.urls', namespace='payments')),
+    path(f'{URL_PREFIX}/delivery/', include('delivery.urls',
+                                            namespace='delivery')),
 ]
 
 handler404 = 'main.views.handle_page_not_found'

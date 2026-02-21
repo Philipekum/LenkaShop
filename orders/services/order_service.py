@@ -14,7 +14,7 @@ def create_order_from_cart(
     email: str,
     delivery_address: str
 ) -> tuple[Order, float]:
-    
+
     cart_items = Cart.objects.filter(session_key=session_key)
 
     if not cart_items.exists():
@@ -47,7 +47,7 @@ def create_order_from_cart(
             product.quantity -= quantity
             product.save()
             total_price += price * quantity
-        
+
         cart_items.delete()
 
     return order, total_price
