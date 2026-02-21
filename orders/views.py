@@ -130,10 +130,13 @@ class OrderView(View):
             return HttpResponseRedirect(success_url)
 
         except EmptyCartError:
-            return HttpResponse("<p>Корзина пустая</p>")
+            return render(request, 'orders/order_form.html', {
+                "form": form,
+                "cart_error": "Корзина пустая"
+            })
 
-        except Exception:
-            form.add_error(None,
-                           ("Произошла внутренняя ошибка. "
-                            "Попробуйте ещё раз или свяжитесь с поддержкой."))
-            return render(request, 'orders/order_form.html', {"form": form})
+        # except Exception:
+        #     form.add_error(None,
+        #                    ("Произошла внутренняя ошибка. "
+        #                     "Попробуйте ещё раз или свяжитесь с поддержкой."))
+        #     return render(request, 'orders/order_form.html', {"form": form})

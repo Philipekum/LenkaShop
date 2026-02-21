@@ -33,20 +33,21 @@ def create_order_from_cart(
 
         for cart_item in cart_items:
             product = cart_item.product
-            name = product.name
-            price = product.sell_price()
-            quantity = cart_item.quantity
+
+            if product is None:
+                cart_item.delete()
+                continue
 
             OrderItem.objects.create(
                 order=order,
                 product=product,
-                name=name,
-                price=price,
-                quantity=quantity,
+                quantity=cart_item.quantity,
             )
-            product.quantity -= quantity
-            product.save()
-            total_price += price * quantity
+
+            item_price = product.sell_price() * cart_item.quantity
+            total_price += item_price
+
+        order.save()
 
         cart_items.delete()
 
