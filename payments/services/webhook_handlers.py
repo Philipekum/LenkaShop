@@ -32,12 +32,15 @@ class PaymentHandlerService:
             order.status = 'paid'
             order.save()
 
-            PaymentHandlerService._send_payment_success_notifications(order, payment_obj)
+            PaymentHandlerService._send_payment_success_notifications(
+                order, payment_obj)
 
             logger.info(f"Order {order.order_id} successfully paid")
 
         except PaymentTransaction.DoesNotExist:
-            raise HandlingOrderNotFoundError(f"Payment {payment_id} not found")
+            message = f"Payment {payment_id} not found"
+            logger.error(message)
+            raise HandlingOrderNotFoundError(message)
 
     @staticmethod
     @transaction.atomic  
@@ -58,7 +61,9 @@ class PaymentHandlerService:
             logger.info(f"Order {order.order_id} payment canceled")
 
         except PaymentTransaction.DoesNotExist:
-            raise HandlingOrderNotFoundError(f"Payment {payment_id} not found") 
+            message = f"Payment {payment_id} not found"
+            logger.error(message)
+            raise HandlingOrderNotFoundError(message)
 
     @staticmethod
     def _send_payment_success_notifications(order, payment):

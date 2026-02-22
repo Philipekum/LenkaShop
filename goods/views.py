@@ -1,20 +1,30 @@
+import logging 
+
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from goods.models import Products, Categories, Collections
 
 
+logger = logging.getLogger("goods")
+
 BLOCK_LIMIT = 6
+ANOMALOUS_SCROLL_THRESHOLD = 500
 
 
 def catalog(request):
     category_slug = request.GET.get('category')
 
     if category_slug:
-        category = get_object_or_404(Categories, slug=category_slug)
-        products = (Products.objects.filter(category=category)
-                    .select_related('flag').prefetch_related('images'))
+        try:
+            category = get_object_or_404(Categories, slug=category_slug)
+            products = (Products.objects.filter(category=category)
+                        .select_related('flag').prefetch_related('images'))
+            logger.info(f"Каталог: категория '{category_slug}' ({category.name})")
+        except Http404:
+            logger.warning(f"Категория не найдена: slug='{category_slug}'")
+            raise
     else:
         category = None
         products = (Products.objects
@@ -30,14 +40,19 @@ def catalog(request):
         'selected_category': category,
         'has_more': len(products) > BLOCK_LIMIT,
         'limit': BLOCK_LIMIT,
-        'offset': offset + BLOCK_LIMIT, 
+        'offset': offset + BLOCK_LIMIT,
     }
 
     return render(request, 'goods/catalog.html', context)
 
 
 def product(request, product_slug):
-    product = Products.objects.get(slug=product_slug)
+    try:
+        product = Products.objects.get(slug=product_slug)
+        logger.info(f"Товар: '{product_slug}' ({product.name})")
+    except Products.DoesNotExist:
+        logger.warning(f"Товар не найден: slug='{product_slug}'")
+        raise Http404
 
     context = {
         'title': product.name,
@@ -48,7 +63,13 @@ def product(request, product_slug):
 
 
 def collection(request, collection_slug):
-    collection = get_object_or_404(Collections, slug=collection_slug)
+    try:
+        collection = get_object_or_404(Collections, slug=collection_slug)
+        logger.info(f"Коллекция: '{collection_slug}' ({collection.name})")
+    except Http404:
+        logger.warning(f"Коллекция не найдена: slug='{collection_slug}'")
+        raise
+
     collection_products = (collection.products.select_related('flag')
                            .prefetch_related('images').all())
     context = {
@@ -78,6 +99,10 @@ def catalog_load_more(request):
 
     total_count = products_qs.count()
     has_more = total_count > offset + BLOCK_LIMIT
+
+    if offset > ANOMALOUS_SCROLL_THRESHOLD:
+        logger.warning((f"Аномальная прокрутка: offset={offset},"
+                        f"category='{category_slug}'"))
 
     html_products = render_to_string('goods/includes/catalog_items.html',
                                      {'products': products})

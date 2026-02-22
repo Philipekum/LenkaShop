@@ -1,6 +1,11 @@
+import logging
+
 from django.http import HttpResponse
 from django.views import View
 from django.utils.html import escape
+
+
+logger = logging.getLogger("delivery")
 
 
 class DeliveryDetails(View):
@@ -56,6 +61,8 @@ class DeliveryDetails(View):
         {"id": 49, "name": "Стокгольм", "region": "", "country": "Швеция", "population": 975000, "price": 800},
         {"id": 50, "name": "Копенгаген", "region": "", "country": "Дания", "population": 610000, "price": 800},
     ]
+    NOT_FOUND_CITY = "Город не найден"
+    ERROR_NOT_FOUND_CITY = "Ошибка: город не найден"
 
     def get(self, request):
         """Возвращает HTML список подсказок по городам"""
@@ -70,7 +77,8 @@ class DeliveryDetails(View):
             results = sorted(self.CITIES, key=lambda x: -x["population"])[:8]
 
         if not results:
-            return HttpResponse("<p>Город не найден</p>")
+            logger.warning(self.NOT_FOUND_CITY)
+            return HttpResponse(f"<p>{self.NOT_FOUND_CITY}</p>")
 
         html = "<ul class='city-suggestions'>"
         for c in results:
@@ -95,7 +103,8 @@ class DeliveryDetails(View):
         try:
             city = next(c for c in self.CITIES if str(c["id"]) == city_id)
         except StopIteration:
-            return HttpResponse("<p>Ошибка: город не найден</p>")
+            logger.error(self.ERROR_NOT_FOUND_CITY)
+            return HttpResponse(f"<p>{self.ERROR_NOT_FOUND_CITY}</p>")
 
         html = f"<p>Стоимость доставки в {escape(city['name'])}: <b>{city['price']} ₽</b></p>"
         return HttpResponse(html)

@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from payments.services.utils import get_client_ip, validate_ip
 from payments.services.webhook_handlers import (
-    PaymentHandlerService, 
+    PaymentHandlerService,
     HandlingOrderNotFoundError
 )
 

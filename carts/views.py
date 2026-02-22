@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views import View
+
 from carts.models import Cart
 from carts.mixins import CartMixin
 
@@ -15,7 +16,7 @@ class CartAddView(CartMixin, View):
         else:
             Cart.objects.create(
                 session_key=request.session.session_key,
-                product=product, 
+                product=product,
                 quantity=1
             )
 

@@ -186,15 +186,91 @@ YOOKASSA_ALLOWED_IPS = os.getenv('YOOKASSA_ALLOWED_IPS', '').split(',')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+            'datefmt': '%d-%m-%Y %H:%M:%S',
         },
     },
+
+    'handlers': {
+        'console': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'payments_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'payments.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'orders_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'orders.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'goods_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'goods.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'carts_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'carts.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'delivery_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'delivery.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+    },
+
     'loggers': {
         'payments': {
-            'handlers': ['console'],
+            'handlers': ['console', 'payments_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'carts': {
+            'handlers': ['console', 'carts_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'orders': {
+            'handlers': ['console', 'orders_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'goods': {
+            'handlers': ['console', 'goods_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'delivery': {
+            'handlers': ['console', 'delivery_file'],
             'level': 'DEBUG',
             'propagate': False,
         },

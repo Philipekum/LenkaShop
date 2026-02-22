@@ -12,6 +12,7 @@ db.sqlite3
 media/
 fixtures/
 staticfiles/
+logs/
 
 .env
 *.sql
