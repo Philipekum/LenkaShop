@@ -1,9 +1,9 @@
 {% load format_tags %}
 
 {% if empty %}
-    <div id="order-container" hx-swap-oob="true">
-        <h1>ваш заказ:</h1>
-        <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
+    <div id="order-container" hx-swap-oob="true" class="text-center">
+        <h1 class="mb-4">ваш заказ:</h1>
+        <div class="fs-3 fw-bold text-secondary">Корзина пуста.</div>
     </div>
     
     <span id="goods-in-cart-count" hx-swap-oob="true">0</span>

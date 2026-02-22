@@ -3,7 +3,7 @@
 {% load format_tags %}
 
 {% block content %}
-<div id="order-container">
+<div id="order-container"  hx-swap-oob="true" class="text-center">
 
     <h1>ваш заказ:</h1>
     
@@ -197,7 +197,7 @@
 
     {% else %}
 
-    <br><div class="col-8 col-lg-10 me-2">Корзина пуста.</div>
+    <div  class="fs-3 fw-bold text-secondary">Корзина пуста.</div>
 
     {% endif %}
 

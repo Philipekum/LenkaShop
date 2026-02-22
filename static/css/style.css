@@ -21,7 +21,7 @@
 	--main-text: #39392F;
 	--light-text: #B9AB9E;
 	--discount_price-text: #47853b;
-	--main-btn: #E6E7FB;
+	--main-btn: #000000;
 
 	--send-btn: #EFE7DB;
 }
@@ -102,6 +102,40 @@ h1{
 }
 
 
+@media (min-width: 992px) {
+	.product_price,
+	.product_name{	
+		margin-bottom: 2rem;
+		width: 100%;
+	}
+
+	.product_price .price_old,
+	.product_price{
+		font-size: 2rem;
+		line-height: 2.2rem;
+	}
+
+	.product_icon {
+		width: 32px;
+	}
+
+	.product_description {
+        margin-top: 3rem;
+    }
+
+	.add2cart_btn {
+		max-width: 200;
+		height: auto;
+		padding: 12px 25px;
+		font-size: 1rem;
+	}
+
+	.add2cart_btn:hover {
+		background-color: #007bff !important;
+		border-color: #007bff !important;
+		color: #FFFFFF !important;
+	}
+}
 /* h1, .h1 { font-size: 2rem; }
 h2, .h2 { font-size: 1.75rem; }
 h3, .h3 { font-size: 1.5rem; }

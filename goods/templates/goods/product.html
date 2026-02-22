@@ -88,12 +88,13 @@
             {% endif %}
 
 
-            <div class="add2cart_block order-2">
-                <button hx-post="{% url 'carts:cart_add' %}" hx-vals='{"product_id": "{{ product.id }}"}'
-                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' hx-swap="none"
-                    class="btn add2cart_btn primary-btn">
-                    Добавить в корзину
-                </button>
+            <div class="add2cart_block order-2 text-center text-lg-start">
+                <button
+                    hx-post="{% url 'carts:cart_add' %}"
+                    hx-vals='{"product_id": "{{ product.id }}"}'
+                    hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+                    hx-swap="none"
+                    class="btn add2cart_btn primary-btn">Добавить в корзину</button>
             </div>
         </div>
 
