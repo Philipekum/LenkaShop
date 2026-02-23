@@ -117,6 +117,7 @@ class OrderView(View):
                 phone_number=form.cleaned_data["phone_number"],
                 email=form.cleaned_data["email"],
                 delivery_address=form.cleaned_data["delivery_address"],
+                delivery_service=form.cleaned_data["delivery_service"],
             )
 
             success_url = reverse('orders:success_order',

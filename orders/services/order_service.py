@@ -1,6 +1,6 @@
 from django.db import transaction
 from carts.models import Cart
-from orders.models import Order, OrderItem
+from orders.models import Order, OrderItem, DeliveryService
 
 
 class EmptyCartError(Exception):
@@ -12,7 +12,8 @@ def create_order_from_cart(
     full_name: str,
     phone_number: str,
     email: str,
-    delivery_address: str
+    delivery_address: str,
+    delivery_service: DeliveryService,
 ) -> tuple[Order, float]:
 
     cart_items = Cart.objects.filter(session_key=session_key)
@@ -27,6 +28,7 @@ def create_order_from_cart(
             phone_number=phone_number,
             email=email,
             delivery_address=delivery_address,
+            delivery_service=delivery_service,
         )
 
         total_price = 0
