@@ -1,13 +1,20 @@
 venv/
+.venv/
 __pycache__/
+.ruff_cache/
+.mypy_cache/
 
 .vscode
 .idea
+mypy.ini
 
 db.sqlite3
 media/
 fixtures/
 staticfiles/
+logs/
 
 .env
 *.sql
+*.md
+TODO

@@ -1,14 +1,16 @@
 import os
-from dotenv import load_dotenv
 import requests
 import uuid
+
+from dotenv import load_dotenv
 
 
 def create_payment(order, total_price, return_url):
     load_dotenv(override=True)
 
     payment_session = requests.Session()
-    payment_session.auth = (os.getenv('PAYMENT_SHOP_ID'), os.getenv('PAYMENT_SECRET_KEY'))
+    payment_session.auth = (os.getenv('PAYMENT_SHOP_ID'), os.getenv(
+        'PAYMENT_SECRET_KEY'))
     PAYMENT_URL = os.getenv('PAYMENT_URL')
 
     payment_data = {
@@ -31,10 +33,10 @@ def create_payment(order, total_price, return_url):
         "Content-Type": "application/json"
     }
 
-    payment = payment_session.post(PAYMENT_URL, headers=headers, json=payment_data, timeout=5)
-
+    payment = payment_session.post(PAYMENT_URL, headers=headers,
+                                   json=payment_data, timeout=5)
 
     if payment.status_code == 200:
         return payment.json()
-    
+
     return None

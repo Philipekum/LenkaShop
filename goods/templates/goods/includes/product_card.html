@@ -1,0 +1,33 @@
+{% load static %}
+{% load format_tags %}
+
+<div>
+    <div class="mb-2">
+        <a href="{% url 'goods:product' product.slug %}">
+            {% with product_image=product.images.all.0 %}
+                {% if product_image %}
+                    <img class="catalog-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ product.name }}" loading="lazy">
+                {% else %}
+                    <img class="catalog-img" src="{% static 'images/No_Image.png' %}" alt="{{ product.name }}" loading="lazy">
+                {% endif %}
+            {% endwith %}
+        </a>
+    </div>
+    <div class="catalog-cart-info">
+        <a class="py-2 py-lg-4" href="{% url 'goods:product' product.slug %}">
+            <div class="product_item_name">{{ product.name }}</div>
+            {% if product.discount_price %}
+                <div class="product_item_price">
+                    <div class="old_price">{{ product.price|format_price }}</div>
+                    <div class="discount_price">{{ product.sell_price|format_price }}</div>
+                </div>
+            {% else %}
+                <div class="product_item_price">{{ product.price|format_price }}</div>
+            {% endif %}
+
+            {% if product.flag and product.flag.is_active %}
+                <p class="{{ product.flag.group }}">{{ product.flag.title }}</p>
+            {% endif %}
+        </a>
+    </div>
+</div>

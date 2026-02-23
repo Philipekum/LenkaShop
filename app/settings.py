@@ -29,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG_STATUS', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 if DEBUG:
     ALLOWED_HOSTS.append('127.0.0.1')
@@ -39,6 +39,8 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,16 +48,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'tinymce',
+    'adminsortable2',
 
     'main',
     'goods',
     'carts',
     'orders',
     'payments',
+    'delivery',
 ]
 
 MIDDLEWARE = [
+    'app.middlewares.TemporaryRedirectMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -64,9 +69,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-if os.getenv('MY_REDIRECT', 'False') == 'True':
-    MIDDLEWARE.append('app.middlewares.TemporaryRedirectMiddleware')
 
 ROOT_URLCONF = 'app.urls'
 
@@ -173,40 +175,186 @@ INTERNAL_IPS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-TINYMCE_DEFAULT_CONFIG = {
-    "menubar": False,
-    "width": "70%",
-    "selector": "textarea",
-    "plugins": "advlist autolink lists link image charmap preview anchor fullscreen insertdatetime media table code help wordcount autoresize",
-    "toolbar": "undo redo | styleselect | bold italic underline strikethrough | fontselect fontsize | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image table",
-    "content_css": "css/style.css",
-    "style_formats": [
-        {"title": "Paragraph", "block": "p"},
-        {"title": "Heading 2", "block": "h2", "classes": "h2"},
-        {"title": "Heading 3", "block": "h3", "classes": "h3"},
-        {"title": "Heading 4", "block": "h4", "classes": "h4"}
-    ],
-    "font_size_formats": "12px 14px 16px 18px 20px 24px 28px 32px",
-    "font_family_formats": "Inter=Inter, Arial=arial,helvetica,sans-serif",
-    "content_style": "body {font-family: Inter, Arial, sans-serif; font-size: 16px;}",
-    "forced_root_block": "p",
-    "branding": False
-}
+
+YOOKASSA_SHOP_ID = os.getenv('YOOKASSA_SHOP_ID')
+YOOKASSA_SECRET_KEY = os.getenv('YOOKASSA_SECRET_KEY')
+YOOKASSA_TEST_SHOP_ID = os.getenv('YOOKASSA_TEST_SHOP_ID') 
+YOOKASSA_TEST_SECRET_KEY = os.getenv('YOOKASSA_TEST_SECRET_KEY')
+YOOKASSA_ALLOWED_IPS = os.getenv('YOOKASSA_ALLOWED_IPS', '').split(',')
+
+
+LOG_DIR = BASE_DIR / 'logs'
+if not LOG_DIR.exists():
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
+
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+            'datefmt': '%d-%m-%Y %H:%M:%S',
         },
     },
+
+    'handlers': {
+        'console': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'payments_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'payments.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'orders_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'orders.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'goods_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'goods.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'carts_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'carts.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+        'delivery_file': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': BASE_DIR / 'logs' / 'delivery.log',
+            'maxBytes': 20*1024*1024,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'verbose',
+        },
+    },
+
     'loggers': {
         'payments': {
-            'handlers': ['console'],
+            'handlers': ['console', 'payments_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'carts': {
+            'handlers': ['console', 'carts_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'orders': {
+            'handlers': ['console', 'orders_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'goods': {
+            'handlers': ['console', 'goods_file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'delivery': {
+            'handlers': ['console', 'delivery_file'],
             'level': 'DEBUG',
             'propagate': False,
         },
     },
+}
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Админ-панель",
+    "site_header": "Администрация",
+    "site_brand": "Lenka",
+    "welcome_sign": "Добро пожаловать в админ-панель",
+    "copyright": "Магазин",
+
+    # Современный вид
+    "theme": "flatly",
+
+    # Иконки
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "products.products": "fas fa-cube",
+        "products.productimage": "fas fa-image",
+        "products.categories": "fas fa-folder",
+    },
+
+    # Меню
+    "order_with_respect_to": ["products", "products.products", "products.categories"],
+
+    # Кастомизация
+    "show_ui_builder": True,  # включить UI builder для дополнительной кастомизации
+    "topmenu_links": [
+        {"name": "Главная", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "products.products"},
+    ],
+
+    # Кастомизация бокового меню
+    "show_sidebar": True,
+    "navigation_expanded": True,
+
+    # Скрыть приложения/модели
+    "hide_apps": [],
+    "hide_models": [],
+
+    # Логин страница
+    "login_logo": None,
+
+    "site_logo": None,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-white navbar-light",
+    "no_navbar_border": False,
+    "navbar_fixed": True,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": True,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "flatly",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-outline-primary",
+        "secondary": "btn-outline-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
 }

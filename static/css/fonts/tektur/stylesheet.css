@@ -1,0 +1,234 @@
+@font-face {
+    font-family: 'Tektur SemiCondensed';
+    src: url('TekturSemiCondensed-Medium.eot');
+    src: local('Tektur SemiCondensed Medium'), local('TekturSemiCondensed-Medium'),
+        url('TekturSemiCondensed-Medium.eot?#iefix') format('embedded-opentype'),
+        url('TekturSemiCondensed-Medium.woff2') format('woff2'),
+        url('TekturSemiCondensed-Medium.woff') format('woff'),
+        url('TekturSemiCondensed-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('Tektur-SemiBold.eot');
+    src: local('Tektur SemiBold'), local('Tektur-SemiBold'),
+        url('Tektur-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('Tektur-SemiBold.woff2') format('woff2'),
+        url('Tektur-SemiBold.woff') format('woff'),
+        url('Tektur-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur Condensed';
+    src: url('TekturCondensed-SemiBold.eot');
+    src: local('Tektur Condensed SemiBold'), local('TekturCondensed-SemiBold'),
+        url('TekturCondensed-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('TekturCondensed-SemiBold.woff2') format('woff2'),
+        url('TekturCondensed-SemiBold.woff') format('woff'),
+        url('TekturCondensed-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur SemiCondensed';
+    src: url('TekturSemiCondensed-ExtraBold.eot');
+    src: local('Tektur SemiCondensed ExtraBold'), local('TekturSemiCondensed-ExtraBold'),
+        url('TekturSemiCondensed-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('TekturSemiCondensed-ExtraBold.woff2') format('woff2'),
+        url('TekturSemiCondensed-ExtraBold.woff') format('woff'),
+        url('TekturSemiCondensed-ExtraBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('Tektur-Black.eot');
+    src: local('Tektur Black'), local('Tektur-Black'),
+        url('Tektur-Black.eot?#iefix') format('embedded-opentype'),
+        url('Tektur-Black.woff2') format('woff2'),
+        url('Tektur-Black.woff') format('woff'),
+        url('Tektur-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur SemiCondensed';
+    src: url('TekturSemiCondensed-Regular.eot');
+    src: local('Tektur SemiCondensed Regular'), local('TekturSemiCondensed-Regular'),
+        url('TekturSemiCondensed-Regular.eot?#iefix') format('embedded-opentype'),
+        url('TekturSemiCondensed-Regular.woff2') format('woff2'),
+        url('TekturSemiCondensed-Regular.woff') format('woff'),
+        url('TekturSemiCondensed-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur Condensed';
+    src: url('TekturCondensed-ExtraBold.eot');
+    src: local('Tektur Condensed ExtraBold'), local('TekturCondensed-ExtraBold'),
+        url('TekturCondensed-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('TekturCondensed-ExtraBold.woff2') format('woff2'),
+        url('TekturCondensed-ExtraBold.woff') format('woff'),
+        url('TekturCondensed-ExtraBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('Tektur-Regular.eot');
+    src: local('Tektur Regular'), local('Tektur-Regular'),
+        url('Tektur-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Tektur-Regular.woff2') format('woff2'),
+        url('Tektur-Regular.woff') format('woff'),
+        url('Tektur-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur Condensed';
+    src: url('TekturCondensed-Regular.eot');
+    src: local('Tektur Condensed Regular'), local('TekturCondensed-Regular'),
+        url('TekturCondensed-Regular.eot?#iefix') format('embedded-opentype'),
+        url('TekturCondensed-Regular.woff2') format('woff2'),
+        url('TekturCondensed-Regular.woff') format('woff'),
+        url('TekturCondensed-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('Tektur-ExtraBold.eot');
+    src: local('Tektur ExtraBold'), local('Tektur-ExtraBold'),
+        url('Tektur-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('Tektur-ExtraBold.woff2') format('woff2'),
+        url('Tektur-ExtraBold.woff') format('woff'),
+        url('Tektur-ExtraBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur Condensed';
+    src: url('TekturCondensed-Bold.eot');
+    src: local('Tektur Condensed Bold'), local('TekturCondensed-Bold'),
+        url('TekturCondensed-Bold.eot?#iefix') format('embedded-opentype'),
+        url('TekturCondensed-Bold.woff2') format('woff2'),
+        url('TekturCondensed-Bold.woff') format('woff'),
+        url('TekturCondensed-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur SemiCondensed';
+    src: url('TekturSemiCondensed-Black.eot');
+    src: local('Tektur SemiCondensed Black'), local('TekturSemiCondensed-Black'),
+        url('TekturSemiCondensed-Black.eot?#iefix') format('embedded-opentype'),
+        url('TekturSemiCondensed-Black.woff2') format('woff2'),
+        url('TekturSemiCondensed-Black.woff') format('woff'),
+        url('TekturSemiCondensed-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur SemiCondensed';
+    src: url('TekturSemiCondensed-SemiBold.eot');
+    src: local('Tektur SemiCondensed SemiBold'), local('TekturSemiCondensed-SemiBold'),
+        url('TekturSemiCondensed-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('TekturSemiCondensed-SemiBold.woff2') format('woff2'),
+        url('TekturSemiCondensed-SemiBold.woff') format('woff'),
+        url('TekturSemiCondensed-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur SemiCondensed';
+    src: url('TekturSemiCondensed-Bold.eot');
+    src: local('Tektur SemiCondensed Bold'), local('TekturSemiCondensed-Bold'),
+        url('TekturSemiCondensed-Bold.eot?#iefix') format('embedded-opentype'),
+        url('TekturSemiCondensed-Bold.woff2') format('woff2'),
+        url('TekturSemiCondensed-Bold.woff') format('woff'),
+        url('TekturSemiCondensed-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('Tektur-Medium.eot');
+    src: local('Tektur Medium'), local('Tektur-Medium'),
+        url('Tektur-Medium.eot?#iefix') format('embedded-opentype'),
+        url('Tektur-Medium.woff2') format('woff2'),
+        url('Tektur-Medium.woff') format('woff'),
+        url('Tektur-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur Condensed';
+    src: url('TekturCondensed-Black.eot');
+    src: local('Tektur Condensed Black'), local('TekturCondensed-Black'),
+        url('TekturCondensed-Black.eot?#iefix') format('embedded-opentype'),
+        url('TekturCondensed-Black.woff2') format('woff2'),
+        url('TekturCondensed-Black.woff') format('woff'),
+        url('TekturCondensed-Black.ttf') format('truetype');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur Condensed';
+    src: url('TekturCondensed-Medium.eot');
+    src: local('Tektur Condensed Medium'), local('TekturCondensed-Medium'),
+        url('TekturCondensed-Medium.eot?#iefix') format('embedded-opentype'),
+        url('TekturCondensed-Medium.woff2') format('woff2'),
+        url('TekturCondensed-Medium.woff') format('woff'),
+        url('TekturCondensed-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Tektur';
+    src: url('Tektur-Bold.eot');
+    src: local('Tektur Bold'), local('Tektur-Bold'),
+        url('Tektur-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Tektur-Bold.woff2') format('woff2'),
+        url('Tektur-Bold.woff') format('woff'),
+        url('Tektur-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+

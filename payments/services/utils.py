@@ -1,9 +1,6 @@
-from dotenv import load_dotenv
-from app.settings import DEBUG
-import os
+import ipaddress
 
-
-load_dotenv(override=True)
+from django.conf import settings
 
 
 def get_client_ip(request):
@@ -15,13 +12,19 @@ def get_client_ip(request):
     return ip
 
 
-def validate_ip(ip):
-    allowed = os.getenv('PAYMENT_WEBHOOK_ALLOWED_IP').split(',')
+def validate_ip(ip, allowed_ips=None):
+    if settings.DEBUG:
+        return True
 
-    if DEBUG:
-        allowed.append(os.getenv('DEBUG_IP'))
-    
-    print(allowed)
+    if allowed_ips is None:
+        allowed_ips = settings.YOOKASSA_ALLOWED_IPS
 
-    return ip in allowed
- 
+    try:
+        ip_obj = ipaddress.ip_address(ip)
+        for allowed_ip in allowed_ips:
+            if ip_obj in ipaddress.ip_network(allowed_ip):
+                return True
+        return False
+
+    except ValueError:
+        return False

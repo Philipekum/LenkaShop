@@ -1,0 +1,92 @@
+.catalog-body{
+    flex-direction: row;
+}
+
+.catalog-nav{
+    width: 20%;
+}
+
+.catalog-nav ul li{
+    padding: 0 !important;
+}
+
+.catalog-nav ul > *:not(:last-child){
+    margin-bottom: 1.8rem;
+}
+
+.catalog-img{
+    width: 250px;
+    height: auto;
+}
+
+.catalog-main{
+    width: 80%;
+    gap: 50px
+}
+
+.catalog-cart-info{
+    text-transform: uppercase; 
+    text-align: center;
+}
+
+/* Стили для кнопок категорий */
+.category-button {
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;  /* Прозрачная граница по умолчанию */
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 1rem;
+    text-align: left;
+    text-decoration: none;
+    color: #39392F;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-button:hover {
+    background-color: #F5F5F5;
+    color: #39392F;
+}
+
+/* Активная категория (выбранная) */
+.category-button.active {
+    font-weight: 700 !important;  /* Жирный текст */
+    /* border: 2px solid #DC143C !important;  /* Красная рамка */
+    /* background-color: #FFF5F5 !important;  Светло-розовый фон (опционально) */ 
+    color: #39392F;
+}
+
+/* Убираем underline у ссылок */
+.category-button.active:hover {
+    color: #39392F;
+    text-decoration: none;
+}
+
+@media (max-width: 768px){
+    .catalog-body{
+        flex-direction: column;
+    }
+
+    .catalog-main{
+        justify-content: center;
+        width: 100%;
+        gap: 30px;
+    }
+
+    .catalog-nav{
+        width: auto;
+    }
+
+    .catalog-nav ul{
+        justify-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 10px;
+        column-gap: 20px;
+    }
+
+    .catalog-nav ul > *:not(:last-child){
+        margin-bottom: 0;
+    }
+}

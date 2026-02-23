@@ -1,75 +1,68 @@
+from django.shortcuts import render
 from django.views import View
-from django.http import JsonResponse
-from goods.models import Products
-from goods.templatetags.format_tags import format_price
-from .models import Cart
-from .mixins import CartMixin
+
+from carts.models import Cart
+from carts.mixins import CartMixin
 
 
 class CartAddView(CartMixin, View):
     def post(self, request):
-        product_id = request.POST.get("product_id")
-        product = Products.objects.get(id=product_id)
-        cart = self.get_cart(request, product=product)
+        product = self.get_validated_product(request)
+        cart = self.get_cart_for_product(request, product)
 
         if cart:
-            cart.quantity += 1
+            cart.quantity = min(cart.quantity + 1, 99)
             cart.save()
-        
         else:
-            Cart.objects.create(session_key=request.session.session_key, product=product, quantity=1)
+            Cart.objects.create(
+                session_key=request.session.session_key,
+                product=product,
+                quantity=1
+            )
 
-        response_data = {
-            "message": "Товар добавлен в корзину",
-            "cart_items_html": self.render_cart(request)
-        }
-
-        return JsonResponse(response_data)
+        cart_data = self.get_session_cart_data(request)
+        return render(request, 'carts/htmx/cart_add.html', {
+            'total_quantity': cart_data['total_quantity']
+        })
 
 
 class CartRemoveView(CartMixin, View):
     def post(self, request):
-        cart_id = request.POST.get("cart_id")
-
-        cart = self.get_cart(request, cart_id=cart_id)
-        quantity = cart.quantity
+        cart = self.get_validated_cart(request,
+                                       cart_id=request.POST.get("cart_id"))
         cart.delete()
 
-        total_price = Cart.objects.filter(session_key=request.session.session_key).total_price()
-        total_price = format_price(total_price)
+        cart_data = self.get_session_cart_data(request)
 
-        response_data = {
-            "message": "Товар удален из корзины",
-            "quantity_deleted": quantity,
-            "cart_items_html": self.render_cart(request),
-            "total_price": total_price,
-        }
+        if cart_data['total_quantity'] == 0:
+            return render(request, 'carts/htmx/cart_remove.html',
+                          {'empty': True})
 
-        return JsonResponse(response_data)
+        return render(request, 'carts/htmx/cart_remove.html', {
+            'empty': False,
+            'cart_id': cart.id,
+            'total_quantity': cart_data['total_quantity'],
+            'total_price': cart_data['total_price']
+        })
 
 
 class CartChangeView(CartMixin, View):
     def post(self, request):
-        cart_id = request.POST.get('cart_id')
+        cart = self.get_validated_cart(request,
+                                       cart_id=request.POST.get('cart_id'))
+        action = request.POST.get('action')
 
-        quantity = request.POST.get('quantity')
+        if action == 'increment':
+            cart.quantity = min(cart.quantity + 1, 99)
+        elif action == 'decrement' and cart.quantity > 1:
+            cart.quantity -= 1
 
-        cart = self.get_cart(request, cart_id=cart_id)
-
-        cart.quantity = request.POST.get('quantity')
         cart.save()
 
-        total_price = Cart.objects.filter(session_key=request.session.session_key).total_price()
-        total_price = format_price(total_price)
-
-        quantity = cart.quantity
-
-        response_data = {
-            "message": "Количество изменено",
-            "quantity": quantity,
-            "cart_items_html": self.render_cart(request),
-            "total_price": total_price,
-        }
-
-        return JsonResponse(response_data)
-    
+        cart_data = self.get_session_cart_data(request)
+        return render(request, 'carts/htmx/cart_change.html', {
+            'cart': cart,
+            'total_quantity': cart_data['total_quantity'],
+            'total_price': cart_data['total_price'],
+            'item_total_price': cart.products_price()
+        })

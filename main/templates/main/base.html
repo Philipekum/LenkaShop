@@ -11,60 +11,73 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta content="width=device-width, initial-scale=1.0, user-scalable=no" name="viewport">
   <title>{{ title }}</title>
-  <link rel="shortcut icon" href="{% static "icon/favicon.png" %}" type="image/x-icon">
+  <link rel="shortcut icon" href="{% static 'icon/favicon.png' %}" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" type='text/css' href={% static "css/bootstrap.min.css" %}>
-  <link rel="stylesheet" type='text/css' href="{% static "css/style.css" %}?v=1.0">
+  <link rel="stylesheet" type='text/css' href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type='text/css' href="{% static 'css/style.css' %}?v=1.0">
+  <script src="{% static 'js/htmx.min.js' %}"></script>
 
 </head>
 
 <body class="d-flex flex-column min-vh-100">
-    <header class="header fixed-top">
-      <div class="container">
-        <nav class="navbar navbar-expand-lg">
-          <div class="container-fluid px-0">
-            <a class="navbar-brand" href="{% url "main:index" %}">
-              <img src={% static "images/logo.png" %} alt="Lenka">
-            </a>
+    <header class="container">
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Переключатель навигации">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-            <div class="cart_block ms-lg-0 order-lg-3">
-              <a class="cart_lnk" href="#">
-                <img src="{% static "icon/cart.svg" %}" width="37" height="37" viewBox="0 0 37 37" fill="none" ></img>
+          <a href="{% url 'main:index' %}">
+            <img src="{% static 'images/Logo.svg' %}" alt="Lenka" class="nav-logo">
+          </a>
+
+          <div class="collapse navbar-collapse jc-center order-4 order-lg-2" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'goods:index' %}">Каталог</a>
+                </li>             
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'main:about_info' %}">О бренде</a>
+                </li>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'main:delivery_info' %}">Доставка и оплата</a>
+                </li>
+            </ul>
+          </div>
+
+          <!-- Сразу переход на страницу -->
+          <div class="order-2 order-lg-3">
+            <div class="icon-btn">
+              <a href="{% url 'orders:order' %}" >
+                <img class ="nav-icon" src="{% static 'images/cart.svg' %}" viewBox="0 0 37 37" fill="none" >
                 <span id="goods-in-cart-count" class="prod_in_cart">{{ carts.total_quantity }}</span>
               </a>
+            </div>
+          </div>
 
-              <div class="container" id="cart-items-container">
+          <!-- Иконка с модальным окном -->
+          <!-- <div class="order-2 order-lg-3">
+            <div class="icon-btn" data-bs-toggle="modal" data-bs-target="#cart-items-container">
+              <img src="{% static "images/cart.svg" %}" width="37" height="37" viewBox="0 0 37 37" fill="none" ></img>
+              <span id="goods-in-cart-count" class="prod_in_cart">{{ carts.total_quantity }}</span>
+            </div>
+
+            <div class="modal fade" id="cart-items-container" data-bs-backdrop="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
                 {% include "carts/cart_modal.html" %}
               </div>
-
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav ms-lg-auto me-16 mb-2 mb-lg-0 col-lg-7 justify-content-lg-between ">
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url "goods:index" %}">Каталог</a>
-                </li>             
-                {% header_links as header_links %}
-                {% for link in header_links %}
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{ link.get_absolute_url }}">{{ link.title }}</a>
-                  </li>
-                {% endfor %}
+          </div> -->
 
-              </ul>
-            </div>
-  
-          </div>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </header>
 
-    <section class="content_section"> 
+    <section> 
       <div class="container">
         {% block content %}
         {% endblock %}
@@ -72,58 +85,54 @@
     </section>
 
     <footer class="footer">
-      <div class="container">
-        <div class="row flex-column flex-lg-row justify-content-lg-between">
-          <div class="col-12 col-lg-4 order-2 order-lg-1 text-center text-lg-start pt-2 mb-4 mb-lg-0">
-            {% get_contact_info as contact %}
-            {% if contact %}
-              {% if contact.phone %}
-                <div class="mb_2_3 mb-lg-4">
-                  <a href="https://wa.me/{{ contact.phone }}"><img class="footer_icon" src={% static "icon/whatsapp-icon.png" %} alt="Chat on WhatsApp">{{ contact.phone|format_phone }}</a>
-                </div>             
-              {% endif %}
-              
-              {% if contact.email %}
-                <div class="">
-                  <a href="mailto:{{ contact.email }}"><img class="footer_icon" src={% static "icon/mail-icon.png" %} alt="contact email">{{ contact.email }}</a>
-                </div>           
-              {% endif %}
+      <div class="container flex jc-sb">
+        <div>
+          <p class="footer-title mb-3">Контакты</p>
+          {% get_contact_info as contact %}
+          {% if contact %}
+            {% if contact.phone %}
+              <div class="flex ai-center mb-1">
+                <img class="me-3 footer-icon" src="{% static 'images/whatsapp.svg' %}" alt="whatsapp">
+                <a href="https://wa.me/{{ contact.phone }}"                    
+                  target="_blank" 
+                  rel="noopener noreferrer">{{ contact.phone|format_phone }}</a>
+              </div>
             {% endif %}
 
-          </div>
+            {% if contact.email %}
+              <div class="flex ai-center mb-2">
+                <img class="me-3 footer-icon" src="{% static 'images/mail.svg' %}" alt="mail">
+                <a href="mailto:{{ contact.email }}"                     
+                  target="_blank" 
+                  rel="noopener noreferrer">{{  contact.email  }}</a>
+              </div>
+            {% endif %}
 
-          <div class="col-12 col-lg-6 order-3 order-lg-2 pt-1 pt-lg-0">
-            <nav class="navbar pt-0">
-              <ul class="navbar-nav flex-lg-row flex-lg-wrap align-items-lg-stretch col">
-                {% footer_links as footer_links %}
-                {% for link in footer_links %}
-                  <li class="nav-item col-lg-6">
-                    <a class="nav-link mb-4 mb-lg-3 text-center text-lg-start" href="{{ link.get_absolute_url }}">{{ link.title }}</a>
-                  </li>
-                {% endfor %}            
-
-              </ul>
-            </nav>
-          </div>
-
-          <div class="col-12 col-lg-auto text-center order-1 order-lg-3 pt-1 mb-4 mb-lg-0">
-            <a href="{% url "main:index" %}">
-              <img class="footer_logo" src= {% static "images/logo.png" %} alt="" width="100" height="100">
-            </a>
-          </div>
-
+            {% if contact.telegram %}
+              <div class="flex ai-center mb-2">
+                <img class="me-3" src="{% static 'images/telegram.svg' %}" alt="telegram">
+                <a href="https://t.me/{{ contact.telegram }}"
+                    target="_blank" 
+                    rel="noopener noreferrer">{{  contact.telegram  }}</a>
+              </div>
+            {% endif %}
+          {% endif %}
         </div>
+
+        <a href="{% url 'main:index' %}">
+          <img src="{% static 'images/Logo.svg' %}" alt="Lenka" class="nav-logo">
+        </a>
       </div>
   
     </footer>
 
     <div id="scroll-to-top" class="scroll-to-top" onclick="scrollToTop()">
-      <img src="{% static 'icon/up_arrow.png' %}" alt="Наверх">
+      <img src="{% static 'images/arrow-up.svg' %}" alt="Наверх">
     </div>
 
-    <script src={% static "js/bootstrap.bundle.min.js" %}></script>
-    <script src={% static "js/jquery-3.7.0.min.js" %}></script>
-    <script src="{% static "js/script.js" %}?v=1.0"></script>	
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'js/jquery-3.7.0.min.js' %}"></script>
+    <script src="{% static 'js/script.js' %}?v=1.0"></script>	
 </body>
 
 </html>

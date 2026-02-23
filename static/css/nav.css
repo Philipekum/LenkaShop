@@ -1,0 +1,50 @@
+header nav ul li .nav-link{
+    font-size: 1.25rem; 
+    font-family: var(--base-font); 
+    font-weight: 500; 
+    text-transform: uppercase; 
+}
+
+.nav-link.active{
+    font-weight: 400 !important;
+}
+
+.navbar {
+    padding: 40px 0;
+}
+
+.nav-logo{
+    width: 100px;
+    height: auto;
+}
+
+.nav-icon{
+    width: 40px;
+    height: auto;
+    margin-right: 0.1rem;
+}
+
+nav ul li:not(:last-child){
+    padding-right: 95px;
+}
+
+@media (max-width: 768px) {
+    nav ul li .nav-link{
+        font-size: 1.125rem; 
+    }
+
+    .navbar {
+        padding: 20px 0;
+    }
+
+    .nav-logo{
+        width: 60px;
+        height: auto;
+    }
+
+    .nav-icon{
+        width: 30px;
+        height: auto;
+    }
+}
+

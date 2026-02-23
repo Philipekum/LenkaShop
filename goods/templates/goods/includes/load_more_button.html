@@ -1,0 +1,9 @@
+<button
+    class="btn btn-primary"
+    hx-get="{% url 'goods:catalog_load_more' %}?offset={{ offset }}{% if category_slug %}&category={{ category_slug }}{% endif %}"
+    hx-target="#catalog-main"
+    hx-swap="beforeend"
+    hx-swap-oob="true"
+    id="load-more-button">
+    Показать ещё
+</button>

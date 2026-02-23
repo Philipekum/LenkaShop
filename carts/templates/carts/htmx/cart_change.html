@@ -1,0 +1,14 @@
+{% load format_tags %}
+
+<span id="goods-in-cart-count" class="prod_in_cart" hx-swap-oob="true">{{ total_quantity }}</span>
+<span id="cart-total-price" hx-swap-oob="true">{{ total_price|format_price }}</span>
+<span id="cart-item-{{ cart.id }}-price" hx-swap-oob="true">{{ item_total_price|format_price }}</span>
+<input 
+    id="cart-item-{{ cart.id }}-quantity"
+    hx-swap-oob="true"
+    value="{{ cart.quantity }}"
+    readonly
+    class="cart_item_q"
+    type="text"
+    name="q_item"
+/>

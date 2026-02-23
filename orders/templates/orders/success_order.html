@@ -1,132 +1,114 @@
 {% extends "main/base.html" %}
 {% load static %}
 {% load format_tags %}
+{% load format_phone_tags %}
 
 
 {% block content %}
 <div class="mx-2">
-  {% if messages %}
-    <div class="fixed-alert">
-        {% for message in messages %}
-            <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
-                <span class="me-auto">{{ message }}</span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    </div>
-  {% endif %}
   <div class="row">
     <div class="col-12">
-        <h1 class="mb-5 text-center text-lg-left">
-            {% if order.is_paid %}Спасибо за покупку!
-            {% else %}Заказ ждет оплаты{% endif %}
-        </h1>
+        <h1 class="mb-5 text-center text-lg-left">Заказ {{ order.get_status_display }}</h1>
     </div>
   </div>
 
-  <div class="row mb-5">
-    <div class="col-md-6">
-      <h2 class="h5">Номер заказа</h2>
-      <p>{{ order.order_id }}</p>
-    </div>
-    <div class="col-md-6 text-md-end">
-      <h2 class="h5">Дата заказа</h2>
-      <p>{{ order.created_timestamp|date:"d.m.Y H:i" }}</p>
-    </div>
-  </div>
-
-  <div class="row mb-5">
-    <div class="col-12">
-        <p>
-            Статус заказа - <strong>{{ order.get_status_display }}</strong>.
-        </p>
-      <p>
-        Информация о заказе направлена на <strong>{{ order.email }}</strong>.
-      </p>
-    </div>
-  </div>
+  <h2>Заказ №{{ order.order_id }}</h2>
+  <p>Заказчик: {{ order.full_name }}, {{ order.phone_number|format_phone }}</p>
+  <p>Информация о заказе направлена на {{ order.email }}.</p>
+  <p>Дата заказа: {{ order.created_timestamp|date:"d.m.Y H:i" }}</p>
+  <p>Статус заказа - {{ order.get_status_display }}.</p>
+  <p>Доставка: {{ order.delivery_service }} на адрес: {{ order.delivery_address }}</p>
+  
+  {% if not order.is_paid %}
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <form action="" method="post" id="payment-form">
+              {% csrf_token %}
+              <button class="btn btn-dark btn-lg" type="submit">Оплатить заказ</button>
+          </form>
+        </div>
+      </div>
+  {% endif %}
 
   <div class="row mb-5">
     <div class="col-12">
       <h3 class="mb-4">Товары в заказе</h3>
       {% if order_items %}
-        <ul class="list-group list-group-flush px-0">
-          {% for item in order_items %}
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-              <span>{{ item.name }}</span>
-              <span>{{ item.price|format_price }}</span>
-            </li>
-          {% endfor %}
-          <li class="list-group-item d-flex justify-content-between align-items-center px-0">
-            <span><u>Общая стоимость</u></span>
-            <span><u>{{ total_price|format_price }}</u></span>
-          </li>
-        </ul>
+        {% for item in order_items %}
+          <div id="item-item-{{ item.id }}">
+              <div class="flex ai-center order-item-body">
+                  <div class="flex ai-center order-content"> 
+                      <a href="{% url "goods:product" item.product.slug %}" class="order-card-img">
+                          {% with product_image=item.product.images.all.0 %}
+                              {% if product_image %}
+                                  <img class="order-img" src="{{ product_image.get_image_url_or_default }}" alt="{{ item.product.name }}" loading="lazy">
+                              {% else %}
+                                  <img class="order-img" src="{% static 'images/No_Image.png' %}" alt="{{ item.product.name }}" loading="lazy">
+                              {% endif %}
+                          {% endwith %}
+                      </a>
+
+                      <div class="order-ditale">
+                          <a href="{% url 'goods:product' item.product.slug %}" class="oreder-item-title">{{ item.product.name }}</a>
+
+                          <div class="order-cout-value number">{{ item.quantity }} шт.</div>
+                      </div>
+
+                  </div> 
+
+                      <div class="flex order-total-price">
+                          <p class="mb-0">
+                              <span id="item-item-{{ item.id }}-price">
+                                  {{ item.products_price|format_price }}
+                              </span>
+                          </p>
+                      </div>
+                      
+                  
+              </div>
+              <hr/>
+          </div>
+        {% endfor %}
+
+            <div class="order-final-price">
+        <div class="flex jc-sb">
+            <div>Стоимость покупки: </div>
+            <div>
+                <span id="cart-total-price">
+                    {{ total_price|format_price }}
+                </span>
+            </div>
+        </div>
+        <div class="flex jc-sb">
+            <div>Стоимость доставки: </div>
+            <div>999 ₽</div>
+        </div>
+        <div class="flex jc-sb">
+            <div>Итого к оплате:</div>
+            <div>99 999 ₽</div>
+        </div>
+    </div>
+
       {% else %}
         <p>Список товаров пуст.</p>
       {% endif %}
     </div>
   </div>
-
-  {% if not order.is_paid %}
-    <div class="row mb-4">
-      <div class="col-12 text-center">
-        <form action="" method="post" id="payment-form">
-            {% csrf_token %}
-            <button class="btn btn-dark btn-lg" type="submit">Оплатить заказ</button>
-        </form>
-      </div>
-    </div>
-  {% endif %}
 </div>
 
-  {% if similar_products and order.is_paid%}      
-  <h2 class="text-center related_title pt-5 mt-5 mb-4">Смотрите также</h2>
+  {% if similar_products and order.is_paid %}      
+    <h2 class="text-center related_title pt-5 mt-5 mb-4">Смотрите также</h2>
 
-  <div class="row flex-wrap product_list">
-      {% for similar_product in similar_products %}
-      
-          <div class="product_item col-6 col-lg-4 mb-lg-2">
-              
-              <div class="product_item_img">
-                  {% with main_image=similar_product.images.all.0 image_alt=similar_product.images.all.1 %}
-                      <a href="{% url "goods:product" similar_product.slug %}">
-                          {% if main_image %}
-                              <img class="first_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                          {% else %}
-                              <img class="first_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                          {% endif %}
-                          
-                          {% if image_alt %}
-                              <img class="second_img" src="{{ image_alt.image.url }}" class="d-block w-100" alt="{{ product.name }}">
-                          {% elif not main_image %}
-                              <img class="second_img" src="{% static 'images/no-product-image.jpg' %}" class="d-block w-100" alt="No Product Image">
-                          {% else %}
-                              <img class="second_img" src="{{ main_image.image.url }}" class="d-block w-100" alt="{{ product.name }}">                                        
-                          {% endif %}
-                      </a>
-                  {% endwith %}
-              </div>
+    <div class="row flex-wrap product_list">
+        {% for similar_product in similar_products %}
+            <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+                {% include "goods/includes/product_card.html" with product=similar_product %}
+            </div>
+        {% endfor %}
+            <div class="col-6 col-md-4 col-lg-3 mb-4 d-flex justify-content-center">
+                <u><a href="{% url 'goods:index' %}">Перейти в каталог...</a></u>
+            </div>
+    </div>
 
-              <div class="product_item_info">
-                  <a class="py-2 py-lg-4" href="{% url "goods:product" similar_product.slug %}">
-                      <div class="product_item_name">{{ similar_product.name }}</div>                            
-                          {% if similar_product.discount_price %}
-                              <div class="product_item_price">
-                                  <div class="price_old">{{ similar_product.price|format_price }}</div>
-                                  <div>{{ similar_product.sell_price|format_price }}</div>
-                              </div>
-
-                          {% else %} 
-                              <div class="product_item_price">{{ similar_product.price|format_price }}</div>
-
-                          {% endif %}
-                  </a>
-              </div>
-          </div>
-
-      {% endfor %}
-  </div>
-
-{% endif %}
+  {% endif %}
 {% endblock %}

@@ -1,0 +1,27 @@
+.btn{
+    background-color: var(--main-btn);
+    color: #FFFFFF;
+    text-transform: uppercase;
+    border-radius: 5px;
+    padding: 15px 30px;
+    
+    font-size: 1.125rem; 
+    font-family: var(--base-font); 
+    font-weight: 300; 
+    text-transform: uppercase;
+    text-align: center;           /* центрирование текста */
+    display: inline-block;        /* корректное отображение кнопки */
+    white-space: nowrap;          /* запрет переноса текста (опционально) */
+    /* white-space: pre-wrap; */
+}
+
+.icon-btn{
+    cursor: pointer;
+}
+
+.increment-btn{
+    border: none;
+    background-color: inherit ;
+    font-size: 2rem;
+    font-weight: 200;
+}

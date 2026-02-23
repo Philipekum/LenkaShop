@@ -1,15 +1,40 @@
-html{
-	height:100%;
-}
+@import "./fonts/tektur/stylesheet.css";
+@import "./fonts/LXGW_Marker_Gothic/stylesheet.css";
+@import "./flex.css";
+@import "./btn.css";
+@import "./input.css";
+@import "./nav.css";
+@import "./footer.css";
+@import "./cart-modal.css";
+@import "./order.css";
+@import "./catalog.css";
+@import "./home.css";
+
 :root {
 	--base-font: 'Inter', Arial, sans-serif;
-	--base-font-size: 16px;
+	--h1-font: 'LXGW Marker Gothic';
+	--home-h1-font: 'Tektur SemiCondensed';
+	--base-font-size: 14px;
 	--line-height: 1.5;
+
+	--bg-light: #FCFBFA;
+	--main-text: #39392F;
+	--light-text: #B9AB9E;
+	--discount_price-text: #47853b;
+	--main-btn: #000000;
+
+	--send-btn: #EFE7DB;
 }
+
+@media (min-width: 768px) {
+  :root {
+    --base-font-size: 16px;
+  }
+}
+
 body{
-	height:100%;
-	background: var(--bs-white);
-	color:var(--bs-black);
+	background: var(--bg-light);
+	color:var(--main-text);
 
 	font-family: var(--base-font);
 	font-size: var(--base-font-size);
@@ -17,15 +42,433 @@ body{
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	display:flex;
+	/* display:flex;
 	flex-direction:column;
-	justify-content:space-between;
+	justify-content:space-between; */
 }
 a, a:hover, a:active, a:focus{
-	color:var(--bs-black);
+	color:var(--main-text);
 	text-decoration:none;
 }
-h1, .h1 { font-size: 2rem; }
+
+ul {
+	list-style: none;
+	padding: 0;
+}
+
+h1{
+	font-family: var(--h1-font);
+	font-size: 2.5rem;
+	text-transform: uppercase;
+}
+
+.scroll-to-top {
+	position: fixed;
+	bottom: 40px;
+	right: 10px;
+	width: 50px;
+	height: 50px;
+	display: none; 
+	cursor: pointer;
+	z-index: 1000;
+	background-color: var(--bg-light);
+	border-radius: 50%; 
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+	justify-content: center;
+	align-items: center;
+}
+  
+.scroll-to-top img { 
+	opacity: 0.5;
+	width: 70%;
+	height: auto;
+	object-fit: contain;
+}
+
+.old_price{
+	font-size: 0.8rem;
+	color: var(--light-text);
+	text-decoration: line-through;
+}
+.discount_price{
+	font-weight: 600;
+	color: var(--discount_price-text);
+}
+
+.cart_q,
+.cart_menu_q {
+	position: relative !important;
+	width: 120px !important;
+	height: 44px !important;
+	border-radius: 22px !important;
+	background-color: #FCFBFA !important;
+	border: 1px solid #E0E0E0 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	overflow: hidden !important;
+	flex-shrink: 0 !important;
+}
+
+.cart_item_q,
+.cart_menu_item_q {
+	width: 60px !important;
+	min-width: 60px !important;
+	max-width: 60px !important;
+    height: 100% !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #39392F !important;
+    padding: 0 !important;
+    margin: 0 !important;
+	outline: 0 !important;
+	box-sizing: none !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.cart_item_q::-webkit-outer-spin-button,
+.cart_item_q::-webkit-inner-spin-button,
+.cart_menu_item_q::-webkit-outer-spin-button,
+.cart_menu_item_q::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.cart_item_q:focus,
+.cart_menu_item_q:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.q_btn {
+    position: absolute !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: 35px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    background: transparent !important;
+    font-size: 1.5rem !important;
+    font-weight: 300 !important;
+    color: #39392F !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+	outline: none !important;
+	box-shadow: none !important;
+    transition: color 0.3s ease !important;
+}
+
+.q_btn:hover {
+    color: #007bff !important;
+}
+
+.q_btn.decrement {
+    left: 0 !important;
+}
+
+.q_btn.increment {
+    right: 0 !important;
+}
+
+.order-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #39392F;
+    margin-bottom: 0.5rem;
+    align-self: flex-start;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: var(--base-font);
+    color: #39392F;
+    background-color: #FCFBFA;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Контейнер с радио-кнопками */
+#id_delivery_service,
+.form-group div div:has(input[type="radio"]) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 350px;
+}
+
+/* Убираем стили у вложенных div */
+#id_delivery_service > div,
+.form-group div div:has(input[type="radio"]) > div {
+    margin: 0;
+}
+
+/* Скрываем стандартные radio кнопки */
+#id_delivery_service input[type="radio"],
+.form-group input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Стили для label с радио-кнопкой */
+#id_delivery_service label,
+.form-group div label:has(input[type="radio"]) {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem 0.75rem 3rem;  /* Отступ слева для кастомного radio */
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: #39392F;
+    background-color: #FCFBFA;
+    position: relative;
+    margin-bottom: 0;
+}
+
+/* Кастомный radio (кружок) - используем ::before */
+#id_delivery_service label::before,
+.form-group div label:has(input[type="radio"])::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #E0E0E0;
+    border-radius: 50%;
+    background-color: #FCFBFA;
+    transition: all 0.3s ease;
+}
+
+/* Внутренний кружок при выборе - используем ::after */
+#id_delivery_service input[type="radio"]:checked + label::after,
+#id_delivery_service label:has(input[type="radio"]:checked)::after,
+.form-group div label:has(input[type="radio"]:checked)::after {
+    content: '';
+    position: absolute;
+    left: 1.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #007bff;
+}
+
+/* Hover эффект */
+#id_delivery_service label:hover,
+.form-group div label:has(input[type="radio"]):hover {
+    background-color: #F5F5F5;
+    border-color: #D0D0D0;
+}
+
+/* Выбранная радио-кнопка */
+#id_delivery_service input[type="radio"]:checked + label,
+#id_delivery_service label:has(input[type="radio"]:checked),
+.form-group div label:has(input[type="radio"]:checked) {
+    background-color: #E6E7FB;
+    border-color: #007bff;
+}
+
+/* Кружок при выборе */
+#id_delivery_service input[type="radio"]:checked + label::before,
+#id_delivery_service label:has(input[type="radio"]:checked)::before,
+.form-group div label:has(input[type="radio"]:checked)::before {
+    border-color: #007bff;
+}
+
+/* .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: #39392F;
+}
+
+.radio-group label::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    border: 2px solid #E0E0E0;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.radio-group input[type="radio"]:checked + label {
+    background-color: #E6E7FB;
+    border-color: #007bff;
+}
+
+.radio-group input[type="radio"]:checked + label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: inset 0 0 0 4px #FCFBFA;
+}
+
+.radio-group label:hover {
+    background-color: #F5F5F5;
+} */
+
+.city-suggestions {
+    margin-top: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    background-color: #FCFBFA;
+}
+
+.form-buttons {
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.form-buttons .btn {
+    width: 100%;
+    max-width: 100%;
+}
+
+
+@media (max-width: 768px) {
+	h1{
+		font-size: 1.5rem;
+	}
+
+	.price_old {
+        font-size: 0.9rem !important;
+        color: #B9AB9E !important;
+        text-decoration: line-through !important;
+    }
+    
+    .product_price {
+        font-size: 1.5rem !important;
+    }
+
+	.cart_q,
+    .cart_menu_q {
+        width: 100px;
+        height: 38px;
+        border-radius: 19px;
+    }
+    
+    .q_btn {
+        width: 30px !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .cart_item_q,
+    .cart_menu_item_q {
+        font-size: 0.9rem !important;
+    }
+}
+
+.prod_in_cart{
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+	color: var(--bs-black);
+	display: inline-flex;
+	align-items: center;
+	text-align: center;
+	margin-left: 1rem;
+}
+
+@media (min-width: 992px) {
+	.product_price,
+	.product_name{	
+		margin-bottom: 2rem;
+		width: 100%;
+	}
+
+	.product_price{
+		font-size: 2rem;
+		line-height: 2.2rem;
+		font-weight: 600;
+		color: #39392F;
+	}
+
+
+	.product_price .price_old{
+		font-size: 1.25rem !important;
+		line-height: 1.5rem !important;
+		color: #B9AB9E !important;
+		text-decoration: line-through !important;
+		font-weight: 300 !important;
+		margin-right: 1rem;
+	}
+
+	.product_icon {
+		width: 32px;
+	}
+
+	.product_description {
+        margin-top: 3rem;
+    }
+
+	.add2cart_btn {
+		max-width: 300px;
+		height: auto;
+		padding: 12px 25px;
+		font-size: 1rem;
+	}
+
+	.add2cart_btn:hover {
+		background-color: #007bff !important;
+		border-color: #007bff !important;
+		color: #FFFFFF !important;
+	}
+}
+/* h1, .h1 { font-size: 2rem; }
 h2, .h2 { font-size: 1.75rem; }
 h3, .h3 { font-size: 1.5rem; }
 h4, .h4 { font-size: 1.25rem; }
@@ -62,7 +505,7 @@ p {
 .container-xxl {
 	--bs-gutter-x: 1.25rem;
 }
-.header {background: var(--bs-white);}
+
 .navbar-nav{padding: 0 .7rem;}
 .nav-link{
 	color: var(--bs-black);
@@ -152,7 +595,7 @@ p {
 	visibility: hidden; 
 	padding-top: 8px;
 }
-.header .cart_block.open .cart_menu {
+.cart_block.open .cart_menu {
 	display: block;
 	visibility: visible;
 	-webkit-animation-name: cart-menu__hidden-toggle;
@@ -275,12 +718,12 @@ p {
 .first_img {
 	opacity: 1;
 	z-index: 2;
-	position: relative;
+	position: relative; */
 /* 	-webkit-transition: all 0.5s ease-out 0s;
 	-moz-transition: all 0.5s ease-out 0s;
 	-o-transition: all 0.5s ease-out 0s;
 	transition: all 0.5s ease-out 0s;	 */
-	width:100%;
+	/* width:100%;
 	max-height:100%;
 }
 .second_img {
@@ -522,9 +965,9 @@ p {
 	margin-bottom: 1.5rem;
 	padding-left: 15px;
 	padding-right: 25px;
-}
+} */
 /*.checkout_form_block {}*/
-.checkout_input {
+/* .checkout_input {
 	height: 45px;
 	font-family: 'Inter';
 	font-style: normal;
@@ -629,86 +1072,65 @@ p {
 	width: 100%; 
 	height: 100%;
 	object-fit: cover;
-}
+} */
 
 /* Обёртка карусели на всю ширину (или ширину контейнера) */
-.fullwidth-carousel-wrapper {
+/* .fullwidth-carousel-wrapper { */
 	/* Если действительно нужен на всю ширину браузера (за пределы .container),
 	   можно обнулить отступы или использовать .container-fluid */
-	width: 100%;
-	margin: 0 auto; /* на всякий случай, если хотим центрировать */
-  }
+	/* width: 100%; */
+	/* margin: 0 auto; на всякий случай, если хотим центрировать */
+  /* } */
   
   /* Сам карусельный блок, который поддерживает соотношение 16:9 */
-  .my-fullwidth-carousel {
+  /* .my-fullwidth-carousel {
 	position: relative;
 	width: 100%;
-	aspect-ratio: 16/9;  /* фиксируем 16:9 */
+	aspect-ratio: 16/9;  фиксируем 16:9 */
 	/* Если вам нужны фиксированная высота, 
 	   можно использовать: height: 500px; 
 	   или любую другую, вместо aspect-ratio. */
-  }
+  /* } */
   
   /* Важно тянуть .carousel-inner и .carousel-item 
 	 во всю доступную ширину/высоту родителя */
-  .my-fullwidth-carousel .carousel-inner,
+  /* .my-fullwidth-carousel .carousel-inner,
   .my-fullwidth-carousel .carousel-item {
 	width: 100%;
 	height: 100%;
 	position: relative; 
-	overflow: hidden; /* чтобы «обрезались» края */
-  }
+	overflow: hidden; чтобы «обрезались» края */
+  /* } */
   
   /* Изображение растягиваем и обрезаем лишнее */
-  .my-fullwidth-carousel .carousel-item img {
+  /* .my-fullwidth-carousel .carousel-item img {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;      /* «обрезаем» лишнее по краям */
-	object-position: center;/* центрируем по умолчанию */
-	display: block;
-  }
-  
+	object-fit: cover;      «обрезаем» лишнее по краям */
+	/* object-position: center;центрируем по умолчанию */
+	/* display: block; */
+  /* } */
+  /*  */
   /* Управляем позиционированием кнопок переключения */
-  .my-fullwidth-carousel .carousel-control-prev,
-  .my-fullwidth-carousel .carousel-control-next {
-	width: auto;       /* убираем слишком широкий «клик-зону» по умолчанию */
+  /* .my-fullwidth-carousel .carousel-control-prev,
+  .my-fullwidth-carousel .carousel-control-next { */
+	/* width: auto;       убираем слишком широкий «клик-зону» по умолчанию
 	top: 50%;          
-	transform: translateY(-50%); 
+	transform: translateY(-50%);  */
 	/* Можете дополнительно задать left/right, 
 	   если надо придвинуть ближе или дальше к краям */
-  }
+  /* } */
   
-  .my-fullwidth-carousel .carousel-control-prev {
-	left: 1rem;  /* или другое значение, насколько хотите сдвинуть */
-  }
+  /* .my-fullwidth-carousel .carousel-control-prev { */
+	/* left: 1rem;  или другое значение, насколько хотите сдвинуть */
+  /* } */
   
-  .my-fullwidth-carousel .carousel-control-next {
-	right: 1rem; /* то же самое для правой кнопки */
-  }
+  /* .my-fullwidth-carousel .carousel-control-next { */
+	/* right: 1rem; то же самое для правой кнопки */
+  /* } */
 
-  /* Кнопка прокрутки наверх */
-.scroll-to-top {
-	position: fixed;
-	bottom: 20px; /* Отступ от низа */
-	right: 20px; /* Отступ от правого края */
-	width: 100px; /* Размер кнопки */
-	height: 100px;
-	display: none; /* Скрываем по умолчанию */
-	cursor: pointer;
-	z-index: 1000; /* Чтобы всегда быть выше остальных элементов */
-	background-color: rgba(255, 255, 255, 1); /* Фон для большей читаемости */
-	border-radius: 50%; 
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
-	justify-content: center;
-	align-items: center;
-  }
-  
-  .scroll-to-top img {
-	width: 70%; /* Размер изображения относительно кнопки */
-	height: auto;
-	object-fit: contain;
-  }
 
+  /*
   .fixed-alert {
     position: fixed;
     top: 10px;
@@ -722,13 +1144,13 @@ p {
 
 @media (min-width: 576px) {
 	
-}/*678*/
-@media (min-width: 768px) {
+}678 */
+/* @media (min-width: 768px) { */
 	
 }/*768*/
-@media (min-width: 992px) {
-	body{
-		font-size: 1rem;
+/* @media (min-width: 992px) { */
+	/* body{ */
+		/* font-size: 1rem;
 		line-height: 1.5rem;
 	}
 	.navbar {--bs-navbar-padding-y: 0.5rem;}
@@ -966,9 +1388,9 @@ p {
 		padding-top: 3rem;
 		padding-bottom: 3rem;
 		margin-bottom: 4rem;
-	}
+	} */
 /*	.checkout_form_block {} */
-	.checkout_input {
+	/* .checkout_input {
 		height: 55px;
 		font-size: 1.25rem;
 		line-height: 1.5rem;
@@ -990,20 +1412,20 @@ p {
 	}
 	.checkout_form_block .form-check-label a{text-decoration:underlined;}
 	.chekout_btn{height: 75px;}
+ */
 
-
-}/*992*/
-@media (min-width: 1200px) {
+/* }992 */
+/* @media (min-width: 1200px) {
 	.product_list {
 		gap: 2rem 1.5rem;
 		margin-bottom: 5.1rem;
 	}
-	.header {padding: .5rem 0;}
-	.content_section {margin-top: 130px;margin-bottom: 100px;}
-	.product_content_block {top: 130px;}
-}/*1200*/
 
-@media (min-width: 1440px) {
+	.content_section {margin-top: 130px;margin-bottom: 100px;}
+	.product_content_block {top: 130px;} */
+/* }1200 */
+
+/* @media (min-width: 1440px) {
 	.container{
 		--bs-gutter-x: 244px;
 	}
@@ -1012,9 +1434,9 @@ p {
 		margin-bottom: 7.1rem;
 	}
 	.product_image_block .d-lg-flex.carousel-inner {gap: 1.2rem;}
-	.header {padding: 2.3rem 0;}
+	
 	.navbar-brand img {width: 100px;}
 	.content_section {margin-top: 205px;margin-bottom: 120px;}
-	.product_content_block {top: 200px;	}
+	.product_content_block {top: 200px;	} */
 
-}/*1440*/
+/* }1440 */
