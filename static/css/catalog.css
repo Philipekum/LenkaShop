@@ -29,6 +29,39 @@
     text-align: center;
 }
 
+/* Стили для кнопок категорий */
+.category-button {
+    display: block;
+    padding: 0.75rem 1rem;
+    border: 1px solid transparent;  /* Прозрачная граница по умолчанию */
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 1rem;
+    text-align: left;
+    text-decoration: none;
+    color: #39392F;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.category-button:hover {
+    background-color: #F5F5F5;
+    color: #39392F;
+}
+
+/* Активная категория (выбранная) */
+.category-button.active {
+    font-weight: 700 !important;  /* Жирный текст */
+    /* border: 2px solid #DC143C !important;  /* Красная рамка */
+    /* background-color: #FFF5F5 !important;  Светло-розовый фон (опционально) */ 
+    color: #39392F;
+}
+
+/* Убираем underline у ссылок */
+.category-button.active:hover {
+    color: #39392F;
+    text-decoration: none;
+}
 
 @media (max-width: 768px){
     .catalog-body{

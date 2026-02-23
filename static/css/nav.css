@@ -1,4 +1,4 @@
-nav ul li .nav-link{
+header nav ul li .nav-link{
     font-size: 1.25rem; 
     font-family: var(--base-font); 
     font-weight: 500; 
@@ -21,6 +21,7 @@ nav ul li .nav-link{
 .nav-icon{
     width: 40px;
     height: auto;
+    margin-right: 0.1rem;
 }
 
 nav ul li:not(:last-child){

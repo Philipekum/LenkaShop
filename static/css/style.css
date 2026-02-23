@@ -95,12 +95,333 @@ h1{
 	color: var(--discount_price-text);
 }
 
+.cart_q,
+.cart_menu_q {
+	position: relative !important;
+	width: 120px !important;
+	height: 44px !important;
+	border-radius: 22px !important;
+	background-color: #FCFBFA !important;
+	border: 1px solid #E0E0E0 !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	overflow: hidden !important;
+	flex-shrink: 0 !important;
+}
+
+.cart_item_q,
+.cart_menu_item_q {
+	width: 60px !important;
+	min-width: 60px !important;
+	max-width: 60px !important;
+    height: 100% !important;
+    border: none !important;
+    background: transparent !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    font-weight: 400 !important;
+    color: #39392F !important;
+    padding: 0 !important;
+    margin: 0 !important;
+	outline: 0 !important;
+	box-sizing: none !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.cart_item_q::-webkit-outer-spin-button,
+.cart_item_q::-webkit-inner-spin-button,
+.cart_menu_item_q::-webkit-outer-spin-button,
+.cart_menu_item_q::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+}
+
+.cart_item_q:focus,
+.cart_menu_item_q:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.q_btn {
+    position: absolute !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: 35px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: none !important;
+    background: transparent !important;
+    font-size: 1.5rem !important;
+    font-weight: 300 !important;
+    color: #39392F !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+	outline: none !important;
+	box-shadow: none !important;
+    transition: color 0.3s ease !important;
+}
+
+.q_btn:hover {
+    color: #007bff !important;
+}
+
+.q_btn.decrement {
+    left: 0 !important;
+}
+
+.q_btn.increment {
+    right: 0 !important;
+}
+
+.order-form {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #39392F;
+    margin-bottom: 0.5rem;
+    align-self: flex-start;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-family: var(--base-font);
+    color: #39392F;
+    background-color: #FCFBFA;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Контейнер с радио-кнопками */
+#id_delivery_service,
+.form-group div div:has(input[type="radio"]) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 350px;
+}
+
+/* Убираем стили у вложенных div */
+#id_delivery_service > div,
+.form-group div div:has(input[type="radio"]) > div {
+    margin: 0;
+}
+
+/* Скрываем стандартные radio кнопки */
+#id_delivery_service input[type="radio"],
+.form-group input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Стили для label с радио-кнопкой */
+#id_delivery_service label,
+.form-group div label:has(input[type="radio"]) {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem 0.75rem 3rem;  /* Отступ слева для кастомного radio */
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: #39392F;
+    background-color: #FCFBFA;
+    position: relative;
+    margin-bottom: 0;
+}
+
+/* Кастомный radio (кружок) - используем ::before */
+#id_delivery_service label::before,
+.form-group div label:has(input[type="radio"])::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    width: 18px;
+    height: 18px;
+    border: 2px solid #E0E0E0;
+    border-radius: 50%;
+    background-color: #FCFBFA;
+    transition: all 0.3s ease;
+}
+
+/* Внутренний кружок при выборе - используем ::after */
+#id_delivery_service input[type="radio"]:checked + label::after,
+#id_delivery_service label:has(input[type="radio"]:checked)::after,
+.form-group div label:has(input[type="radio"]:checked)::after {
+    content: '';
+    position: absolute;
+    left: 1.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #007bff;
+}
+
+/* Hover эффект */
+#id_delivery_service label:hover,
+.form-group div label:has(input[type="radio"]):hover {
+    background-color: #F5F5F5;
+    border-color: #D0D0D0;
+}
+
+/* Выбранная радио-кнопка */
+#id_delivery_service input[type="radio"]:checked + label,
+#id_delivery_service label:has(input[type="radio"]:checked),
+.form-group div label:has(input[type="radio"]:checked) {
+    background-color: #E6E7FB;
+    border-color: #007bff;
+}
+
+/* Кружок при выборе */
+#id_delivery_service input[type="radio"]:checked + label::before,
+#id_delivery_service label:has(input[type="radio"]:checked)::before,
+.form-group div label:has(input[type="radio"]:checked)::before {
+    border-color: #007bff;
+}
+
+/* .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.radio-group input[type="radio"] {
+    display: none;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    color: #39392F;
+}
+
+.radio-group label::before {
+    content: '';
+    width: 18px;
+    height: 18px;
+    border: 2px solid #E0E0E0;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.radio-group input[type="radio"]:checked + label {
+    background-color: #E6E7FB;
+    border-color: #007bff;
+}
+
+.radio-group input[type="radio"]:checked + label::before {
+    background-color: #007bff;
+    border-color: #007bff;
+    box-shadow: inset 0 0 0 4px #FCFBFA;
+}
+
+.radio-group label:hover {
+    background-color: #F5F5F5;
+} */
+
+.city-suggestions {
+    margin-top: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #E0E0E0;
+    border-radius: 5px;
+    background-color: #FCFBFA;
+}
+
+.form-buttons {
+    margin-top: 2rem;
+    width: 100%;
+}
+
+.form-buttons .btn {
+    width: 100%;
+    max-width: 100%;
+}
+
+
 @media (max-width: 768px) {
 	h1{
 		font-size: 1.5rem;
 	}
+
+	.price_old {
+        font-size: 0.9rem !important;
+        color: #B9AB9E !important;
+        text-decoration: line-through !important;
+    }
+    
+    .product_price {
+        font-size: 1.5rem !important;
+    }
+
+	.cart_q,
+    .cart_menu_q {
+        width: 100px;
+        height: 38px;
+        border-radius: 19px;
+    }
+    
+    .q_btn {
+        width: 30px !important;
+        font-size: 1.25rem !important;
+    }
+    
+    .cart_item_q,
+    .cart_menu_item_q {
+        font-size: 0.9rem !important;
+    }
 }
 
+.prod_in_cart{
+	font-size: 1.25rem;
+	line-height: 1.5rem;
+	color: var(--bs-black);
+	display: inline-flex;
+	align-items: center;
+	text-align: center;
+	margin-left: 1rem;
+}
 
 @media (min-width: 992px) {
 	.product_price,
@@ -109,10 +430,21 @@ h1{
 		width: 100%;
 	}
 
-	.product_price .price_old,
 	.product_price{
 		font-size: 2rem;
 		line-height: 2.2rem;
+		font-weight: 600;
+		color: #39392F;
+	}
+
+
+	.product_price .price_old{
+		font-size: 1.25rem !important;
+		line-height: 1.5rem !important;
+		color: #B9AB9E !important;
+		text-decoration: line-through !important;
+		font-weight: 300 !important;
+		margin-right: 1rem;
 	}
 
 	.product_icon {
@@ -124,7 +456,7 @@ h1{
     }
 
 	.add2cart_btn {
-		max-width: 200;
+		max-width: 300px;
 		height: auto;
 		padding: 12px 25px;
 		font-size: 1rem;
