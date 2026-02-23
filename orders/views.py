@@ -2,7 +2,7 @@ import random
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from django.views import View
 
@@ -76,9 +76,9 @@ class SuccessOrderView(View):
                 amount=total_price
             )
 
-            return JsonResponse({
-                'redirect_url': payment_data['confirmation_url']
-            })
+            confirmation_url = payment_data['confirmation_url']
+
+            return redirect(confirmation_url)
 
         except Exception:
             # logger.error(f"Payment creation error: {str(e)}")
