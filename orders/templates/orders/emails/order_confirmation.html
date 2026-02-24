@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Заказ оформлен</title>
+</head>
+<body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    <div style="background-color: #f8f9fa; padding: 20px; text-align: center;">
+        <h1 style="color: #333;">Спасибо за заказ!</h1>
+    </div>
+    
+    <div style="padding: 20px;">
+        <p>Здравствуйте, <strong>{{ order.full_name }}</strong>!</p>
+        <p>Ваш заказ №<strong>{{ order.order_id }}</strong> успешно оформлен.</p>
+        
+        <h3>Детали заказа:</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">Статус:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ order.get_status_display }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">Телефон:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ order.phone_number }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">Email:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ order.email }}</td>
+            </tr>
+            {% if order.delivery_address %}
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">Адрес доставки:</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">{{ order.delivery_address }}</td>
+            </tr>
+            {% endif %}
+        </table>
+        
+        <p style="margin-top: 30px;">
+            Вы можете отслеживать статус заказа в <a href="{{ site_url }}/orders/{{ order.order_id }}/">личном кабинете</a>.
+        </p>
+        
+        <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+        
+        <p style="color: #666; font-size: 12px; text-align: center;">
+            © {{ order.created_timestamp|date:"Y" }} Магазин. Все права защищены.
+        </p>
+    </div>
+</body>
+</html>
