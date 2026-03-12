@@ -11,7 +11,7 @@
 }
 
 .catalog-nav ul > *:not(:last-child){
-    margin-bottom: 1.8rem;
+    margin-bottom: 1.1rem;
 }
 
 .catalog-img{
@@ -42,6 +42,8 @@
     color: #39392F;
     cursor: pointer;
     transition: all 0.3s ease;
+
+    padding: 0;/*6px 8px;*/
 }
 
 .category-button:hover {

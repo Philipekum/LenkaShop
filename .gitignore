@@ -9,6 +9,7 @@ __pycache__/
 mypy.ini
 
 db.sqlite3
+new_fix.json
 media/
 fixtures/
 staticfiles/
