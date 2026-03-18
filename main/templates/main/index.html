@@ -17,10 +17,11 @@
     </a>
 
     <div class="flex fw-wrap">
-      {% for product in collection.products.all %}
+      {% for product in collection.products.all|slice:":3" %}
         {% include "goods/includes/product_card.html" with product=product %}
                 
       {% endfor %}
+      <a class="btn btn-primary" href="{% url 'goods:collection' collection.slug %}">Больше товаров из коллекции</a>
     </div>
 
   {% endif %}
