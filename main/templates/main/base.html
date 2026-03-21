@@ -110,10 +110,19 @@
 
             {% if contact.telegram %}
               <div class="flex ai-center mb-2">
-                <img class="me-3" src="{% static 'images/telegram.svg' %}" alt="telegram">
+                <img class="me-3 footer-icon" src="{% static 'images/telegram.svg' %}" alt="telegram">
                 <a href="https://t.me/{{ contact.telegram }}"
                     target="_blank" 
                     rel="noopener noreferrer">{{  contact.telegram  }}</a>
+              </div>
+            {% endif %}
+
+            {% if contact.vk %}
+              <div class="flex ai-center mb-2">
+                <img class="me-3 footer-icon" src="{% static 'images/vk.svg' %}" alt="VK">
+                <a href="https://vk.com/{{ contact.vk }}"
+                    target="_blank" 
+                    rel="noopener noreferrer">{{  contact.vk  }}</a>
               </div>
             {% endif %}
           {% endif %}
