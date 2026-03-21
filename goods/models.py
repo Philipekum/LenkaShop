@@ -117,7 +117,7 @@ class Products(models.Model):
     sizes = models.ManyToManyField(Sizes, blank=True, verbose_name='Размеры')
 
     price = models.PositiveIntegerField(default=0, verbose_name='Цена')
-    discount_price = models.PositiveBigIntegerField(default=0, verbose_name='Цена по скидке')
+    discount_price = models.PositiveBigIntegerField(default=0, blank=True, null=True, verbose_name='Цена по скидке')
 
     quantity = models.IntegerField(default=0, verbose_name='Количество')
 
@@ -128,7 +128,7 @@ class Products(models.Model):
     similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
     
     def sell_price(self):
-        if self.discount_price > 0:
+        if self.discount_price and self.discount_price > 0:
             return self.discount_price
 
         return self.price
