@@ -4,8 +4,18 @@ from django.templatetags.static import static
 
 
 class Categories(models.Model):
-    name = models.CharField(max_length=150, unique=True, verbose_name='Название')
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
+    name = models.CharField(
+        max_length=150, 
+        unique=True, 
+        verbose_name='Название',
+    )
+    slug = models.SlugField(
+        max_length=200, 
+        unique=True, 
+        blank=True, 
+        null=True, 
+        verbose_name='URL',
+    )
 
     class Meta:
         db_table = 'category'
@@ -17,11 +27,31 @@ class Categories(models.Model):
 
 
 class Collections(models.Model):
-    name = models.CharField(max_length=150, unique=True, verbose_name='Название')
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
-    description = models.TextField(blank=True, null=True, verbose_name='Описание коллекции')
-    is_active = models.BooleanField(default=True, verbose_name='Активная коллекция')
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    name = models.CharField(
+        max_length=150, 
+        unique=True, 
+        verbose_name='Название',
+    )
+    slug = models.SlugField(
+        max_length=200, 
+        unique=True, 
+        blank=True, 
+        null=True, 
+        verbose_name='URL',
+    )
+    description = models.TextField(
+        blank=True, 
+        null=True, 
+        verbose_name='Описание коллекции',
+    )
+    is_active = models.BooleanField(
+        default=True, 
+        verbose_name='Активная коллекция',
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True, 
+        verbose_name='Дата создания',
+    )
     
     class Meta:
         db_table = 'collection'
@@ -34,9 +64,20 @@ class Collections(models.Model):
 
 
 class CollectionImage(models.Model):
-    collection = models.ForeignKey(Collections, on_delete=models.CASCADE, related_name='images', verbose_name='Картинка')
-    image = models.ImageField(upload_to='collection_images', verbose_name='Фото')
-    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    collection = models.ForeignKey(
+        Collections, 
+        on_delete=models.CASCADE, 
+        related_name='images', 
+        verbose_name='Картинка',
+    )
+    image = models.ImageField(
+        upload_to='collection_images', 
+        verbose_name='Фото',
+    )
+    order = models.PositiveIntegerField(
+        default=0, 
+        verbose_name='Порядок',
+    )
 
     class Meta:
         db_table = 'collection_image'
@@ -56,7 +97,11 @@ class CollectionImage(models.Model):
 
 
 class LaundryFeature(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name='Способ стирки')
+    name = models.CharField(
+        max_length=100, 
+        unique=True, 
+        verbose_name='Способ стирки',
+    )
     icon = models.ImageField(upload_to='laundry_icons')
 
     class Meta:
@@ -74,9 +119,22 @@ class Flags(models.Model):
         ('product-flag', 'Флаг товара'),
     ]
 
-    title = models.CharField(max_length=150, unique=True, blank=False, verbose_name='Название')
-    group = models.CharField(max_length=150, choices=GROUPS_CHOICES, blank=False, verbose_name='Группа')
-    is_active = models.BooleanField(default=False, verbose_name='Активен')
+    title = models.CharField(
+        max_length=150, 
+        unique=True, 
+        blank=False, 
+        verbose_name='Название',
+    )
+    group = models.CharField(
+        max_length=150, 
+        choices=GROUPS_CHOICES, 
+        blank=False, 
+        verbose_name='Группа',
+    )
+    is_active = models.BooleanField(
+        default=False, 
+        verbose_name='Активен',
+    )
 
     class Meta:
         db_table = 'flags'
@@ -96,7 +154,12 @@ class Sizes(models.Model):
         ('XL', 'XL - Extra Large'),
     ]
 
-    name = models.CharField(max_length=10, choices=SIZE_CHOICES, unique=True,verbose_name='Размер')
+    name = models.CharField(
+        max_length=10, 
+        choices=SIZE_CHOICES, 
+        unique=True, 
+        verbose_name='Размер',
+    )
 
     class Meta:
         db_table = 'sizes'
@@ -108,24 +171,76 @@ class Sizes(models.Model):
 
 
 class Products(models.Model):
-    name = models.CharField(max_length=150, unique=True, verbose_name='Название')
-    slug = models.SlugField(max_length=200, unique=True, blank=True, null=True, verbose_name='URL')
-
-    description = models.TextField(blank=True, null=True, verbose_name='Описание')
-    compound = models.TextField(blank=True, null=True, verbose_name='Состав')
-    flag = models.ForeignKey(Flags, on_delete=models.SET_NULL, blank=True, null=True, verbose_name='Флаг')
-    sizes = models.ManyToManyField(Sizes, blank=True, verbose_name='Размеры')
-
-    price = models.PositiveIntegerField(default=0, verbose_name='Цена')
-    discount_price = models.PositiveBigIntegerField(default=0, blank=True, null=True, verbose_name='Цена по скидке')
-
-    quantity = models.IntegerField(default=0, verbose_name='Количество')
-
-    category = models.ForeignKey(to=Categories, on_delete=models.CASCADE, verbose_name='Категория')
-    collections = models.ManyToManyField(Collections, blank=True, related_name='products', verbose_name='Коллекции')
-    
-    laundry_features = models.ManyToManyField(LaundryFeature, blank=True)
-    similar_products = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='similar_to_this', verbose_name='Похожие товары')
+    name = models.CharField(
+        max_length=150, 
+        unique=True, 
+        verbose_name='Название',
+    )
+    slug = models.SlugField(
+        max_length=200, 
+        unique=True, 
+        blank=True, 
+        null=True, 
+        verbose_name='URL',
+    )
+    description = models.TextField(
+        blank=True, 
+        null=True, 
+        verbose_name='Описание',
+    )
+    compound = models.TextField(
+        blank=True, 
+        null=True, 
+        verbose_name='Состав',
+    )
+    flag = models.ForeignKey(
+        Flags, 
+        on_delete=models.SET_NULL, 
+        blank=True, 
+        null=True, 
+        verbose_name='Флаг',
+    )
+    sizes = models.ManyToManyField(
+        Sizes, 
+        blank=True, 
+        verbose_name='Размеры',
+    )
+    price = models.PositiveIntegerField(
+        default=0, 
+        verbose_name='Цена',
+    )
+    discount_price = models.PositiveBigIntegerField(
+        default=0, 
+        blank=True, 
+        null=True, 
+        verbose_name='Цена по скидке',
+    )
+    quantity = models.IntegerField(
+        default=0, 
+        verbose_name='Количество',
+    )
+    category = models.ForeignKey(
+        to=Categories, 
+        on_delete=models.CASCADE, 
+        verbose_name='Категория',
+    )
+    collections = models.ManyToManyField(
+        Collections, 
+        blank=True, 
+        related_name='products', 
+        verbose_name='Коллекции',
+    )
+    laundry_features = models.ManyToManyField(
+        LaundryFeature, 
+        blank=True,
+    )
+    similar_products = models.ManyToManyField(
+        'self', 
+        blank=True, 
+        symmetrical=False, 
+        related_name='similar_to_this', 
+        verbose_name='Похожие товары',
+    )
     
     def sell_price(self):
         if self.discount_price and self.discount_price > 0:
@@ -147,9 +262,20 @@ class Products(models.Model):
 
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images', verbose_name='Продукт')
-    image = models.ImageField(upload_to='goods_images', verbose_name='Фото')
-    order = models.PositiveIntegerField(default=0, verbose_name='Порядок')
+    product = models.ForeignKey(
+        Products, 
+        on_delete=models.CASCADE, 
+        related_name='images', 
+        verbose_name='Продукт',
+    )
+    image = models.ImageField(
+        upload_to='goods_images', 
+        verbose_name='Фото',
+    )
+    order = models.PositiveIntegerField(
+        default=0, 
+        verbose_name='Порядок',
+    )
 
     class Meta:
         db_table = 'product_image'
