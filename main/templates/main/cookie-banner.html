@@ -1,0 +1,11 @@
+<div id="cookie-banner">
+    <p>
+        Мы используем файлы cookie для улучшения работы сайта. Продолжая пользоваться, вы <u><a href="#">соглашаетесь с их использованием</a></u>.
+    </p>
+    <button hx-post="{% url 'main:cookie_consent' %}"
+            hx-target="#cookie-banner"
+            hx-swap="outerHTML"
+            hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        Принимаю
+    </button>
+</div>

@@ -139,6 +139,10 @@
       <img src="{% static 'images/arrow-up.svg' %}" alt="Наверх">
     </div>
 
+    <div hx-get="{% url 'main:cookie_consent' %}"
+     hx-trigger="load"
+     hx-swap="outerHTML"></div>
+
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'js/jquery-3.7.0.min.js' %}"></script>
     <script src="{% static 'js/script.js' %}?v=1.0"></script>	
