@@ -66,15 +66,17 @@ class Order(models.Model):
     delivery_address = models.TextField(null=True, blank=True,
                                         verbose_name="Адрес доставки")
 
-    is_paid = models.BooleanField(default=False, verbose_name="Оплачено")
     status = models.CharField(max_length=50, choices=STATUS_CHOICES,
                               default='pending', verbose_name="Статус заказа")
+    
+    def is_paid(self):
+        return self.status in ('paid', 'shipped')
 
     class Meta:
         db_table = 'order'
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
-        ordering = ('id',)
+        ordering = ('created_timestamp',)
 
     def __str__(self):
         return f'Заказ № {self.order_id}, Покупатель {self.full_name}'

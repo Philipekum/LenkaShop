@@ -28,7 +28,6 @@ class PaymentHandlerService:
             payment_obj.save()
 
             order = payment_obj.order
-            order.is_paid = True
             order.status = 'paid'
             order.save()
 
@@ -55,7 +54,6 @@ class PaymentHandlerService:
 
             order = payment_obj.order
             order.status = 'canceled'
-            order.is_paid = False
             order.save()
 
             logger.info(f"Order {order.order_id} payment canceled")
