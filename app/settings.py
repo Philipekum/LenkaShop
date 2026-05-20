@@ -290,6 +290,8 @@ JAZZMIN_SETTINGS = {
     "welcome_sign": "Добро пожаловать в админ-панель",
     "copyright": "Магазин",
 
+    "hide_models": ["auth.User", "auth.Group"],
+
     # Современный вид
     "theme": "flatly",
 
