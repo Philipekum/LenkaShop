@@ -37,7 +37,7 @@ class SuccessOrderView(View):
 
         if len(similar_products) < 5:
             needed = 5 - len(similar_products)
-            exclude_ids = [p.id for p in similar_products] + product_ids
+            exclude_ids = [p.id for p in similar_products] + product_ids # type: ignore
 
             random_products = (Products.objects
                                .exclude(id__in=exclude_ids)
@@ -50,12 +50,14 @@ class SuccessOrderView(View):
         similar_products = similar_products[:5]
         random.shuffle(similar_products)
 
+        total_price = OrderItem.objects.filter(order=order).total_price()
+
         context = {
-            'title': order.get_status_display(),
+            'title': order.status,
             'order': order,
             'order_items': order_items,
             'similar_products': similar_products,
-            'total_price': order.orderitem_set.total_price(),
+            'total_price': total_price,
         }
 
         return render(request, 'orders/success_order.html', context=context)
@@ -63,7 +65,8 @@ class SuccessOrderView(View):
     def post(self, request, order_id):
         try:
             order = get_object_or_404(Order, order_id=order_id)
-            total_price = order.orderitem_set.total_price()
+
+            total_price = OrderItem.objects.filter(order=order).total_price()
 
             payment_data = YooKassaPaymentService.create_payment(
                 order, total_price, request
@@ -135,9 +138,3 @@ class OrderView(View):
                 "form": form,
                 "cart_error": "Корзина пустая"
             })
-
-        # except Exception:
-        #     form.add_error(None,
-        #                    ("Произошла внутренняя ошибка. "
-        #                     "Попробуйте ещё раз или свяжитесь с поддержкой."))
-        #     return render(request, 'orders/order_form.html', {"form": form})

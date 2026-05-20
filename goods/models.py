@@ -143,7 +143,7 @@ class Products(models.Model):
         return f'{self.name}'
     
     def display_id(self):
-        return f'{self.id:05}'
+        return f'{self.id:05}' # type: ignore
 
 
 class ProductImage(models.Model):

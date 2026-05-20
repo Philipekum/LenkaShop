@@ -1,6 +1,8 @@
 import uuid
 import logging
 from django.urls import reverse
+
+from orders.models import Order
 from yookassa import Payment
 from yookassa.domain.common.confirmation_type import ConfirmationType
 from yookassa.domain.models.currency import Currency
@@ -13,7 +15,7 @@ logger = logging.getLogger('payments')
 
 class YooKassaPaymentService:
     @staticmethod
-    def create_payment(order, total_price, request):
+    def create_payment(order: Order, total_price, request):
         try:
             return_url = request.build_absolute_uri(
                 reverse('orders:success_order', args=[order.order_id])
@@ -43,13 +45,21 @@ class YooKassaPaymentService:
             logger.info((f"Created payment {payment_response.id}"
                          f"for order {order.order_id}"))
 
-            return {
+            if payment_response.confirmation is None:
+                raise ValueError()
+
+            if payment_response.amount is None:
+                raise ValueError()
+            
+            response = {
                 'id': payment_response.id,
                 'status': payment_response.status,
                 'confirmation_url': (
                     payment_response.confirmation.confirmation_url),
                 'amount': payment_response.amount.value,
             }
+        
+            return response
 
         except Exception as e:
             logger.error(

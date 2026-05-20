@@ -1,4 +1,5 @@
 import logging
+from typing import Union
 
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseBadRequest
@@ -26,22 +27,24 @@ class CartMixin:
             logger.error(f"Ошибка при получении товара {product_id}: {e}")
             raise
 
-    def get_validated_cart(self, request, cart_id=None):
+    def get_validated_cart(self, request) -> Cart:
         if not request.session.session_key:
             request.session.create()
 
-        if cart_id:
-            try:
-                cart = get_object_or_404(
-                    Cart,
-                    id=cart_id,
-                    session_key=request.session.session_key
-                )
-                return cart
-            except Exception as e:
-                logger.error(f"Ошибка при получении корзины {cart_id}: {e}")
-                raise
-        return None
+        cart_id = request.POST.get("cart_id")
+        if not cart_id:
+            raise ValueError("cart_id is required")
+
+        try:
+            cart = get_object_or_404(
+                Cart,
+                id=cart_id,
+                session_key=request.session.session_key
+            )
+            return cart
+        except Exception as e:
+            logger.error(f"Ошибка при получении корзины {cart_id}: {e}")
+            raise
 
     def get_cart_for_product(self, request, product):
         if not request.session.session_key:

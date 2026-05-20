@@ -1,13 +1,14 @@
 import random
 
 from django.db import models
+from django.db.models import QuerySet, Sum, F, Case, When, DecimalField
 
 from goods.models import Products
 
 
-def generate_unique_order_id():
+def generate_unique_order_id() -> int:
     while True:
-        order_id = random.randint(100000000, 999999999)
+        order_id = random.randint(100_000_000, 999_999_999)
         if not Order.objects.filter(order_id=order_id).exists():
             return order_id
 
@@ -28,14 +29,25 @@ class DeliveryService(models.Model):
         return self.name
 
 
-class OrderitemQueryset(models.QuerySet):
-    def total_price(self):
-        return sum(cart.products_price() for cart in self)
+class OrderItemQueryset(QuerySet):
+    def total_price(self) -> float:
+        result = self.aggregate(
+            total=Sum(
+                Case(
+                    When(
+                        product__discount_price__gt=0,
+                        then=F('product__discount_price') * F('quantity')
+                    ),
+                    default=F('product__price') * F('quantity'),
+                    output_field=DecimalField(max_digits=12, decimal_places=2),
+                )
+            )
+        )['total']
+        return float(result) if result is not None else 0.0
 
-    def total_quantity(self):
-        if self:
-            return sum(cart.quantity for cart in self)
-        return 0
+    def total_quantity(self) -> int:
+        result = self.aggregate(total=models.Sum('quantity'))['total']
+        return result or 0
 
 
 class Order(models.Model):
@@ -83,15 +95,22 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(to=Order, on_delete=models.CASCADE,
-                              verbose_name="Заказ")
-    product = models.ForeignKey(to=Products, on_delete=models.SET_DEFAULT,
-                                null=True, verbose_name="Продукт",
-                                default=None)
-    quantity = models.PositiveIntegerField(default=0,
-                                           verbose_name="Количество")
-    created_timestamp = models.DateTimeField(auto_now_add=True,
-                                             verbose_name="Дата продажи")
+    order = models.ForeignKey(
+        to=Order,
+        on_delete=models.CASCADE,
+        verbose_name="Заказ",
+        related_name="items"
+    )
+    product = models.ForeignKey(
+        to=Products,
+        on_delete=models.SET_DEFAULT,
+        null=True,
+        verbose_name="Продукт",
+        default=None
+    )
+    quantity = models.PositiveIntegerField(default=0, verbose_name="Количество")
+    created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата продажи")
+
 
     class Meta:
         db_table = "order_item"
@@ -99,24 +118,18 @@ class OrderItem(models.Model):
         verbose_name_plural = "Проданные товары"
         ordering = ("id",)
 
-    objects = OrderitemQueryset.as_manager()
+    objects: OrderItemQueryset = OrderItemQueryset.as_manager() # type: ignore
 
     @property
-    def name(self):
-        if self.product:
-            return self.product.name
-        return 'Товар удален'
+    def name(self) -> str:
+        return self.product.name if self.product else 'Товар удален'
 
     @property
-    def price(self):
-        if self.product:
-            return self.product.sell_price()
-        return 0
+    def price(self) -> float:
+        return self.product.sell_price() if self.product else 0.0
 
-    def products_price(self):
-        if self.product:
-            return self.product.sell_price() * self.quantity
-        return 0
+    def products_price(self) -> float:
+        return self.product.sell_price() * self.quantity if self.product else 0.0
 
     def __str__(self):
         return f"Товар {self.name} | Заказ № {self.order.order_id}"

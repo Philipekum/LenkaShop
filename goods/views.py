@@ -69,9 +69,11 @@ def collection(request, collection_slug):
     except Http404:
         logger.warning(f"Коллекция не найдена: slug='{collection_slug}'")
         raise
+    
+    collection_products = Products.objects.filter(
+        collections=collection
+    ).select_related('flag').prefetch_related('images')
 
-    collection_products = (collection.products.select_related('flag')
-                           .prefetch_related('images').all())
     context = {
         'title': collection.name,
         'collection': collection,

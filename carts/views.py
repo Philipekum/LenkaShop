@@ -28,8 +28,7 @@ class CartAddView(CartMixin, View):
 
 class CartRemoveView(CartMixin, View):
     def post(self, request):
-        cart = self.get_validated_cart(request,
-                                       cart_id=request.POST.get("cart_id"))
+        cart = self.get_validated_cart(request)
         cart.delete()
 
         cart_data = self.get_session_cart_data(request)
@@ -40,7 +39,7 @@ class CartRemoveView(CartMixin, View):
 
         return render(request, 'carts/htmx/cart_remove.html', {
             'empty': False,
-            'cart_id': cart.id,
+            'cart_id': cart.id, # type: ignore 
             'total_quantity': cart_data['total_quantity'],
             'total_price': cart_data['total_price']
         })
@@ -48,8 +47,7 @@ class CartRemoveView(CartMixin, View):
 
 class CartChangeView(CartMixin, View):
     def post(self, request):
-        cart = self.get_validated_cart(request,
-                                       cart_id=request.POST.get('cart_id'))
+        cart = self.get_validated_cart(request)
         action = request.POST.get('action')
 
         if action == 'increment':

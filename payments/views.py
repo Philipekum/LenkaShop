@@ -23,6 +23,9 @@ def payment_webhook(request):
     try:
         notification = PaymentHandlerService.parse_webhook_notification(
             request.body)
+        
+        if notification.object is None:
+                raise ValueError()
 
         if notification.event == 'payment.succeeded':
             payment_id = notification.object.id

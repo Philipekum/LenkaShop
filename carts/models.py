@@ -28,7 +28,7 @@ class Cart(models.Model):
         verbose_name_plural = "Корзины"
         ordering = ("id",)
 
-    objects = CartQueryset().as_manager()
+    objects: CartQueryset = CartQueryset().as_manager() # type: ignore
 
     def products_price(self):
         return round(self.product.sell_price() * self.quantity, 2)
