@@ -24,4 +24,4 @@ handler404 = 'main.views.handle_page_not_found'
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+                          document_root=settings.MEDIA_ROOT) # type: ignore[arg-type]

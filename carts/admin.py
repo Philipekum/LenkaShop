@@ -9,7 +9,6 @@ class CartAdmin(admin.ModelAdmin):
                     "created_timestamp",]
     list_filter = ["created_timestamp", "session_key", "product__name",]
 
+    @admin.display(description="Товар")
     def product_display(self, obj):
         return str(obj.product.name)
-
-    product_display.short_description = "Товар"

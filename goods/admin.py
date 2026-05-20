@@ -29,6 +29,7 @@ class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
     fields = ('image', 'image_preview', 'order')
     readonly_fields = ('image_preview',)
 
+    @admin.display(description="Предпросмотр")
     def image_preview(self, obj):
         if obj.image and hasattr(obj.image, 'url'):
             return format_html(
@@ -36,8 +37,6 @@ class ProductImageInline(SortableInlineAdminMixin, admin.StackedInline):
                 obj.image.url
             )
         return "Нет изображения"
-
-    image_preview.short_description = "Предпросмотр"
 
 
 @admin.register(Products)
@@ -64,6 +63,7 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
         }),
     )
 
+    @admin.display(description="Фото")
     def image_preview(self, obj):
         if obj and obj.pk and obj.images.exists():
             first_image = obj.images.first()
@@ -74,8 +74,6 @@ class ProductsAdmin(SortableAdminBase, admin.ModelAdmin):
                 )
         return "—"
 
-    image_preview.short_description = "Фото"
-
 
 class CollectionImageInline(SortableInlineAdminMixin, admin.StackedInline):
     model = CollectionImage
@@ -83,6 +81,7 @@ class CollectionImageInline(SortableInlineAdminMixin, admin.StackedInline):
     fields = ('image', 'image_preview', 'order')
     readonly_fields = ('image_preview',)
 
+    @admin.display(description="Предпросмотр")
     def image_preview(self, obj):
         if obj.image and hasattr(obj.image, 'url'):
             return format_html(
@@ -90,8 +89,6 @@ class CollectionImageInline(SortableInlineAdminMixin, admin.StackedInline):
                 obj.image.url
             )
         return "Нет изображения"
-
-    image_preview.short_description = "Предпросмотр"
 
 
 @admin.register(Collections)
