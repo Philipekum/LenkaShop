@@ -25,7 +25,7 @@ def payment_webhook(request):
             request.body)
         
         if notification.object is None:
-                raise ValueError()
+            return HttpResponse("Webhook didnt parse", status=400)
 
         if notification.event == 'payment.succeeded':
             payment_id = notification.object.id
@@ -43,7 +43,7 @@ def payment_webhook(request):
 
         else:
             logger.info(f'Unhandled event type: {notification.event}')
-            return HttpResponse("Event not handled", status=200)
+            return HttpResponse("Event not handled", status=400)
 
         return HttpResponse("Success", status=200)
 

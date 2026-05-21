@@ -2,7 +2,7 @@ import logging
 from typing import Union
 
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, Http404
 
 from carts.models import Cart
 from goods.models import Products
@@ -20,12 +20,8 @@ class CartMixin:
         if not product_id:
             logger.warning(self.NOT_ID)
             return HttpResponseBadRequest(self.NOT_ID)
-        try:
-            product = get_object_or_404(Products, id=product_id)
-            return product
-        except Exception as e:
-            logger.error(f"Ошибка при получении товара {product_id}: {e}")
-            raise
+        product = get_object_or_404(Products, id=product_id)
+        return product
 
     def get_validated_cart(self, request) -> Cart:
         if not request.session.session_key:
@@ -33,22 +29,19 @@ class CartMixin:
 
         cart_id = request.POST.get("cart_id")
         if not cart_id:
-            raise ValueError("cart_id is required")
+            raise Http404('cart_id не указан!')
 
-        try:
-            cart = get_object_or_404(
-                Cart,
-                id=cart_id,
-                session_key=request.session.session_key
-            )
-            return cart
-        except Exception as e:
-            logger.error(f"Ошибка при получении корзины {cart_id}: {e}")
-            raise
+        cart = get_object_or_404(
+            Cart,
+            id=cart_id,
+            session_key=request.session.session_key
+        )
+        return cart
 
-    def get_cart_for_product(self, request, product):
+    def get_cart_for_product(self, request, product) -> Union[Cart, None]:
         if not request.session.session_key:
             request.session.create()
+            
         return Cart.objects.filter(
             session_key=request.session.session_key,
             product=product
@@ -57,15 +50,11 @@ class CartMixin:
     def get_session_cart_data(self, request):
         if not request.session.session_key:
             return {'total_quantity': 0, 'total_price': 0}
-
-        try:
-            session_cart = Cart.objects.filter(
-                session_key=request.session.session_key
-            )
-            return {
-                'total_quantity': session_cart.total_quantity(),
-                'total_price': session_cart.total_price()
-            }
-        except Exception as e:
-            logger.error(f"Ошибка при подсчёте корзины: {e}", exc_info=True)
-            return {'total_quantity': 0, 'total_price': 0}
+        
+        session_cart = Cart.objects.filter(
+            session_key=request.session.session_key
+        )
+        return {
+            'total_quantity': session_cart.total_quantity(),
+            'total_price': session_cart.total_price()
+        }

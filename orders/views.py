@@ -72,6 +72,9 @@ class SuccessOrderView(View):
                 order, total_price, request
             )
 
+            if not payment_data:
+                raise NotImplementedError
+
             PaymentTransaction.objects.create(
                 order=order,
                 payment_id=payment_data['id'],

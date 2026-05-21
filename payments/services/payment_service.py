@@ -45,11 +45,8 @@ class YooKassaPaymentService:
             logger.info((f"Created payment {payment_response.id}"
                          f"for order {order.order_id}"))
 
-            if payment_response.confirmation is None:
-                raise ValueError()
-
-            if payment_response.amount is None:
-                raise ValueError()
+            if payment_response.confirmation is None or payment_response.amount is None:
+                return None
             
             response = {
                 'id': payment_response.id,
@@ -64,7 +61,7 @@ class YooKassaPaymentService:
         except Exception as e:
             logger.error(
                 f"Error creating payment for order {order.order_id}: {str(e)}")
-            raise
+            return None
 
     @staticmethod
     def _get_client_ip(request):

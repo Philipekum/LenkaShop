@@ -17,14 +17,10 @@ def catalog(request):
     category_slug = request.GET.get('category')
 
     if category_slug:
-        try:
-            category = get_object_or_404(Categories, slug=category_slug)
-            products = (Products.objects.filter(category=category)
-                        .select_related('flag').prefetch_related('images'))
-            logger.info(f"Каталог: категория '{category_slug}' ({category.name})")
-        except Http404:
-            logger.warning(f"Категория не найдена: slug='{category_slug}'")
-            raise
+        category = get_object_or_404(Categories, slug=category_slug)
+        products = (Products.objects.filter(category=category)
+                    .select_related('flag').prefetch_related('images'))
+        logger.info(f"Каталог: категория '{category_slug}' ({category.name})")
     else:
         category = None
         products = (Products.objects
@@ -47,12 +43,8 @@ def catalog(request):
 
 
 def product(request, product_slug):
-    try:
-        product = Products.objects.get(slug=product_slug)
-        logger.info(f"Товар: '{product_slug}' ({product.name})")
-    except Products.DoesNotExist:
-        logger.warning(f"Товар не найден: slug='{product_slug}'")
-        raise Http404
+    product = get_object_or_404(Products, slug=product_slug)
+    logger.info(f"Товар: '{product_slug}' ({product.name})")
 
     context = {
         'title': product.name,
@@ -63,12 +55,8 @@ def product(request, product_slug):
 
 
 def collection(request, collection_slug):
-    try:
-        collection = get_object_or_404(Collections, slug=collection_slug)
-        logger.info(f"Коллекция: '{collection_slug}' ({collection.name})")
-    except Http404:
-        logger.warning(f"Коллекция не найдена: slug='{collection_slug}'")
-        raise
+    collection = get_object_or_404(Collections, slug=collection_slug)
+    logger.info(f"Коллекция: '{collection_slug}' ({collection.name})")
     
     collection_products = Products.objects.filter(
         collections=collection
