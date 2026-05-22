@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpRequest
 
 from goods.models import Collections
 
 
-def handle_page_not_found(request, exception):
+def handle_page_not_found(request: HttpRequest, _: Exception) -> HttpResponse:
     return render(request, 'main/404.html', status=404)
 
 
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     collections = Collections.objects.prefetch_related('products').all()
 
     context = {
@@ -20,14 +20,14 @@ def index(request):
     return render(request, 'main/index.html', context)
 
 
-def delivery_info(request):
+def delivery_info(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'Доставка и оплата',
     }
     return render(request, 'main/delivery.html', context)
 
 
-def about_info(request):
+def about_info(request: HttpRequest) -> HttpResponse:
     context = {
         'title': 'О бренде',
     }
@@ -35,17 +35,17 @@ def about_info(request):
 
 
 class CookieConsentView(View):
-    def get(self, request):
+    def get(self, request: HttpRequest) -> HttpResponse:
         if request.session.get('cookie_consent'):
             return HttpResponse(status=200)
         
         return render(request, 'main/cookie-banner.html')
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         request.session['cookie_consent'] = True
         return HttpResponse(status=200)
 
 
-def reset_cookie(request):
+def reset_cookie(request: HttpRequest) -> HttpResponse:
     request.session['cookie_consent'] = False
     return redirect('main:index')

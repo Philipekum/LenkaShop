@@ -6,7 +6,7 @@ register = template.Library()
 
 
 @register.filter
-def format_phone(value):
+def format_phone(value: str) -> str:
     try:
         value = re.sub(r"\D", "", str(value))
         if len(value) == 11 and value.startswith("7"):

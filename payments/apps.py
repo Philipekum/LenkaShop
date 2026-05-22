@@ -6,6 +6,6 @@ class PaymentsConfig(AppConfig):
     name = 'payments'
     verbose_name = 'Оплаты'
 
-    def ready(self):
+    def ready(self) -> None:
         from payments.yookassa_config import configure_yookassa
         configure_yookassa()

@@ -35,6 +35,8 @@ if DEBUG:
     ALLOWED_HOSTS.append('127.0.0.1')
     ALLOWED_HOSTS.append('localhost')
 
+MY_REDIRECT = os.getenv('MY_REDIRECT', 'False').lower() == 'true'
+MY_REDIRECT_URL = os.getenv('MY_REDIRECT_URL')
 
 # Application definition
 
@@ -55,7 +57,6 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'payments',
-    'delivery',
 ]
 
 MIDDLEWARE = [
@@ -242,15 +243,6 @@ LOGGING = {
             'encoding': 'utf-8',
             'formatter': 'verbose',
         },
-        'delivery_file': {
-            'level': 'DEBUG' if DEBUG else 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'delivery.log',
-            'maxBytes': 20*1024*1024,
-            'backupCount': 5,
-            'encoding': 'utf-8',
-            'formatter': 'verbose',
-        },
     },
 
     'loggers': {
@@ -271,11 +263,6 @@ LOGGING = {
         },
         'goods': {
             'handlers': ['console', 'goods_file'],
-            'level': 'DEBUG',
-            'propagate': False,
-        },
-        'delivery': {
-            'handlers': ['console', 'delivery_file'],
             'level': 'DEBUG',
             'propagate': False,
         },

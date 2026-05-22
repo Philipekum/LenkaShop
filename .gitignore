@@ -19,3 +19,8 @@ logs/
 *.sql
 *.md
 TODO
+
+# static/
+# **/migrations/*.py
+# **/__init__.py
+# *.html

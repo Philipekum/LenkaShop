@@ -31,5 +31,5 @@ class ContactInfo(models.Model):
         verbose_name = 'Контактная информация'
         verbose_name_plural = 'Контактная информация'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Контакты: {self.phone}, {self.email}, {self.telegram}, {self.vk}'

@@ -35,5 +35,5 @@ class PaymentTransaction(models.Model):
         verbose_name = 'Данные об оплате'
         verbose_name_plural = 'Данные об оплатах'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Payment {self.payment_id} - {self.status}"

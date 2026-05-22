@@ -22,7 +22,7 @@ class Categories(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -59,7 +59,7 @@ class Collections(models.Model):
         verbose_name_plural = 'Коллекции'
         ordering = ['-created_at']
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -85,14 +85,14 @@ class CollectionImage(models.Model):
         verbose_name_plural = 'Фото коллекции'
         ordering = ['order']
     
-    def image_exists(self):
+    def image_exists(self) -> bool:
         if self.image:
             return default_storage.exists(self.image.name)
         return False
     
-    def get_image_url_or_default(self, default_path='images/No_Image.png'):
+    def get_image_url_or_default(self, default_path: str='images/No_Image.png') -> str:
         if self.image_exists():
-            return self.image.url
+            return str(self.image.url)
         return static(default_path)
 
 
@@ -109,7 +109,7 @@ class LaundryFeature(models.Model):
         verbose_name = 'Способ стирки'
         verbose_name_plural = 'Способы стирки'
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -141,7 +141,7 @@ class Flags(models.Model):
         verbose_name = 'Флаг продукта'
         verbose_name_plural = 'Флаги продукта'
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
 
 
@@ -166,7 +166,7 @@ class Sizes(models.Model):
         verbose_name = 'Размер'
         verbose_name_plural = 'Размеры'
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
@@ -242,7 +242,7 @@ class Products(models.Model):
         verbose_name='Похожие товары',
     )
     
-    def sell_price(self):
+    def sell_price(self) -> int:
         if self.discount_price and self.discount_price > 0:
             return self.discount_price
 
@@ -254,10 +254,10 @@ class Products(models.Model):
         verbose_name_plural = 'Продукты'
         ordering = ('id',)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.name}'
     
-    def display_id(self):
+    def display_id(self) -> int:
         return f'{self.id:05}' # type: ignore
 
 
@@ -283,12 +283,12 @@ class ProductImage(models.Model):
         verbose_name_plural = 'Фото продуктов'
         ordering = ['order']
     
-    def image_exists(self):
+    def image_exists(self) -> bool:
         if self.image:
             return default_storage.exists(self.image.name)
         return False
     
-    def get_image_url_or_default(self, default_path='images/No_Image.png'):
+    def get_image_url_or_default(self, default_path: str='images/No_Image.png') -> str:
         if self.image_exists():
-            return self.image.url
+            return str(self.image.url)
         return static(default_path)

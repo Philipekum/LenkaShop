@@ -1,19 +1,15 @@
-import os
-from dotenv import load_dotenv
+from typing import Callable
 from django.shortcuts import redirect
-
-
-load_dotenv(override=True)
+from django.http import HttpRequest, HttpResponse
+from app.settings import MY_REDIRECT, MY_REDIRECT_URL
 
 
 class TemporaryRedirectMiddleware:
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]) -> None:
         self.get_response = get_response
-        self.redirect_enabled = os.getenv('MY_REDIRECT', 'False').lower() == 'true'
-        self.redirect_url = os.getenv('MY_REDIRECT_URL')
 
-    def __call__(self, request):
-        if not self.redirect_enabled:
+    def __call__(self, request: HttpRequest) -> HttpResponse:
+        if not MY_REDIRECT:
             return self.get_response(request)
 
         if request.path.startswith(('/static/', '/media/', '/favicon.ico')):
@@ -21,8 +17,8 @@ class TemporaryRedirectMiddleware:
 
         if request.path.startswith('/new-site/'):
             return self.get_response(request)
-
-        if not self.redirect_url:
+        
+        if not MY_REDIRECT_URL:
             return self.get_response(request)
 
-        return redirect(self.redirect_url, permanent=False)
+        return redirect(MY_REDIRECT_URL, permanent=False)

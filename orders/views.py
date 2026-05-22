@@ -2,7 +2,7 @@ import random
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect, Http404
 from django.contrib import messages
 from django.views import View
 
@@ -11,12 +11,11 @@ from orders.forms import CreateOrderForm
 from orders.models import Order, OrderItem
 from orders.services.order_service import (create_order_from_cart,
                                            EmptyCartError)
-from payments.models import PaymentTransaction
 from payments.services.payment_service import YooKassaPaymentService
 
 
 class SuccessOrderView(View):
-    def get(self, request, order_id):
+    def get(self, request: HttpRequest, order_id: int) -> HttpResponse:
         order = get_object_or_404(
             Order.objects.select_related('delivery_service'),
             order_id=order_id
@@ -37,7 +36,7 @@ class SuccessOrderView(View):
 
         if len(similar_products) < 5:
             needed = 5 - len(similar_products)
-            exclude_ids = [p.id for p in similar_products] + product_ids # type: ignore
+            exclude_ids = [p.id for p in similar_products] + product_ids
 
             random_products = (Products.objects
                                .exclude(id__in=exclude_ids)
@@ -62,27 +61,18 @@ class SuccessOrderView(View):
 
         return render(request, 'orders/success_order.html', context=context)
 
-    def post(self, request, order_id):
+    def post(self, request: HttpRequest, order_id: int) -> HttpResponseRedirect:
         try:
             order = get_object_or_404(Order, order_id=order_id)
 
             total_price = OrderItem.objects.filter(order=order).total_price()
 
-            payment_data = YooKassaPaymentService.create_payment(
+            confirmation_url = YooKassaPaymentService.create_payment(
                 order, total_price, request
             )
 
-            if not payment_data:
-                raise NotImplementedError
-
-            PaymentTransaction.objects.create(
-                order=order,
-                payment_id=payment_data['id'],
-                status=payment_data['status'],
-                amount=total_price
-            )
-
-            confirmation_url = payment_data['confirmation_url']
+            if not confirmation_url:
+                raise Http404
 
             return redirect(confirmation_url)
 
@@ -95,7 +85,7 @@ class SuccessOrderView(View):
 
 
 class OrderView(View):
-    def get(self, request):
+    def get(self, request: HttpRequest) -> HttpResponse:
         form = CreateOrderForm()
 
         context = {
@@ -105,17 +95,17 @@ class OrderView(View):
 
         return render(request, 'orders/order.html', context=context)
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         form = CreateOrderForm(data=request.POST)
 
         if not form.is_valid():
             return render(request, 'orders/order_form.html', {"form": form})
 
         try:
-            session_key = request.session.session_key
-            if not session_key:
+            if not request.session.session_key:
                 request.session.create()
-                session_key = request.session.session_key
+
+            session_key = request.session.session_key
 
             order_obj, _ = create_order_from_cart(
                 session_key=session_key,

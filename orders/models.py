@@ -34,11 +34,11 @@ class DeliveryService(models.Model):
         verbose_name_plural = 'Службы доставки'
         ordering = ('name',)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
 
-class OrderItemQueryset(QuerySet):
+class OrderItemQueryset(QuerySet['OrderItem']):
     def total_price(self) -> float:
         result = self.aggregate(
             total=Sum(
@@ -113,7 +113,7 @@ class Order(models.Model):
         verbose_name="Статус заказа",
     )
     
-    def is_paid(self):
+    def is_paid(self) -> bool:
         return self.status in ('paid', 'shipped')
 
     class Meta:
@@ -122,7 +122,7 @@ class Order(models.Model):
         verbose_name_plural = 'Заказы'
         ordering = ('created_timestamp',)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'Заказ № {self.order_id}, Покупатель {self.full_name}'
 
 
@@ -131,14 +131,14 @@ class OrderItem(models.Model):
         to=Order,
         on_delete=models.CASCADE,
         verbose_name="Заказ",
-        related_name="items"
+        related_name="items",
     )
     product = models.ForeignKey(
         to=Products,
         on_delete=models.SET_DEFAULT,
         null=True,
         verbose_name="Продукт",
-        default=None
+        default=None,
     )
     quantity = models.PositiveIntegerField(default=0, verbose_name="Количество")
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Дата продажи")
@@ -163,5 +163,5 @@ class OrderItem(models.Model):
     def products_price(self) -> float:
         return self.product.sell_price() * self.quantity if self.product else 0.0
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Товар {self.name} | Заказ № {self.order.order_id}"

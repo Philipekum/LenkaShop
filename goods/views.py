@@ -2,7 +2,7 @@ import logging
 
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, HttpRequest
 
 from goods.models import Products, Categories, Collections
 
@@ -13,7 +13,7 @@ BLOCK_LIMIT = 6
 ANOMALOUS_SCROLL_THRESHOLD = 500
 
 
-def catalog(request):
+def catalog(request: HttpRequest) -> HttpResponse:
     category_slug = request.GET.get('category')
 
     if category_slug:
@@ -42,7 +42,7 @@ def catalog(request):
     return render(request, 'goods/catalog.html', context)
 
 
-def product(request, product_slug):
+def product(request: HttpRequest, product_slug: str) -> HttpResponse:
     product = get_object_or_404(Products, slug=product_slug)
     logger.info(f"Товар: '{product_slug}' ({product.name})")
 
@@ -54,7 +54,7 @@ def product(request, product_slug):
     return render(request, 'goods/product.html', context)
 
 
-def collection(request, collection_slug):
+def collection(request: HttpRequest, collection_slug: str) -> HttpResponse:
     collection = get_object_or_404(Collections, slug=collection_slug)
     logger.info(f"Коллекция: '{collection_slug}' ({collection.name})")
     
@@ -71,7 +71,7 @@ def collection(request, collection_slug):
     return render(request, 'goods/collection.html', context)
 
 
-def catalog_load_more(request):
+def catalog_load_more(request: HttpRequest) -> HttpResponse:
     category_slug = request.GET.get('category')
     offset = int(request.GET.get('offset', 0))
 

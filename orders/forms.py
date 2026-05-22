@@ -18,8 +18,8 @@ class CreateOrderForm(forms.Form):
     )
     delivery_address = forms.CharField(label="Адрес доставки", required=True)
 
-    def clean_phone_number(self):
+    def clean_phone_number(self) -> str:
         phone = self.cleaned_data["phone_number"]
         if not re.match(r"^\+?\d{10,15}$", phone):
             raise forms.ValidationError("Введите корректный номер телефона.")
-        return phone
+        return str(phone)

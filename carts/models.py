@@ -2,11 +2,11 @@ from django.db import models
 from goods.models import Products
 
 
-class CartQueryset(models.QuerySet):
-    def total_price(self):
+class CartQueryset(models.QuerySet['Cart']):
+    def total_price(self) -> float:
         return sum(cart.products_price() for cart in self)
 
-    def total_quantity(self):
+    def total_quantity(self) -> int:
         if self:
             return sum(cart.quantity for cart in self)
         return 0
@@ -41,5 +41,5 @@ class Cart(models.Model):
 
     objects: CartQueryset = CartQueryset().as_manager() # type: ignore
 
-    def products_price(self):
+    def products_price(self) -> float:
         return round(self.product.sell_price() * self.quantity, 2)

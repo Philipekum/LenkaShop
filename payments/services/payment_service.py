@@ -1,13 +1,17 @@
 import uuid
 import logging
-from django.urls import reverse
+from typing import Optional
 
-from orders.models import Order
+from django.urls import reverse
+from django.http import HttpRequest
+
 from yookassa import Payment
 from yookassa.domain.common.confirmation_type import ConfirmationType
 from yookassa.domain.models.currency import Currency
-from yookassa.domain.request.payment_request_builder import (
-    PaymentRequestBuilder)
+from yookassa.domain.request.payment_request_builder import PaymentRequestBuilder
+
+from orders.models import Order
+from payments.models import PaymentTransaction
 
 
 logger = logging.getLogger('payments')
@@ -15,7 +19,7 @@ logger = logging.getLogger('payments')
 
 class YooKassaPaymentService:
     @staticmethod
-    def create_payment(order: Order, total_price, request):
+    def create_payment(order: Order, total_price: float, request: HttpRequest) -> Optional[str]:
         try:
             return_url = request.build_absolute_uri(
                 reverse('orders:success_order', args=[order.order_id])
@@ -42,21 +46,20 @@ class YooKassaPaymentService:
 
             payment_response = Payment.create(request_obj, idempotence_key)
 
-            logger.info((f"Created payment {payment_response.id}"
-                         f"for order {order.order_id}"))
-
             if payment_response.confirmation is None or payment_response.amount is None:
                 return None
             
-            response = {
-                'id': payment_response.id,
-                'status': payment_response.status,
-                'confirmation_url': (
-                    payment_response.confirmation.confirmation_url),
-                'amount': payment_response.amount.value,
-            }
-        
-            return response
+            logger.info((f"Created payment {payment_response.id}"
+                         f"for order {order.order_id}"))
+
+            PaymentTransaction.objects.create(
+                order=order,
+                payment_id=payment_response.id,
+                status=payment_response.status,
+                amount=payment_response.amount.value,
+            )
+
+            return str(payment_response.confirmation.confirmation_url)
 
         except Exception as e:
             logger.error(
@@ -64,8 +67,12 @@ class YooKassaPaymentService:
             return None
 
     @staticmethod
-    def _get_client_ip(request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    def _get_client_ip(request: HttpRequest) -> Optional[str]:
+        x_forwarded_for: Optional[str] = request.META.get('HTTP_X_FORWARDED_FOR')
+        
         if x_forwarded_for:
-            return x_forwarded_for.split(',')[0]
-        return request.META.get('REMOTE_ADDR')
+            ip: str = x_forwarded_for.split(',')[0].strip()
+        else:
+            ip = request.META.get('REMOTE_ADDR', '')
+            
+        return ip if ip else None

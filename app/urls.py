@@ -14,10 +14,7 @@ urlpatterns = [
     path(f'{URL_PREFIX}/catalog/', include('goods.urls', namespace='goods')),
     path(f'{URL_PREFIX}/cart/', include('carts.urls', namespace='cart')),
     path(f'{URL_PREFIX}/order/', include('orders.urls', namespace='orders')),
-    path(f'{URL_PREFIX}/payments/',
-         include('payments.urls', namespace='payments')),
-    path(f'{URL_PREFIX}/delivery/', include('delivery.urls',
-                                            namespace='delivery')),
+    path(f'{URL_PREFIX}/payments/',include('payments.urls', namespace='payments')),
 ]
 
 handler404 = 'main.views.handle_page_not_found'

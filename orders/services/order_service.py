@@ -1,3 +1,4 @@
+from typing import Union
 from django.db import transaction
 from carts.models import Cart
 from orders.models import Order, OrderItem, DeliveryService
@@ -8,7 +9,7 @@ class EmptyCartError(Exception):
 
 
 def create_order_from_cart(
-    session_key: str,
+    session_key: Union[str, None],
     full_name: str,
     phone_number: str,
     email: str,

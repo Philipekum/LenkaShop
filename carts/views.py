@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.views import View
+from django.http import HttpRequest, HttpResponse
 
 from carts.models import Cart
 from carts.mixins import CartMixin
 
 
 class CartAddView(CartMixin, View):
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         product = self.get_validated_product(request)
         cart = self.get_cart_for_product(request, product)
 
@@ -27,7 +28,7 @@ class CartAddView(CartMixin, View):
 
 
 class CartRemoveView(CartMixin, View):
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         cart = self.get_validated_cart(request)
         cart.delete()
 
@@ -39,14 +40,14 @@ class CartRemoveView(CartMixin, View):
 
         return render(request, 'carts/htmx/cart_remove.html', {
             'empty': False,
-            'cart_id': cart.id, # type: ignore 
+            'cart_id': cart.id,
             'total_quantity': cart_data['total_quantity'],
             'total_price': cart_data['total_price']
         })
 
 
 class CartChangeView(CartMixin, View):
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         cart = self.get_validated_cart(request)
         action = request.POST.get('action')
 
